@@ -140,7 +140,7 @@ export default function ProductCard({ card, onClick }) {
                   style={{
                     display: 'block', height: 4, borderRadius: 9999,
                     width: i === currentImg ? 16 : 4,
-                    background: i === currentImg ? '#10b981' : 'rgba(0,0,0,0.25)',
+                    background: i === currentImg ? '#ec4899' : 'rgba(0,0,0,0.25)',
                     border: 'none', cursor: 'pointer', padding: 0,
                     transition: 'all 0.2s',
                   }}
@@ -200,7 +200,7 @@ export default function ProductCard({ card, onClick }) {
             <div style={{
               fontSize: 20,
               fontWeight: 900,
-              color: '#059669',
+              color: '#db2777',
               lineHeight: 1,
             }}>
               {startingPrice}

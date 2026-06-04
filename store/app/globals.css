@@ -2,9 +2,9 @@
 
 /* ─── Design Tokens ──────────────────────────────── */
 @theme {
-  --color-emerald-400: #34d399;
-  --color-emerald-500: #10b981;
-  --color-emerald-600: #059669;
+  --color-pink-400: #f472b6;
+  --color-pink-500: #ec4899;
+  --color-pink-600: #db2777;
   --font-display: var(--font-display), 'Plus Jakarta Sans', sans-serif;
 }
 
@@ -12,9 +12,9 @@
   --font-inter: 'Inter', sans-serif;
 
   /* Brand */
-  --color-primary: #10b981;
-  --color-primary-hover: #059669;
-  --color-primary-soft: rgba(16, 185, 129, 0.12);
+  --color-primary: #ec4899;
+  --color-primary-hover: #db2777;
+  --color-primary-soft: rgba(236, 72, 153, 0.12);
   --color-secondary: #d4a853;
   --color-on-primary: #ffffff;
 
@@ -22,7 +22,7 @@
   --color-success: #16a34a;
   --color-error: #dc2626;
   --color-info: #2563eb;
-  --color-focus: #10b981;
+  --color-focus: #ec4899;
 
   /* Surfaces */
   --surface: #ffffff;
@@ -70,7 +70,7 @@
   --shadow-3: 0 12px 40px rgba(0,0,0,0.12);
 
   /* Legacy */
-  --emerald: var(--color-primary);
+  --pink: var(--color-primary);
   --gold: var(--color-secondary);
   --accent: var(--color-primary);
 }
@@ -255,12 +255,12 @@ body {
 .product-card-price-value {
   font-size: 1.125rem;
   font-weight: 900;
-  color: #059669;
+  color: #db2777;
   line-height: 1;
 }
 @media (min-width: 420px) { .product-card-price-value { font-size: 1.25rem; } }
 @media (min-width: 640px) { .product-card-price-value { font-size: 1.5rem; } }
-.dark .product-card-price-value { color: #34d399; }
+.dark .product-card-price-value { color: #f472b6; }
 
 /* ─── Button system ──────────────────────────────── */
 .btn {
@@ -296,12 +296,12 @@ body {
   text-decoration: none;
   border: none;
   cursor: pointer;
-  box-shadow: 0 8px 24px -6px rgba(16,185,129,0.45);
+  box-shadow: 0 8px 24px -6px rgba(236,72,153,0.45);
   transition: all 0.2s ease;
   touch-action: manipulation;
   white-space: nowrap;
 }
-.btn-primary:hover { filter: brightness(1.05); box-shadow: 0 10px 28px -6px rgba(16,185,129,0.55); transform: translateY(-1px); }
+.btn-primary:hover { filter: brightness(1.05); box-shadow: 0 10px 28px -6px rgba(236,72,153,0.55); transform: translateY(-1px); }
 .btn-primary:active { transform: scale(0.98); }
 .btn-primary:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
 
@@ -592,8 +592,8 @@ body {
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-.text-emerald-gradient {
-  background: linear-gradient(135deg, #10b981, #34d399);
+.text-pink-gradient {
+  background: linear-gradient(135deg, #ec4899, #f472b6);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;

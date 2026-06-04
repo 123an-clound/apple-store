@@ -1,4 +1,4 @@
-# 🍎 Bé Táo Store — Deployment Guide
+# 🍎 Linh Tây Store — Deployment Guide
 
 ## ✨ Features
 
@@ -104,8 +104,8 @@ Ensure your Supabase `kho_hang_iphone` table has these columns:
 ## 🎨 Customization
 
 ### Brand Assets:
-- **Logo**: Update image in Supabase Storage `anh-iphone/logo.png`
-- **Hero banner**: Update `anh-iphone/hero.png`
+- **Logo**: Update `store/public/logo.png`
+- **Hero banner**: Update `store/public/hero.png`
 - **Favicon**: Update `store/app/favicon.ico`
 
 ### Contact Info:
@@ -163,6 +163,6 @@ store/
 ## 📞 Support
 
 For issues or questions:
-- Email: contact@betaostore.vn
+- Email: contact@linhtaystore.vn
 - Zalo: [0123456789](https://zalo.me/0123456789)
 - Phone: 0123 456 789

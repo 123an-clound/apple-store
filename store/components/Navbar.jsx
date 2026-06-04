@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useState, useEffect, useSyncExternalStore } from 'react';
 import { Menu, X, Phone, Sun, Moon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LOGO_URL } from '@/lib/supabase';
+
 import { TEL_URL, HOTLINE_DISPLAY } from '@/lib/constants';
 
 export default function Navbar() {
@@ -52,17 +52,17 @@ export default function Navbar() {
     >
       <div className="section-shell section-padding flex items-center justify-between h-14 sm:h-16 lg:h-[4.5rem]">
         <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group focus-ring rounded-lg">
-          <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-[var(--radius-md)] overflow-hidden ring-1 ring-[var(--border-subtle)] group-hover:ring-emerald-500/40 transition-all">
+          <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-[var(--radius-md)] overflow-hidden ring-1 ring-[var(--border-subtle)] group-hover:ring-pink-500/40 transition-all">
             <Image
-              src={LOGO_URL}
-              alt="Bé Táo Store logo"
+              src="/logo.png"
+              alt="Linh Tây Store logo"
               fill
               className="object-cover"
               sizes="(max-width: 640px) 32px, 36px"
             />
           </div>
           <span className="font-bold text-base sm:text-lg lg:text-xl tracking-tight heading-display">
-            <span className="text-[var(--text-primary)]">Bé Táo</span>{' '}
+            <span className="text-[var(--text-primary)]">Linh Tây</span>{' '}
             <span className="text-gold-gradient">Store</span>
           </span>
         </Link>
@@ -78,7 +78,7 @@ export default function Navbar() {
             {theme === 'dark' ? 'Sáng' : 'Tối'}
           </button>
           <a href={TEL_URL} className="btn-ghost gap-2 !min-h-[40px] px-4">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" aria-hidden />
+            <span className="w-2 h-2 rounded-full bg-pink-500 animate-pulse" aria-hidden />
             {HOTLINE_DISPLAY}
           </a>
           <a href="#products" className="btn-primary btn-sm !min-h-[40px] px-5">
@@ -159,7 +159,7 @@ export default function Navbar() {
                   style={{
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
                     width: '100%', minHeight: 52, borderRadius: 12,
-                    background: 'linear-gradient(135deg, #10b981, #059669)',
+                    background: 'linear-gradient(135deg, #ec4899, #db2777)',
                     color: '#fff', fontWeight: 700, fontSize: 16,
                     textDecoration: 'none', boxShadow: '0 4px 16px rgba(16,185,129,0.35)',
                   }}

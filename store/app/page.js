@@ -14,20 +14,20 @@ async function fetchProducts() {
       .order('stt', { ascending: false });
 
     if (error) {
-      console.error('[Bé Táo Store] Supabase fetch error:', error.message);
-      console.error('[Bé Táo Store] Error details:', error);
+      console.error('[Linh Tây Store] Supabase fetch error:', error.message);
+      console.error('[Linh Tây Store] Error details:', error);
       return [];
     }
     
     if (!data) {
-      console.warn('[Bé Táo Store] No data returned from Supabase');
+      console.warn('[Linh Tây Store] No data returned from Supabase');
       return [];
     }
     
-    console.log(`[Bé Táo Store] Successfully fetched ${data.length} products`);
+    console.log(`[Linh Tây Store] Successfully fetched ${data.length} products`);
     return data;
   } catch (err) {
-    console.error('[Bé Táo Store] Unexpected error:', err.message);
+    console.error('[Linh Tây Store] Unexpected error:', err.message);
     return [];
   }
 }

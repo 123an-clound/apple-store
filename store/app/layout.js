@@ -1,7 +1,6 @@
 import { Inter, Plus_Jakarta_Sans } from 'next/font/google';
 import Script from 'next/script';
 import './globals.css';
-import { LOGO_URL } from '@/lib/supabase';
 
 const inter = Inter({
   subsets: ['latin', 'vietnamese'],
@@ -17,18 +16,18 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata = {
-  title: 'Bé Táo Store — iPhone Chính Hãng Giá Tốt',
+  title: 'Linh Tây Store — iPhone Chính Hãng Giá Tốt',
   description:
-    'Mua iPhone chính hãng tại Bé Táo Store. Đa dạng model từ iPhone X đến iPhone 17 Series. Giá tốt nhất, bảo hành uy tín, giao hàng toàn quốc.',
-  keywords: 'iPhone, mua iPhone, Bé Táo Store, iPhone chính hãng, iPhone giá rẻ',
+    'Mua iPhone chính hãng tại Linh Tây Store. Đa dạng model từ iPhone X đến iPhone 17 Series. Giá tốt nhất, bảo hành uy tín, giao hàng toàn quốc.',
+  keywords: 'iPhone, mua iPhone, Linh Tây Store, iPhone chính hãng, iPhone giá rẻ',
   icons: {
-    icon: '/favicon.png',
-    apple: '/favicon.png',
+    icon: '/favicon.ico',
+    apple: '/favicon.ico',
   },
   openGraph: {
-    title: 'Bé Táo Store — iPhone Chính Hãng Giá Tốt',
-    description: 'Mua iPhone chính hãng tại Bé Táo Store. Đa dạng model, giá tốt nhất.',
-    images: [LOGO_URL],
+    title: 'Linh Tây Store — iPhone Chính Hãng Giá Tốt',
+    description: 'Mua iPhone chính hãng tại Linh Tây Store. Đa dạng model, giá tốt nhất.',
+    images: ['/logo.png'],
     type: 'website',
   },
 };

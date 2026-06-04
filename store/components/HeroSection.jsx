@@ -1,9 +1,10 @@
 'use client';
 
-import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ShieldCheck, Smartphone, Sparkles, MessageCircle } from 'lucide-react';
 import { ZALO_TRAGOP_URL } from '@/lib/constants';
+
+// Remove unused Image import since we're using SVG now
 
 const heroHighlights = [
   {
@@ -22,22 +23,91 @@ export default function HeroSection() {
   return (
     <section className="relative overflow-hidden pt-0 sm:pt-0 lg:pt-28 pb-8 sm:pb-10 lg:pb-16 lg:min-h-[80svh] lg:flex lg:items-end lg:justify-center">
 
-      {/* Desktop background */}
+      {/* Desktop SVG Background */}
       <div className="absolute inset-0 z-0 hidden lg:block">
-        <Image
-          src="/Hero.png"
-          alt="Bé Táo Store hero banner"
-          fill
-          priority
-          className="object-cover object-center"
-          sizes="100vw"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-white/5 to-[var(--bg-color)]/75 dark:from-black/20 dark:via-black/5 dark:to-[var(--bg-color)]/80" />
-        <div className="absolute -top-24 left-[-10%] h-72 w-72 rounded-full bg-emerald-400/15 blur-3xl" />
+        <svg
+          className="w-full h-full"
+          viewBox="0 0 1920 1080"
+          preserveAspectRatio="xMidYMid slice"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs>
+            <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#fdf2f8" />
+              <stop offset="50%" stopColor="#fce7f3" />
+              <stop offset="100%" stopColor="#fbcfe8" />
+            </linearGradient>
+            <linearGradient id="pinkGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#f472b6" stopOpacity="0.3" />
+              <stop offset="50%" stopColor="#ec4899" stopOpacity="0.2" />
+              <stop offset="100%" stopColor="#db2777" stopOpacity="0.1" />
+            </linearGradient>
+            <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#fde68a" stopOpacity="0.3" />
+              <stop offset="100%" stopColor="#fbbf24" stopOpacity="0.1" />
+            </linearGradient>
+          </defs>
+
+          {/* Background */}
+          <rect width="1920" height="1080" fill="url(#bgGradient)" />
+
+          {/* Decorative circles */}
+          <circle cx="200" cy="200" r="300" fill="url(#pinkGradient)" opacity="0.6">
+            <animate attributeName="r" values="280;300;280" dur="8s" repeatCount="indefinite" />
+          </circle>
+          <circle cx="1700" cy="300" r="250" fill="url(#goldGradient)" opacity="0.5">
+            <animate attributeName="r" values="230;250;230" dur="10s" repeatCount="indefinite" />
+          </circle>
+          <circle cx="960" cy="800" r="400" fill="url(#pinkGradient)" opacity="0.4" />
+
+          {/* Phone outlines - stylized iPhone shapes */}
+          <g opacity="0.15" fill="#ec4899">
+            {/* Left phone */}
+            <rect x="100" y="350" width="180" height="380" rx="40" transform="rotate(-15 190 540)" />
+            <rect x="120" y="370" width="140" height="320" rx="30" transform="rotate(-15 190 540)" fill="rgba(255,255,255,0.5)" />
+
+            {/* Right phone */}
+            <rect x="1640" y="400" width="200" height="400" rx="45" transform="rotate(15 1740 600)" />
+            <rect x="1660" y="420" width="160" height="340" rx="35" transform="rotate(15 1740 600)" fill="rgba(255,255,255,0.5)" />
+
+            {/* Top phone */}
+            <rect x="800" y="100" width="150" height="300" rx="35" transform="rotate(-5 875 250)" />
+            <rect x="815" y="115" width="120" height="260" rx="28" transform="rotate(-5 875 250)" fill="rgba(255,255,255,0.5)" />
+          </g>
+
+          {/* Decorative lines */}
+          <g opacity="0.2" stroke="#ec4899" strokeWidth="2" fill="none">
+            <path d="M0 500 Q400 400 800 500 T1600 500 T1920 400" strokeDasharray="10 10">
+              <animate attributeName="stroke-dashoffset" from="100" to="0" dur="3s" repeatCount="indefinite" />
+            </path>
+            <path d="M0 600 Q400 700 800 600 T1600 600 T1920 700" strokeDasharray="15 15">
+              <animate attributeName="stroke-dashoffset" from="0" to="100" dur="4s" repeatCount="indefinite" />
+            </path>
+            <path d="M0 700 Q400 800 800 700 T1600 700 T1920 800" strokeDasharray="8 8">
+              <animate attributeName="stroke-dashoffset" from="50" to="0" dur="5s" repeatCount="indefinite" />
+            </path>
+          </g>
+
+          {/* Small decorative elements */}
+          <g opacity="0.3" fill="#f472b6">
+            <circle cx="300" cy="150" r="8" />
+            <circle cx="1600" cy="200" r="12" />
+            <circle cx="500" cy="850" r="10" />
+            <circle cx="1400" cy="750" r="15" />
+            <circle cx="900" cy="300" r="6" />
+            <circle cx="1100" cy="450" r="9" />
+          </g>
+
+          {/* Gradient overlay */}
+          <rect width="1920" height="1080" fill="url(#bgGradient)" opacity="0.3" />
+        </svg>
+
+        <div className="absolute inset-0 bg-gradient-to-b from-white/40 via-white/20 to-[var(--bg-color)]/90 dark:from-black/30 dark:via-black/20 dark:to-[var(--bg-color)]/95" />
+        <div className="absolute -top-24 left-[-10%] h-72 w-72 rounded-full bg-pink-400/15 blur-3xl" />
         <div className="absolute top-1/3 right-[-8%] h-80 w-80 rounded-full bg-amber-300/15 blur-3xl" />
       </div>
 
-      {/* Mobile/Tablet hero image */}
+      {/* Mobile/Tablet SVG Background */}
       <div className="relative z-10 lg:hidden" style={{ paddingTop: '56px' }}>
         <div style={{
           position: 'relative',
@@ -47,18 +117,41 @@ export default function HeroSection() {
           maxHeight: 260,
           overflow: 'hidden',
         }}>
-          <Image
-            src="/Hero.png"
-            alt="Bé Táo Store hero banner"
-            fill
-            priority
-            style={{
-              objectFit: 'cover',
-              objectPosition: 'center 30%',
-              transformOrigin: 'center 35%',
-            }}
-            sizes="100vw"
-          />
+          <svg
+            className="w-full h-full"
+            viewBox="0 0 400 200"
+            preserveAspectRatio="xMidYMid slice"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <defs>
+              <linearGradient id="mobileBgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#fdf2f8" />
+                <stop offset="100%" stopColor="#fce7f3" />
+              </linearGradient>
+              <linearGradient id="mobilePinkGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#f472b6" stopOpacity="0.4" />
+                <stop offset="100%" stopColor="#ec4899" stopOpacity="0.2" />
+              </linearGradient>
+            </defs>
+
+            <rect width="400" height="200" fill="url(#mobileBgGradient)" />
+
+            <circle cx="80" cy="60" r="50" fill="url(#mobilePinkGradient)" opacity="0.6" />
+            <circle cx="320" cy="140" r="60" fill="url(#mobilePinkGradient)" opacity="0.4" />
+
+            <g opacity="0.2" fill="#ec4899">
+              <rect x="150" y="40" width="60" height="120" rx="15" transform="rotate(-10 180 100)" />
+              <rect x="160" y="50" width="40" height="90" rx="8" transform="rotate(-10 180 100)" fill="rgba(255,255,255,0.5)" />
+            </g>
+
+            <g opacity="0.3" fill="#f472b6">
+              <circle cx="50" cy="50" r="6" />
+              <circle cx="350" cy="40" r="8" />
+              <circle cx="200" cy="160" r="10" />
+            </g>
+
+            <rect width="400" height="200" fill="url(#mobileBgGradient)" opacity="0.4" />
+          </svg>
         </div>
       </div>
 
@@ -71,7 +164,7 @@ export default function HeroSection() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-[var(--radius-pill)] border border-emerald-500/25 bg-[var(--color-primary-soft)] text-emerald-700 dark:text-emerald-400 text-xs sm:text-sm font-semibold"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-[var(--radius-pill)] border border-pink-500/25 bg-[var(--color-primary-soft)] text-pink-700 dark:text-pink-400 text-xs sm:text-sm font-semibold"
           >
             <Sparkles size={14} className="shrink-0" />
             iPhone chính hãng · Giá tốt
@@ -84,7 +177,7 @@ export default function HeroSection() {
             transition={{ duration: 0.55, delay: 0.15 }}
             className="text-display"
           >
-            <span className="block text-[var(--text-primary)]">Bé Táo</span>
+            <span className="block text-[var(--text-primary)]">Linh Tây</span>
             <span className="block shimmer-text">Store</span>
           </motion.h1>
 
@@ -101,9 +194,9 @@ export default function HeroSection() {
               style={{
                 display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
                 gap: 10, minHeight: 56, padding: '0 36px', borderRadius: 9999,
-                background: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
+                background: 'linear-gradient(135deg, #ec4899, #db2777)',
                 color: '#fff', fontWeight: 700, fontSize: 16, textDecoration: 'none',
-                boxShadow: '0 8px 28px -4px rgba(37,99,235,0.5)', whiteSpace: 'nowrap',
+                boxShadow: '0 8px 28px -4px rgba(236,72,153,0.5)', whiteSpace: 'nowrap',
               }}
             >
               <MessageCircle size={20} />
@@ -114,7 +207,7 @@ export default function HeroSection() {
           {/* Trust badges */}
           <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
             <span className="hero-trust-badge">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" aria-hidden />
+              <span className="h-1.5 w-1.5 rounded-full bg-pink-500" aria-hidden />
               Cập nhật theo kho thực tế
             </span>
             <span className="hero-trust-badge">

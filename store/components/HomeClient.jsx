@@ -91,7 +91,7 @@ export default function HomeClient({ allCards, series }) {
                   <button
                     type="button"
                     onClick={() => setActiveSeries(null)}
-                    className="p-0.5 rounded-full hover:bg-emerald-500/20 focus-ring"
+                    className="p-0.5 rounded-full hover:bg-pink-500/20 focus-ring"
                     aria-label="Xóa bộ lọc"
                   >
                     <X size={14} />

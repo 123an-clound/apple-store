@@ -8,7 +8,7 @@ export default function Footer() {
       <div className="section-shell section-padding">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 text-center md:text-left">
           <div className="space-y-2.5">
-            <p className="text-h2 text-[var(--text-primary)] !text-lg font-bold">Bé Táo Store</p>
+            <p className="text-h2 text-[var(--text-primary)] !text-lg font-bold">Linh Tây Store</p>
             <p className="text-caption leading-relaxed">iPhone chính hãng · Giá tốt · Bảo hành uy tín</p>
           </div>
 
@@ -16,7 +16,7 @@ export default function Footer() {
             <p className="text-[11px] font-semibold uppercase tracking-widest text-[var(--text-muted)] mb-1">Liên hệ</p>
             <a
               href={TEL_URL}
-              className="text-sm font-semibold text-[var(--text-primary)] hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors focus-ring rounded"
+              className="text-sm font-semibold text-[var(--text-primary)] hover:text-pink-600 dark:hover:text-pink-400 transition-colors focus-ring rounded"
             >
               {HOTLINE_DISPLAY}
             </a>
@@ -37,7 +37,7 @@ export default function Footer() {
           </div>
 
           <div className="md:text-right space-y-1.5">
-            <p className="text-caption">© {year} Bé Táo Store</p>
+            <p className="text-caption">© {year} Linh Tây Store</p>
             <p className="text-micro">All rights reserved</p>
           </div>
         </div>

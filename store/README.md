@@ -1,4 +1,4 @@
-# 🍎 Bé Táo Store
+# 🍎 Linh Tây Store
 
 Modern, responsive e-commerce store for iPhone products built with **Next.js 16**, **React 19**, **Tailwind CSS**, and **Supabase**.
 
