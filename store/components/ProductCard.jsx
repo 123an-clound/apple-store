@@ -73,7 +73,7 @@ export default function ProductCard({ card, onClick }) {
         onMouseLeave={() => setPaused(false)}
         onFocus={() => setPaused(true)}
         onBlur={() => setPaused(false)}
-        className="ui-card ui-card-interactive focus-ring"
+        className="ui-card ui-card-interactive focus-ring card-shine btn-modern"
         style={{
           width: '100%',
           height: '100%',
@@ -83,6 +83,12 @@ export default function ProductCard({ card, onClick }) {
           display: 'flex',
           flexDirection: 'column',
           cursor: 'pointer',
+          transition: 'all 0.4s cubic-bezier(0.23, 1, 0.32, 1)'
+        }}
+        whileHover={{
+          boxShadow: '0 0 40px rgba(236,72,153,0.5), 0 0 70px rgba(236,72,153,0.3)',
+          borderColor: 'rgba(236,72,153,0.6)',
+          transform: 'translateY(-4px)'
         }}
         aria-label={`Xem chi tiết ${card.name}, giá từ ${startingPrice}`}
       >

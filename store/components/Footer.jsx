@@ -8,7 +8,7 @@ export default function Footer() {
       <div className="section-shell section-padding">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 text-center md:text-left">
           <div className="space-y-2.5">
-            <p className="text-h2 text-[var(--text-primary)] !text-lg font-bold">Linh Tây Store</p>
+            <p className="text-h2 text-[var(--text-primary)] !text-lg font-bold glow-text-pink">Linh Tây Store</p>
             <p className="text-caption leading-relaxed">iPhone chính hãng · Giá tốt · Bảo hành uy tín</p>
           </div>
 
@@ -16,7 +16,7 @@ export default function Footer() {
             <p className="text-[11px] font-semibold uppercase tracking-widest text-[var(--text-muted)] mb-1">Liên hệ</p>
             <a
               href={TEL_URL}
-              className="text-sm font-semibold text-[var(--text-primary)] hover:text-pink-600 dark:hover:text-pink-400 transition-colors focus-ring rounded"
+              className="text-sm font-semibold text-[var(--text-primary)] hover:text-pink-600 dark:hover:text-pink-400 hover:scale-105 transition-all focus-ring rounded inline-block btn-modern"
             >
               {HOTLINE_DISPLAY}
             </a>
@@ -24,13 +24,13 @@ export default function Footer() {
               href={ZALO_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors focus-ring rounded"
+              className="text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:scale-105 transition-all focus-ring rounded inline-block btn-neon"
             >
               Nhắn Zalo
             </a>
             <a
               href="#products"
-              className="text-caption hover:text-[var(--text-primary)] transition-colors focus-ring rounded"
+              className="text-caption hover:text-[var(--text-primary)] hover:scale-105 transition-all focus-ring rounded inline-block btn-modern btn-shine-sweep"
             >
               Xem sản phẩm
             </a>

@@ -52,7 +52,7 @@ export default function Navbar() {
     >
       <div className="section-shell section-padding flex items-center justify-between h-14 sm:h-16 lg:h-[4.5rem]">
         <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group focus-ring rounded-lg">
-          <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-[var(--radius-md)] overflow-hidden ring-1 ring-[var(--border-subtle)] group-hover:ring-pink-500/40 transition-all">
+          <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-[var(--radius-md)] overflow-hidden ring-1 ring-[var(--border-subtle)] group-hover:ring-pink-500/40 transition-all icon-float">
             <Image
               src="/logo.png"
               alt="Linh Tây Store logo"
@@ -63,28 +63,53 @@ export default function Navbar() {
           </div>
           <span className="font-bold text-base sm:text-lg lg:text-xl tracking-tight heading-display">
             <span className="text-[var(--text-primary)]">Linh Tây</span>{' '}
-            <span className="text-gold-gradient">Store</span>
+            <span className="text-pink-gradient glow-text-pink">Store</span>
           </span>
         </Link>
 
-        <div className="hidden lg:flex items-center gap-3">
-          <button
+        <motion.div className="hidden lg:flex items-center gap-3"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <motion.button
             type="button"
             onClick={toggleTheme}
-            className="btn-ghost gap-2 !min-h-[40px] px-4"
+            whileHover={{ 
+              scale: 1.1,
+              boxShadow: '0 0 25px rgba(236,72,153,0.5), 0 0 50px rgba(236,72,153,0.3)'
+            }}
+            whileTap={{ scale: 0.9 }}
+            className="btn-ghost gap-2 !min-h-[40px] px-4 btn-modern btn-liquid"
             aria-label={theme === 'dark' ? 'Chuyển sang giao diện sáng' : 'Chuyển sang giao diện tối'}
           >
-            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+            <Sun size={18} className={theme === 'dark' ? 'icon-float' : 'icon-float-delayed'} />
             {theme === 'dark' ? 'Sáng' : 'Tối'}
-          </button>
-          <a href={TEL_URL} className="btn-ghost gap-2 !min-h-[40px] px-4">
+          </motion.button>
+          <motion.a 
+            href={TEL_URL} 
+            className="btn-ghost gap-2 !min-h-[40px] px-4 btn-neon"
+            whileHover={{ 
+              scale: 1.05,
+              boxShadow: '0 0 25px rgba(236,72,153,0.4), 0 0 40px rgba(236,72,153,0.2)'
+            }}
+            whileTap={{ scale: 0.95 }}
+          >
             <span className="w-2 h-2 rounded-full bg-pink-500 animate-pulse" aria-hidden />
             {HOTLINE_DISPLAY}
-          </a>
-          <a href="#products" className="btn-primary btn-sm !min-h-[40px] px-5">
+          </motion.a>
+          <motion.a 
+            href="#products" 
+            className="btn-primary btn-sm !min-h-[40px] px-5 btn-modern btn-shine-sweep"
+            whileHover={{ 
+              scale: 1.05,
+              boxShadow: '0 0 35px rgba(236,72,153,0.6), 0 0 60px rgba(236,72,153,0.4)'
+            }}
+            whileTap={{ scale: 0.95 }}
+          >
             Sản phẩm
-          </a>
-        </div>
+          </motion.a>
+        </motion.div>
 
         <button
           type="button"
