@@ -203,8 +203,7 @@ export default function ProductCard({ card, onClick }) {
             }}>
               Giá từ
             </span>
-            <div style={{
-              fontSize: 20,
+            <div className="product-card-price-value" style={{
               fontWeight: 900,
               color: '#db2777',
               lineHeight: 1,
