@@ -109,7 +109,7 @@ export default function ProductModal({ card, onClose }) {
           <div style={{ flex: 1, overflowY: 'auto', WebkitOverflowScrolling: 'touch' }}>
 
             {/* Ảnh — chiều cao cố định nhỏ gọn */}
-            <div style={{ position: 'relative', height: 200, background: 'var(--surface-elevated)', flexShrink: 0 }}>
+            <div style={{ position: 'relative', height: 300, background: 'var(--surface-elevated)', flexShrink: 0 }}>
               <AnimatePresence mode="wait">
                 {images.length > 0 ? (
                   <motion.div key={`${activeVariant.spec}-${currentImg}`}
@@ -198,24 +198,24 @@ export default function ProductModal({ card, onClose }) {
             display: 'flex', gap: 8,
           }}>
             <motion.a href={TEL_URL}
-              whileHover={{ 
+              whileHover={{
                 scale: 1.08,
                 boxShadow: '0 0 35px rgba(236,72,153,0.7), 0 0 60px rgba(236,72,153,0.5)'
               }}
               whileTap={{ scale: 0.92 }}
-              className="flex-1 flex items-center justify-center gap-6 h-46 rounded-[12px] btn-neon btn-liquid btn-3d"
-              style={{ background: 'linear-gradient(135deg,#ec4899,#db2777)', color: '#fff', fontWeight: 700, fontSize: 14, textDecoration: 'none', boxShadow: '0 4px 16px rgba(236,72,153,0.35), 0 0 30px rgba(236,72,153,0.3)' }}>
-              <Phone size={15} style={{ filter: 'drop-shadow(0 0 6px rgba(255,255,255,0.6))' }} />Gọi mua ngay
+              className="flex-1 flex items-center justify-center gap-3 h-23 rounded-[12px] btn-neon btn-liquid btn-3d"
+              style={{ background: 'linear-gradient(135deg,#ec4899,#db2777)', color: '#fff', fontWeight: 700, fontSize: 7, textDecoration: 'none', boxShadow: '0 4px 16px rgba(236,72,153,0.35), 0 0 30px rgba(236,72,153,0.3)' }}>
+              <Phone size={7.5} style={{ filter: 'drop-shadow(0 0 6px rgba(255,255,255,0.6))' }} />Gọi mua ngay
             </motion.a>
             <motion.a href={ZALO_URL} target="_blank" rel="noopener noreferrer"
-              whileHover={{ 
+              whileHover={{
                 scale: 1.08,
                 boxShadow: '0 0 35px rgba(37,99,235,0.7), 0 0 60px rgba(37,99,235,0.5)'
               }}
               whileTap={{ scale: 0.92 }}
-              className="flex-1 flex items-center justify-center gap-6 h-46 rounded-[12px] btn-modern btn-shine-sweep btn-3d"
-              style={{ background: '#2563eb', color: '#fff', fontWeight: 700, fontSize: 14, textDecoration: 'none', boxShadow: '0 4px 16px rgba(37,99,235,0.3), 0 0 30px rgba(37,99,235,0.3)' }}>
-              <MessageCircle size={15} style={{ filter: 'drop-shadow(0 0 6px rgba(255,255,255,0.6))' }} />Tư vấn Zalo
+              className="flex-1 flex items-center justify-center gap-3 h-23 rounded-[12px] btn-modern btn-shine-sweep btn-3d"
+              style={{ background: '#2563eb', color: '#fff', fontWeight: 700, fontSize: 7, textDecoration: 'none', boxShadow: '0 4px 16px rgba(37,99,235,0.3), 0 0 30px rgba(37,99,235,0.3)' }}>
+              <MessageCircle size={7.5} style={{ filter: 'drop-shadow(0 0 6px rgba(255,255,255,0.6))' }} />Tư vấn Zalo
             </motion.a>
           </div>
         </motion.div>
@@ -248,7 +248,7 @@ export default function ProductModal({ card, onClose }) {
             </div>
             {/* Body 2 cols */}
             <div style={{ display: 'flex', flex: 1, minHeight: 0, overflow: 'hidden' }}>
-              <div style={{ width: '44%', flexShrink: 0, position: 'relative', background: 'var(--surface-elevated)', minHeight: 420 }}>
+              <div style={{ width: '44%', flexShrink: 0, position: 'relative', background: 'var(--surface-elevated)', minHeight: 630 }}>
                 <AnimatePresence mode="wait">
                   {images.length > 0 ? (
                     <motion.div key={`d-${activeVariant.spec}-${currentImg}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }} style={{ position: 'absolute', inset: 0 }}>
@@ -300,24 +300,24 @@ export default function ProductModal({ card, onClose }) {
                 )}
                 <div style={{ marginTop: 'auto', paddingTop: 4, display: 'flex', gap: 10 }}>
                   <motion.a href={TEL_URL}
-                    whileHover={{ 
+                    whileHover={{
                       scale: 1.08,
                       boxShadow: '0 0 40px rgba(236,72,153,0.7), 0 0 70px rgba(236,72,153,0.5)'
                     }}
                     whileTap={{ scale: 0.92 }}
-                    className="flex-1 flex items-center justify-center gap-8 min-h-50 rounded-[12px] btn-neon btn-liquid btn-3d"
-                    style={{ background: 'linear-gradient(135deg,#ec4899,#db2777)', color: '#fff', fontWeight: 700, fontSize: 15, textDecoration: 'none', boxShadow: '0 4px 16px rgba(236,72,153,0.35), 0 0 35px rgba(236,72,153,0.3)' }}>
-                    <Phone size={17} style={{ filter: 'drop-shadow(0 0 8px rgba(255,255,255,0.6))' }} />Gọi mua ngay
+                    className="flex-1 flex items-center justify-center gap-4 min-h-25 rounded-[12px] btn-neon btn-liquid btn-3d"
+                    style={{ background: 'linear-gradient(135deg,#ec4899,#db2777)', color: '#fff', fontWeight: 700, fontSize: 7.5, textDecoration: 'none', boxShadow: '0 4px 16px rgba(236,72,153,0.35), 0 0 35px rgba(236,72,153,0.3)' }}>
+                    <Phone size={8.5} style={{ filter: 'drop-shadow(0 0 8px rgba(255,255,255,0.6))' }} />Gọi mua ngay
                   </motion.a>
                   <motion.a href={ZALO_URL} target="_blank" rel="noopener noreferrer"
-                    whileHover={{ 
+                    whileHover={{
                       scale: 1.08,
                       boxShadow: '0 0 40px rgba(37,99,235,0.7), 0 0 70px rgba(37,99,235,0.5)'
                     }}
                     whileTap={{ scale: 0.92 }}
-                    className="flex-1 flex items-center justify-center gap-8 min-h-50 rounded-[12px] btn-modern btn-shine-sweep btn-3d"
-                    style={{ background: '#2563eb', color: '#fff', fontWeight: 700, fontSize: 15, textDecoration: 'none', boxShadow: '0 4px 16px rgba(37,99,235,0.3), 0 0 35px rgba(37,99,235,0.3)' }}>
-                    <MessageCircle size={17} style={{ filter: 'drop-shadow(0 0 8px rgba(255,255,255,0.6))' }} />Tư vấn Zalo
+                    className="flex-1 flex items-center justify-center gap-4 min-h-25 rounded-[12px] btn-modern btn-shine-sweep btn-3d"
+                    style={{ background: '#2563eb', color: '#fff', fontWeight: 700, fontSize: 7.5, textDecoration: 'none', boxShadow: '0 4px 16px rgba(37,99,235,0.3), 0 0 35px rgba(37,99,235,0.3)' }}>
+                    <MessageCircle size={8.5} style={{ filter: 'drop-shadow(0 0 8px rgba(255,255,255,0.6))' }} />Tư vấn Zalo
                   </motion.a>
                 </div>
               </div>
