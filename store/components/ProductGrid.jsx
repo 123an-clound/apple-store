@@ -33,7 +33,7 @@ export default function ProductGrid({ cards, onCardClick, onResetFilter }) {
           className="col-span-full w-full text-center py-16 sm:py-24"
         >
           <motion.div 
-            className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[var(--surface-elevated)] border border-[var(--border-subtle)] mb-5 glow-pink"
+            className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[var(--surface-elevated)] border border-[var(--border-subtle)] mb-5 glow-blue"
             animate={{ 
               rotate: [0, 5, -5, 0],
               scale: [1, 1.05, 1]

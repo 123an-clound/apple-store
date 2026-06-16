@@ -1,4 +1,4 @@
-# 🍎 Linh Tây Store — Deployment Guide
+# 🍎 Apple Store — Deployment Guide
 
 ## ✨ Features
 
@@ -163,6 +163,6 @@ store/
 ## 📞 Support
 
 For issues or questions:
-- Email: contact@linhtaystore.vn
+- Email: contact@applestore.vn
 - Zalo: [0123456789](https://zalo.me/0123456789)
 - Phone: 0123 456 789

@@ -14,20 +14,20 @@ async function fetchProducts() {
       .order('stt', { ascending: false });
 
     if (error) {
-      console.error('[Linh Tây Store] Supabase fetch error:', error.message);
-      console.error('[Linh Tây Store] Error details:', error);
+      console.error('[Apple Store] Supabase fetch error:', error.message);
+      console.error('[Apple Store] Error details:', error);
       return [];
     }
     
     if (!data) {
-      console.warn('[Linh Tây Store] No data returned from Supabase');
+      console.warn('[Apple Store] No data returned from Supabase');
       return [];
     }
     
-    console.log(`[Linh Tây Store] Successfully fetched ${data.length} products`);
+    console.log(`[Apple Store] Successfully fetched ${data.length} products`);
     return data;
   } catch (err) {
-    console.error('[Linh Tây Store] Unexpected error:', err.message);
+    console.error('[Apple Store] Unexpected error:', err.message);
     return [];
   }
 }

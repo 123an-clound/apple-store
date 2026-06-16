@@ -86,8 +86,8 @@ export default function ProductCard({ card, onClick }) {
           transition: 'all 0.4s cubic-bezier(0.23, 1, 0.32, 1)'
         }}
         whileHover={{
-          boxShadow: '0 0 40px rgba(236,72,153,0.5), 0 0 70px rgba(236,72,153,0.3)',
-          borderColor: 'rgba(236,72,153,0.6)',
+          boxShadow: '0 0 40px rgba(50,55,74,0.5), 0 0 70px rgba(50,55,74,0.3)',
+          borderColor: 'rgba(50,55,74,0.6)',
           transform: 'translateY(-4px)'
         }}
         aria-label={`Xem chi tiết ${card.name}, giá từ ${startingPrice}`}
@@ -146,7 +146,7 @@ export default function ProductCard({ card, onClick }) {
                   style={{
                     display: 'block', height: 4, borderRadius: 9999,
                     width: i === currentImg ? 16 : 4,
-                    background: i === currentImg ? '#ec4899' : 'rgba(0,0,0,0.25)',
+                    background: i === currentImg ? '#5B8FB8' : 'rgba(0,0,0,0.25)',
                     border: 'none', cursor: 'pointer', padding: 0,
                     transition: 'all 0.2s',
                   }}
@@ -205,7 +205,7 @@ export default function ProductCard({ card, onClick }) {
             </span>
             <div className="product-card-price-value" style={{
               fontWeight: 900,
-              color: '#db2777',
+              color: '#3B7597',
               lineHeight: 1,
             }}>
               {startingPrice}

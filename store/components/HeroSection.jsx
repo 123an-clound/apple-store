@@ -43,9 +43,9 @@ export default function HeroSection() {
               <stop offset="100%" stopColor="#fbcfe8" />
             </linearGradient>
             <linearGradient id="pinkGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#f472b6" stopOpacity="0.3" />
-              <stop offset="50%" stopColor="#ec4899" stopOpacity="0.2" />
-              <stop offset="100%" stopColor="#db2777" stopOpacity="0.1" />
+              <stop offset="0%" stopColor="#3B7597" stopOpacity="0.3" />
+              <stop offset="50%" stopColor="#3B7597" stopOpacity="0.2" />
+              <stop offset="100%" stopColor="#3B7597" stopOpacity="0.1" />
             </linearGradient>
             <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="#fde68a" stopOpacity="0.3" />
@@ -71,7 +71,7 @@ export default function HeroSection() {
           </circle>
 
           {/* Phone outlines - stylized iPhone shapes */}
-          <g opacity="0.15" fill="#ec4899">
+          <g opacity="0.15" fill="#3B7597">
             {/* Left phone */}
             <rect x="100" y="350" width="180" height="380" rx="40" transform="rotate(-15 190 540)" />
             <rect x="120" y="370" width="140" height="320" rx="30" transform="rotate(-15 190 540)" fill="rgba(255,255,255,0.5)" />
@@ -86,7 +86,7 @@ export default function HeroSection() {
           </g>
 
           {/* Decorative lines */}
-          <g opacity="0.2" stroke="#ec4899" strokeWidth="2" fill="none">
+          <g opacity="0.2" stroke="#3B7597" strokeWidth="2" fill="none">
             <path d="M0 500 Q400 400 800 500 T1600 500 T1920 400" strokeDasharray="10 10">
               <animate attributeName="stroke-dashoffset" from="100" to="0" dur="3s" repeatCount="indefinite" />
               <animate attributeName="opacity" values="0.2;0.4;0.2" dur="2s" repeatCount="indefinite" />
@@ -102,7 +102,7 @@ export default function HeroSection() {
           </g>
 
           {/* Small decorative elements */}
-          <g opacity="0.3" fill="#f472b6">
+          <g opacity="0.3" fill="#3B7597">
             <circle cx="300" cy="150" r="8">
               <animate attributeName="cy" values="150;140;150" dur="3s" repeatCount="indefinite" />
               <animate attributeName="opacity" values="0.3;0.6;0.3" dur="2s" repeatCount="indefinite" />
@@ -158,7 +158,7 @@ export default function HeroSection() {
 
       {/* Mobile/Tablet SVG Background */}
       <motion.div 
-        className="relative z-10 lg:hidden" 
+        className="relative z-10 hidden" 
         style={{ paddingTop: '56px' }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -184,8 +184,8 @@ export default function HeroSection() {
                 <stop offset="100%" stopColor="#fce7f3" />
               </linearGradient>
               <linearGradient id="mobilePinkGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#f472b6" stopOpacity="0.4" />
-                <stop offset="100%" stopColor="#ec4899" stopOpacity="0.2" />
+                <stop offset="0%" stopColor="#3B7597" stopOpacity="0.4" />
+                <stop offset="100%" stopColor="#3B7597" stopOpacity="0.2" />
               </linearGradient>
             </defs>
 
@@ -194,12 +194,12 @@ export default function HeroSection() {
             <circle cx="80" cy="60" r="50" fill="url(#mobilePinkGradient)" opacity="0.6" />
             <circle cx="320" cy="140" r="60" fill="url(#mobilePinkGradient)" opacity="0.4" />
 
-            <g opacity="0.2" fill="#ec4899">
+            <g opacity="0.2" fill="#3B7597">
               <rect x="150" y="40" width="60" height="120" rx="15" transform="rotate(-10 180 100)" />
               <rect x="160" y="50" width="40" height="90" rx="8" transform="rotate(-10 180 100)" fill="rgba(255,255,255,0.5)" />
             </g>
 
-            <g opacity="0.3" fill="#f472b6">
+            <g opacity="0.3" fill="#3B7597">
               <circle cx="50" cy="50" r="6" />
               <circle cx="350" cy="40" r="8" />
               <circle cx="200" cy="160" r="10" />
@@ -209,23 +209,23 @@ export default function HeroSection() {
             
             {/* Animated particles */}
             <g>
-              <circle cx="50" cy="30" r="2" fill="#ec4899">
+              <circle cx="50" cy="30" r="2" fill="#3B7597">
                 <animate attributeName="cy" values="30;40;30" dur="3s" repeatCount="indefinite" />
                 <animate attributeName="opacity" values="0.3;0.8;0.3" dur="3s" repeatCount="indefinite" />
               </circle>
-              <circle cx="350" cy="50" r="3" fill="#f472b6">
+              <circle cx="350" cy="50" r="3" fill="#3B7597">
                 <animate attributeName="cy" values="50;35;50" dur="4s" repeatCount="indefinite" />
                 <animate attributeName="opacity" values="0.4;0.9;0.4" dur="4s" repeatCount="indefinite" />
               </circle>
-              <circle cx="200" cy="100" r="2" fill="#ec4899">
+              <circle cx="200" cy="100" r="2" fill="#3B7597">
                 <animate attributeName="cy" values="100;110;100" dur="5s" repeatCount="indefinite" />
                 <animate attributeName="opacity" values="0.3;0.7;0.3" dur="5s" repeatCount="indefinite" />
               </circle>
-              <circle cx="100" cy="150" r="2.5" fill="#f472b6">
+              <circle cx="100" cy="150" r="2.5" fill="#3B7597">
                 <animate attributeName="cy" values="150;140;150" dur="3.5s" repeatCount="indefinite" />
                 <animate attributeName="opacity" values="0.4;0.8;0.4" dur="3.5s" repeatCount="indefinite" />
               </circle>
-              <circle cx="300" cy="170" r="2" fill="#ec4899">
+              <circle cx="300" cy="170" r="2" fill="#3B7597">
                 <animate attributeName="cy" values="170;180;170" dur="4.5s" repeatCount="indefinite" />
                 <animate attributeName="opacity" values="0.3;0.7;0.3" dur="4.5s" repeatCount="indefinite" />
               </circle>
@@ -261,13 +261,13 @@ export default function HeroSection() {
             <motion.span 
               className="block text-[var(--text-primary)] glow-text-pink"
               whileHover={{ 
-                textShadow: '0 0 30px rgba(236,72,153,0.8), 0 0 60px rgba(236,72,153,0.4)'
+                textShadow: '0 0 30px rgba(53, 87, 240, 0.8).8), 0 0 60px rgba(236,72,153,0.4)'
               }}
               transition={{ duration: 0.3 }}
             >
-              Linh Tây
+              Apple
             </motion.span>
-            <span className="block shimmer-text">Store</span>
+            <span className="block glow-text-blue logo-text-glow">Store</span>
           </motion.h1>
 
           {/* CTA */}
@@ -284,16 +284,16 @@ export default function HeroSection() {
               rel="noopener noreferrer"
               className="btn-neon btn-modern btn-liquid btn-3d"
               whileHover={{ 
-                boxShadow: '0 20px 50px -6px rgba(236,72,153,0.9), 0 0 70px rgba(236,72,153,0.7), 0 0 100px rgba(236,72,153,0.5)',
-                background: 'linear-gradient(135deg, #f472b6, #ec4899, #db2777, #be185d)'
+                boxShadow: '0 20px 50px -6px #3B7597, 0 0 70px #3B7597, 0 0 100px #3B7597',
+                background: 'linear-gradient(135deg, #3B7597, #3B7597, #3B7597, #3B7597)'
               }}
               whileTap={{ scale: 0.95 }}
               style={{
                 display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
                 gap: 10, minHeight: 56, padding: '0 36px', borderRadius: 9999,
-                background: 'linear-gradient(135deg, #ec4899, #db2777)',
+                background: 'linear-gradient(135deg ,#3B7597, #3B7597)',
                 color: '#fff', fontWeight: 700, fontSize: 16, textDecoration: 'none',
-                boxShadow: '0 8px 28px -4px rgba(236,72,153,0.5), 0 0 40px rgba(236,72,153,0.3), 0 0 60px rgba(236,72,153,0.2)', whiteSpace: 'nowrap',
+                boxShadow: '0 8px 28px -4px rgba(82, 50, 226, 0.5).5), 0 0 40px rgba(236,72,153,0.3), 0 0 60px rgba(236,72,153,0.2)', whiteSpace: 'nowrap',
                 position: 'relative',
                 overflow: 'hidden',
               }}
@@ -367,7 +367,7 @@ export default function HeroSection() {
                   <div className="hero-highlight-text">
                     <motion.p 
                       className="hero-highlight-title"
-                      whileHover={{ color: '#ec4899' }}
+                      whileHover={{ color: '#3B7597' }}
                       transition={{ duration: 0.2 }}
                     >
                       {item.title}

@@ -88,11 +88,11 @@ export default function ProductModal({ card, onClose }) {
                 {card.name}
               </h2>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 5 }}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, fontSize: 10, fontWeight: 700, color: '#db2777', background: 'rgba(236,72,153,0.1)', borderRadius: 9999, padding: '2px 8px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, fontSize: 10, fontWeight: 700, color: '#2B5A75', background: 'rgba(59,117,151,0.2)', borderRadius: 9999, padding: '2px 8px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                   <Sparkles size={9} className="icon-float" />{card.series}
                 </span>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, fontSize: 10, fontWeight: 600, color: 'var(--text-muted)', background: 'var(--surface-elevated)', border: '1px solid var(--border-subtle)', borderRadius: 9999, padding: '2px 8px' }}>
-                  <ShieldCheck size={9} />Chính hãng
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, fontSize: 10, fontWeight: 600, color: '#3B7597', background: 'rgba(59,117,151,0.15)', border: '1px solid rgba(59,117,151,0.3)', borderRadius: 9999, padding: '2px 8px' }}>
+                  <ShieldCheck size={9} style={{ color: '#3B7597' }} />Chính hãng
                 </span>
               </div>
             </div>
@@ -140,7 +140,7 @@ export default function ProductModal({ card, onClose }) {
                   <div style={{ position: 'absolute', bottom: 8, left: 0, right: 0, display: 'flex', justifyContent: 'center', gap: 4, zIndex: 2 }}>
                     {images.map((_, i) => (
                       <button key={i} type="button" onClick={() => setCurrentImg(i)}
-                        style={{ height: 4, borderRadius: 9999, border: 'none', padding: 0, cursor: 'pointer', transition: 'all 0.2s', width: i === currentImg ? 16 : 4, background: i === currentImg ? '#ec4899' : 'rgba(0,0,0,0.2)' }} />
+                        style={{ height: 4, borderRadius: 9999, border: 'none', padding: 0, cursor: 'pointer', transition: 'all 0.2s', width: i === currentImg ? 16 : 4, background: i === currentImg ? '#3B7597' : 'rgba(0,0,0,0.2)' }} />
                     ))}
                   </div>
                   <div style={{ position: 'absolute', top: 6, right: 8, zIndex: 2, background: 'rgba(0,0,0,0.4)', borderRadius: 6, padding: '1px 6px', fontSize: 10, fontWeight: 600, color: '#fff' }}>
@@ -153,11 +153,11 @@ export default function ProductModal({ card, onClose }) {
             {/* Giá + spec */}
             <div style={{ padding: '12px 14px 0' }}>
               <motion.div 
-                whileHover={{ scale: 1.02, boxShadow: '0 0 20px rgba(236,72,153,0.3)' }}
-                style={{ borderRadius: 12, border: '1px solid rgba(236,72,153,0.2)', background: 'linear-gradient(135deg,rgba(236,72,153,0.07),var(--surface-elevated))', padding: '10px 14px' }}>
-                <p style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#db2777', margin: '0 0 4px' }}>Giá bán</p>
+                whileHover={{ scale: 1.02, boxShadow: '0 0 20px rgba(59,117,151,0.4)' }}
+                style={{ borderRadius: 12, border: '1px solid rgba(50,55,74,0.2)', background: 'linear-gradient(135deg,rgba(59,117,151,0.15),var(--surface-elevated))', padding: '10px 14px' }}>
+                <p style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#2B5A75', margin: '0 0 4px' }}>Giá bán</p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-                  <span style={{ fontSize: 24, fontWeight: 900, color: '#db2777', lineHeight: 1 }}>{activeVariant.priceFormatted}</span>
+                  <span style={{ fontSize: 24, fontWeight: 900, color: '#2B5A75', lineHeight: 1 }}>{activeVariant.priceFormatted}</span>
                   <span style={{ fontSize: 10, color: 'var(--text-muted)', background: 'var(--surface)', border: '1px solid var(--border-subtle)', borderRadius: 9999, padding: '2px 7px' }}>{activeVariant.spec}</span>
                 </div>
               </motion.div>
@@ -169,9 +169,9 @@ export default function ProductModal({ card, onClose }) {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: 6 }}>
                 {card.variants.map((v, i) => (
                   <button key={`${v.spec}-${v.price}-${i}`} type="button" onClick={() => selectVariant(v)}
-                    style={{ padding: '8px 10px', borderRadius: 9, textAlign: 'left', cursor: 'pointer', transition: 'all 0.15s', border: isActive(v) ? '2px solid #ec4899' : '1.5px solid var(--border-subtle)', background: isActive(v) ? 'rgba(236,72,153,0.07)' : 'var(--surface-elevated)', outline: 'none' }}>
-                    <span style={{ display: 'block', fontSize: 12, fontWeight: 700, color: isActive(v) ? '#db2777' : 'var(--text-primary)', lineHeight: 1.3 }}>{v.spec}</span>
-                    <span style={{ display: 'block', fontSize: 11, fontWeight: 600, marginTop: 2, color: isActive(v) ? '#db2777' : 'var(--text-muted)' }}>{v.priceFormatted}</span>
+                    style={{ padding: '8px 10px', borderRadius: 9, textAlign: 'left', cursor: 'pointer', transition: 'all 0.15s', border: isActive(v) ? '2px solid #3B7597' : '1.5px solid var(--border-subtle)', background: isActive(v) ? 'rgba(59,117,151,0.15)' : 'var(--surface-elevated)', outline: 'none' }}>
+                    <span style={{ display: 'block', fontSize: 12, fontWeight: 700, color: isActive(v) ? '#ffffff' : 'var(--text-primary)', lineHeight: 1.3 }}>{v.spec}</span>
+                    <span style={{ display: 'block', fontSize: 11, fontWeight: 600, marginTop: 2, color: isActive(v) ? '#ffffff' : 'var(--text-muted)' }}>{v.priceFormatted}</span>
                   </button>
                 ))}
               </div>
@@ -200,12 +200,12 @@ export default function ProductModal({ card, onClose }) {
             <motion.a href={TEL_URL}
               whileHover={{
                 scale: 1.08,
-                boxShadow: '0 0 35px rgba(236,72,153,0.7), 0 0 60px rgba(236,72,153,0.5)'
+                boxShadow: '0 0 35px rgba(50,55,74,0.7), 0 0 60px rgba(50,55,74,0.5)'
               }}
               whileTap={{ scale: 0.92 }}
-              className="flex-1 flex items-center justify-center gap-3 h-23 rounded-[12px] btn-neon btn-liquid btn-3d"
-              style={{ background: 'linear-gradient(135deg,#ec4899,#db2777)', color: '#fff', fontWeight: 700, fontSize: 7, textDecoration: 'none', boxShadow: '0 4px 16px rgba(236,72,153,0.35), 0 0 30px rgba(236,72,153,0.3)' }}>
-              <Phone size={7.5} style={{ filter: 'drop-shadow(0 0 6px rgba(255,255,255,0.6))' }} />Gọi mua ngay
+              className="flex-1 flex items-center justify-center gap-3 h-12 rounded-[12px] btn-neon btn-liquid btn-3d"
+              style={{ background: 'linear-gradient(135deg,#3B7597,#2B5A75)', color: '#fff', fontWeight: 700, fontSize: 14, textDecoration: 'none', boxShadow: '0 4px 16px rgba(59,117,151,0.5), 0 0 30px rgba(59,117,151,0.4)' }}>
+              <Phone size={15} style={{ filter: 'drop-shadow(0 0 6px rgba(255,255,255,0.6))' }} />Gọi mua ngay
             </motion.a>
             <motion.a href={ZALO_URL} target="_blank" rel="noopener noreferrer"
               whileHover={{
@@ -213,9 +213,9 @@ export default function ProductModal({ card, onClose }) {
                 boxShadow: '0 0 35px rgba(37,99,235,0.7), 0 0 60px rgba(37,99,235,0.5)'
               }}
               whileTap={{ scale: 0.92 }}
-              className="flex-1 flex items-center justify-center gap-3 h-23 rounded-[12px] btn-modern btn-shine-sweep btn-3d"
-              style={{ background: '#2563eb', color: '#fff', fontWeight: 700, fontSize: 7, textDecoration: 'none', boxShadow: '0 4px 16px rgba(37,99,235,0.3), 0 0 30px rgba(37,99,235,0.3)' }}>
-              <MessageCircle size={7.5} style={{ filter: 'drop-shadow(0 0 6px rgba(255,255,255,0.6))' }} />Tư vấn Zalo
+              className="flex-1 flex items-center justify-center gap-3 h-12 rounded-[12px] btn-modern btn-shine-sweep btn-3d"
+              style={{ background: '#2B5A75', color: '#fff', fontWeight: 700, fontSize: 14, textDecoration: 'none', boxShadow: '0 4px 16px rgba(37,99,235,0.3), 0 0 30px rgba(37,99,235,0.3)' }}>
+              <MessageCircle size={15} style={{ filter: 'drop-shadow(0 0 6px rgba(255,255,255,0.6))' }} />Tư vấn Zalo
             </motion.a>
           </div>
         </motion.div>
@@ -238,8 +238,8 @@ export default function ProductModal({ card, onClose }) {
             {/* Header */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 20px', borderBottom: '1px solid var(--border-subtle)', flexShrink: 0 }}>
               <div style={{ display: 'flex', gap: 8 }}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: 'rgba(236,72,153,0.1)', color: '#db2777', borderRadius: 9999, padding: '4px 12px', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}><Sparkles size={11} />{card.series}</span>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: 'var(--surface-elevated)', color: 'var(--text-secondary)', border: '1px solid var(--border-subtle)', borderRadius: 9999, padding: '4px 12px', fontSize: 11, fontWeight: 600 }}><ShieldCheck size={11} />Chính hãng</span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: 'rgba(59,117,151,0.2)', color: '#2B5A75', borderRadius: 9999, padding: '4px 12px', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}><Sparkles size={11} />{card.series}</span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: 'rgba(59,117,151,0.15)', color: '#3B7597', border: '1px solid rgba(59,117,151,0.3)', borderRadius: 9999, padding: '4px 12px', fontSize: 11, fontWeight: 600 }}><ShieldCheck size={11} />Chính hãng</span>
               </div>
               <button type="button" onClick={onClose} aria-label="Đóng"
                 style={{ width: 36, height: 36, borderRadius: '50%', background: 'var(--surface-elevated)', border: '1px solid var(--border-subtle)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)' }}>
@@ -261,7 +261,7 @@ export default function ProductModal({ card, onClose }) {
                     <button type="button" onClick={prevImage} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', zIndex: 2, width: 38, height: 38, borderRadius: '50%', background: 'rgba(0,0,0,0.4)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}><ChevronLeft size={18} /></button>
                     <button type="button" onClick={nextImage} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', zIndex: 2, width: 38, height: 38, borderRadius: '50%', background: 'rgba(0,0,0,0.4)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}><ChevronRight size={18} /></button>
                     <div style={{ position: 'absolute', bottom: 12, left: 0, right: 0, display: 'flex', justifyContent: 'center', gap: 6, zIndex: 2 }}>
-                      {images.map((_, i) => <button key={i} type="button" onClick={() => setCurrentImg(i)} style={{ height: 5, borderRadius: 9999, border: 'none', cursor: 'pointer', padding: 0, transition: 'all 0.2s', width: i === currentImg ? 22 : 5, background: i === currentImg ? '#ec4899' : 'rgba(0,0,0,0.2)' }} />)}
+                      {images.map((_, i) => <button key={i} type="button" onClick={() => setCurrentImg(i)} style={{ height: 5, borderRadius: 9999, border: 'none', cursor: 'pointer', padding: 0, transition: 'all 0.2s', width: i === currentImg ? 22 : 5, background: i === currentImg ? '#3B7597' : 'rgba(0,0,0,0.2)' }} />)}
                     </div>
                     <div style={{ position: 'absolute', top: 10, right: 10, zIndex: 2, background: 'rgba(0,0,0,0.4)', borderRadius: 8, padding: '3px 8px', fontSize: 11, fontWeight: 600, color: '#fff' }}>{currentImg + 1}/{images.length}</div>
                   </>
@@ -273,9 +273,9 @@ export default function ProductModal({ card, onClose }) {
                   <p style={{ fontSize: 13, color: 'var(--text-muted)', marginTop: 5 }}>Chọn phiên bản phù hợp với bạn</p>
                 </div>
                 <div style={{ borderRadius: 14, border: '1px solid rgba(16,185,129,0.22)', background: 'linear-gradient(135deg,rgba(16,185,129,0.08),var(--surface-elevated))', padding: '16px 20px' }}>
-                  <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#db2777', margin: '0 0 8px' }}>Giá bán</p>
+                  <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#2B5A75', margin: '0 0 8px' }}>Giá bán</p>
                   <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, flexWrap: 'wrap' }}>
-                    <span style={{ fontSize: 34, fontWeight: 900, color: '#db2777', lineHeight: 1 }}>{activeVariant.priceFormatted}</span>
+                    <span style={{ fontSize: 34, fontWeight: 900, color: '#2B5A75', lineHeight: 1 }}>{activeVariant.priceFormatted}</span>
                     <span style={{ fontSize: 12, color: 'var(--text-muted)', background: 'var(--surface)', border: '1px solid var(--border-subtle)', borderRadius: 9999, padding: '3px 10px' }}>Giá theo phiên bản</span>
                   </div>
                   <p style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 6 }}>{activeVariant.spec}</p>
@@ -285,9 +285,9 @@ export default function ProductModal({ card, onClose }) {
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(130px,1fr))', gap: 8 }}>
                     {card.variants.map((v, i) => (
                       <button key={`${v.spec}-${v.price}-${i}`} type="button" onClick={() => selectVariant(v)}
-                        style={{ padding: '10px 14px', borderRadius: 10, textAlign: 'left', cursor: 'pointer', transition: 'all 0.15s', border: isActive(v) ? '2px solid #ec4899' : '1px solid var(--border-subtle)', background: isActive(v) ? 'rgba(236,72,153,0.1)' : 'var(--surface-elevated)', outline: 'none' }}>
-                        <span style={{ display: 'block', fontSize: 13, fontWeight: 700, color: isActive(v) ? '#db2777' : 'var(--text-primary)', lineHeight: 1.3 }}>{v.spec}</span>
-                        <span style={{ display: 'block', fontSize: 12, fontWeight: 600, marginTop: 3, color: isActive(v) ? '#db2777' : 'var(--text-muted)' }}>{v.priceFormatted}</span>
+                        style={{ padding: '10px 14px', borderRadius: 10, textAlign: 'left', cursor: 'pointer', transition: 'all 0.15s', border: isActive(v) ? '2px solid #3B7597' : '1px solid var(--border-subtle)', background: isActive(v) ? 'rgba(59,117,151,0.2)' : 'var(--surface-elevated)', outline: 'none' }}>
+                        <span style={{ display: 'block', fontSize: 13, fontWeight: 700, color: isActive(v) ? '#ffffff' : 'var(--text-primary)', lineHeight: 1.3 }}>{v.spec}</span>
+                        <span style={{ display: 'block', fontSize: 12, fontWeight: 600, marginTop: 3, color: isActive(v) ? '#ffffff' : 'var(--text-muted)' }}>{v.priceFormatted}</span>
                       </button>
                     ))}
                   </div>
@@ -302,12 +302,12 @@ export default function ProductModal({ card, onClose }) {
                   <motion.a href={TEL_URL}
                     whileHover={{
                       scale: 1.08,
-                      boxShadow: '0 0 40px rgba(236,72,153,0.7), 0 0 70px rgba(236,72,153,0.5)'
+                      boxShadow: '0 0 40px rgba(50,55,74,0.7), 0 0 70px rgba(50,55,74,0.5)'
                     }}
                     whileTap={{ scale: 0.92 }}
-                    className="flex-1 flex items-center justify-center gap-4 min-h-25 rounded-[12px] btn-neon btn-liquid btn-3d"
-                    style={{ background: 'linear-gradient(135deg,#ec4899,#db2777)', color: '#fff', fontWeight: 700, fontSize: 7.5, textDecoration: 'none', boxShadow: '0 4px 16px rgba(236,72,153,0.35), 0 0 35px rgba(236,72,153,0.3)' }}>
-                    <Phone size={8.5} style={{ filter: 'drop-shadow(0 0 8px rgba(255,255,255,0.6))' }} />Gọi mua ngay
+                    className="flex-1 flex items-center justify-center gap-4 min-h-13 rounded-[12px] btn-neon btn-liquid btn-3d"
+                    style={{ background: 'linear-gradient(135deg,#3B7597,#2B5A75)', color: '#fff', fontWeight: 700, fontSize: 15, textDecoration: 'none', boxShadow: '0 4px 16px rgba(59,117,151,0.5), 0 0 35px rgba(59,117,151,0.4)' }}>
+                    <Phone size={17} style={{ filter: 'drop-shadow(0 0 8px rgba(255,255,255,0.6))' }} />Gọi mua ngay
                   </motion.a>
                   <motion.a href={ZALO_URL} target="_blank" rel="noopener noreferrer"
                     whileHover={{
@@ -315,9 +315,9 @@ export default function ProductModal({ card, onClose }) {
                       boxShadow: '0 0 40px rgba(37,99,235,0.7), 0 0 70px rgba(37,99,235,0.5)'
                     }}
                     whileTap={{ scale: 0.92 }}
-                    className="flex-1 flex items-center justify-center gap-4 min-h-25 rounded-[12px] btn-modern btn-shine-sweep btn-3d"
-                    style={{ background: '#2563eb', color: '#fff', fontWeight: 700, fontSize: 7.5, textDecoration: 'none', boxShadow: '0 4px 16px rgba(37,99,235,0.3), 0 0 35px rgba(37,99,235,0.3)' }}>
-                    <MessageCircle size={8.5} style={{ filter: 'drop-shadow(0 0 8px rgba(255,255,255,0.6))' }} />Tư vấn Zalo
+                    className="flex-1 flex items-center justify-center gap-4 min-h-13 rounded-[12px] btn-modern btn-shine-sweep btn-3d"
+                    style={{ background: '#2B5A75', color: '#fff', fontWeight: 700, fontSize: 15, textDecoration: 'none', boxShadow: '0 4px 16px rgba(37,99,235,0.3), 0 0 35px rgba(37,99,235,0.3)' }}>
+                    <MessageCircle size={17} style={{ filter: 'drop-shadow(0 0 8px rgba(255,255,255,0.6))' }} />Tư vấn Zalo
                   </motion.a>
                 </div>
               </div>

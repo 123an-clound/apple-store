@@ -16,17 +16,17 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata = {
-  title: 'Linh Tây Store — iPhone Chính Hãng Giá Tốt',
+  title: 'Apple Store — iPhone Chính Hãng Giá Tốt',
   description:
-    'Mua iPhone chính hãng tại Linh Tây Store. Đa dạng model từ iPhone X đến iPhone 17 Series. Giá tốt nhất, bảo hành uy tín, giao hàng toàn quốc.',
-  keywords: 'iPhone, mua iPhone, Linh Tây Store, iPhone chính hãng, iPhone giá rẻ',
+    'Mua iPhone chính hãng tại Apple Store. Đa dạng model từ iPhone X đến iPhone 17 Series. Giá tốt nhất, bảo hành uy tín, giao hàng toàn quốc.',
+  keywords: 'iPhone, mua iPhone, Apple Store, iPhone chính hãng, iPhone giá rẻ',
   icons: {
     icon: '/favicon.ico',
     apple: '/favicon.ico',
   },
   openGraph: {
-    title: 'Linh Tây Store — iPhone Chính Hãng Giá Tốt',
-    description: 'Mua iPhone chính hãng tại Linh Tây Store. Đa dạng model, giá tốt nhất.',
+    title: 'Apple Store — iPhone Chính Hãng Giá Tốt',
+    description: 'Mua iPhone chính hãng tại Apple Store. Đa dạng model, giá tốt nhất.',
     images: ['/logo.png'],
     type: 'website',
   },

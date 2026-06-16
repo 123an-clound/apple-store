@@ -13,17 +13,17 @@
   --font-inter: 'Inter', sans-serif;
 
   /* Brand */
-  --color-primary: #ec4899;
-  --color-primary-hover: #db2777;
-  --color-primary-soft: rgba(236, 72, 153, 0.12);
+  --color-primary: #3B7597;
+  --color-primary-hover: #4B85A7;
+  --color-primary-soft: rgba(59, 117, 151, 0.12);
   --color-secondary: #d4a853;
   --color-on-primary: #ffffff;
 
   /* Semantic */
   --color-success: #16a34a;
   --color-error: #dc2626;
-  --color-info: #2563eb;
-  --color-focus: #ec4899;
+  --color-info: #3B7597;
+  --color-focus: #3B7597;
 
   /* Surfaces */
   --surface: #ffffff;
@@ -257,12 +257,12 @@ body {
 .product-card-price-value {
   font-size: 1.1875rem;
   font-weight: 900;
-  color: #db2777;
+  color: rgba(59,117,151,0.55);
   line-height: 1;
 }
 @media (min-width: 420px) { .product-card-price-value { font-size: 1.25rem; } }
 @media (min-width: 640px) { .product-card-price-value { font-size: 1.5rem; } }
-.dark .product-card-price-value { color: #f472b6; }
+.dark .product-card-price-value { color: rgba(59,117,151,0.55); }
 
 /* ─── Button system ──────────────────────────────── */
 .btn {
@@ -298,12 +298,12 @@ body {
   text-decoration: none;
   border: none;
   cursor: pointer;
-  box-shadow: 0 8px 24px -6px rgba(236,72,153,0.45);
+  box-shadow: 0 8px 24px -6px rgba(59,117,151,0.45);
   transition: all 0.2s ease;
   touch-action: manipulation;
   white-space: nowrap;
 }
-.btn-primary:hover { filter: brightness(1.05); box-shadow: 0 10px 28px -6px rgba(236,72,153,0.55); transform: translateY(-1px); }
+.btn-primary:hover { filter: brightness(1.05); box-shadow: 0 10px 28px -6px rgba(59,117,151,0.55); transform: translateY(-1px); }
 .btn-primary:active { transform: scale(0.98); }
 .btn-primary:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
 
@@ -409,7 +409,7 @@ body {
   background: var(--color-primary);
   color: var(--color-on-primary);
   border-color: transparent;
-  box-shadow: 0 4px 12px rgba(16,185,129,0.3);
+  box-shadow: 0 4px 12px rgba(59,117,151,0.4);
 }
 .series-pill--active::after {
   content: '';
@@ -726,11 +726,11 @@ body {
   box-shadow: 0 0 20px rgba(236,72,153,0.3), 0 0 40px rgba(236,72,153,0.2);
 }
 .glow-pink:hover {
-  box-shadow: 0 0 30px rgba(236,72,153,0.4), 0 0 60px rgba(236,72,153,0.3);
+  box-shadow: 0 0 30px rgba(70, 95, 236, 0.4), 0 0 60px rgba(61, 64, 228, 0.3);
 }
 
 .glow-text-pink {
-  text-shadow: 0 0 10px rgba(236,72,153,0.5), 0 0 20px rgba(236,72,153,0.3);
+  text-shadow: 0 0 10px #3B7597, 0 0 20px #3B7597;
 }
 
 .shine-effect {
@@ -1045,3 +1045,126 @@ body {
 
 .modal-backdrop { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 .focus-ring:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+
+/* ─── Logo Glow Effect ────────────────────────────────── */
+.logo-glow {
+  position: relative;
+  animation: logo-pulse-glow 2s ease-in-out infinite;
+}
+.logo-glow::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  background: linear-gradient(45deg, #3b82f6, #5B8FB8, #8BAAC9, #BAD0E3, #5B8FB8, #3b82f6, #2B5A75);
+  background-size: 400% 400%;
+  border-radius: inherit;
+  z-index: -1;
+  animation: logo-gradient-rotate 2s linear infinite;
+  opacity: 0.9;
+  filter: blur(6px);
+}
+.logo-glow::after {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  background: conic-gradient(from 0deg, transparent, rgba(59, 130, 246, 0.6), transparent 30%);
+  background-size: 200% 200%;
+  border-radius: inherit;
+  z-index: -2;
+  animation: logo-conic-rotate 3s linear infinite;
+}
+@keyframes logo-pulse-glow {
+  0%, 100% { transform: scale(1); filter: brightness(1); box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+  50% { transform: scale(1.08); filter: brightness(1.3); box-shadow: 0 0 35px rgba(59, 130, 246, 0.6); }
+}
+@keyframes logo-gradient-rotate {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@keyframes logo-conic-rotate {
+  0% { background-position: 0% 50%; transform: rotate(0deg); }
+  100% { background-position: 0% 50%; transform: rotate(360deg); }
+}
+
+/* ─── Logo Container Glow Effect ─────────────────────── */
+.logo-container-glow {
+  position: relative;
+  padding: 4px;
+  border-radius: 12px;
+  background: rgba(59, 130, 246, 0.05);
+  overflow: hidden;
+}
+.logo-container-glow::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  background: linear-gradient(45deg, #3b82f6, #5B8FB8, #8BAAC9, #5B8FB8, #3b82f6, #2B5A75, #3b82f6);
+  background-size: 300% 300%;
+  border-radius: inherit;
+  z-index: -1;
+  animation: border-rotate 3s linear infinite;
+  opacity: 0.6;
+  filter: blur(2px);
+}
+.logo-container-glow::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  background: linear-gradient(45deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+  background-size: 200% 200%;
+  border-radius: inherit;
+  z-index: -2;
+  animation: shimmer 2s ease-in-out infinite;
+}
+@keyframes border-rotate {
+  0% { background-position: 0% 50%; }
+  25% { background-position: 100% 50%; }
+  50% { background-position: 100% 100%; }
+  75% { background-position: 0% 100%; }
+  100% { background-position: 0% 50%; }
+}
+@keyframes shimmer {
+  0% { opacity: 0.3; transform: translateX(-100%) translateY(-100%); }
+  50% { opacity: 0.8; transform: translateX(100%) translateY(100%); }
+  100% { opacity: 0.3; transform: translateX(-100%) translateY(-100%); }
+}
+
+
+/* Logo Text Glow Effect */
+.logo-text-glow {
+  position: relative;
+  display: inline-block;
+}
+.logo-text-glow::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  background: linear-gradient(45deg, #3b82f6, #5B8FB8, #8BAAC9, #BAD0E3, #5B8FB8, #3b82f6, #2B5A75);
+  background-size: 400% 400%;
+  border-radius: inherit;
+  z-index: -1;
+  animation: logo-text-gradient-rotate 2s linear infinite;
+  opacity: 0.8;
+  filter: blur(8px);
+}
+.logo-text-glow::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  background: conic-gradient(from 0deg, transparent, rgba(59, 130, 246, 0.5), transparent 30%);
+  background-size: 200% 200%;
+  border-radius: inherit;
+  z-index: -2;
+  animation: logo-text-conic-rotate 3s linear infinite;
+}
+@keyframes logo-text-gradient-rotate {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@keyframes logo-text-conic-rotate {
+  0% { background-position: 0% 50%; transform: rotate(0deg); }
+  100% { background-position: 0% 50%; transform: rotate(360deg); }
+}
+

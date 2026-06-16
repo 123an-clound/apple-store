@@ -62,7 +62,7 @@ export default function HomeClient({ allCards, series }) {
           >
             <motion.div 
               style={{ background: 'var(--surface-section)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid var(--border-subtle)', borderRadius: 20, padding: '12px 16px', boxShadow: 'var(--shadow-1)' }}
-              whileHover={{ boxShadow: '0 8px 32px rgba(236,72,153,0.15)' }}
+              whileHover={{ boxShadow: '0 8px 32px rgba(50,55,74,0.15)' }}
               transition={{ duration: 0.3 }}
             >
               {/* Series filter pills */}
@@ -90,7 +90,7 @@ export default function HomeClient({ allCards, series }) {
             >
               <motion.h2 
                 id="products-heading" 
-                className="text-h1 text-[var(--text-primary)] glow-text-pink"
+                className="text-h1 text-[var(--text-primary)] glow-text-blue"
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.2 }}
               >
@@ -103,7 +103,7 @@ export default function HomeClient({ allCards, series }) {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2, duration: 0.4 }}
               >
-                <span className="font-semibold text-[var(--text-primary)] animate-scale-pulse glow-text-pink">
+                <span className="font-semibold text-[var(--text-primary)] animate-scale-pulse glow-text-blue">
                   {visibleCards.length}
                 </span>{' '}
                 mẫu iPhone
@@ -126,12 +126,12 @@ export default function HomeClient({ allCards, series }) {
                   <motion.button
                     type="button"
                     onClick={() => setActiveSeries(null)}
-                    className="p-0.5 rounded-full hover:bg-pink-500/20 focus-ring btn-modern"
+                    className="p-0.5 rounded-full hover:bg-blue-500/20 focus-ring btn-modern"
                     aria-label="Xóa bộ lọc"
                     whileHover={{ 
                       rotate: 90,
                       scale: 1.1,
-                      boxShadow: '0 0 15px rgba(236,72,153,0.4)'
+                      boxShadow: '0 0 15px rgba(50,55,74,0.4)'
                     }}
                     transition={{ duration: 0.3 }}
                   >
@@ -144,7 +144,7 @@ export default function HomeClient({ allCards, series }) {
                   className="btn-ghost text-xs sm:text-sm btn-modern"
                   whileHover={{ 
                     scale: 1.08,
-                    boxShadow: '0 0 20px rgba(236,72,153,0.3), 0 0 35px rgba(236,72,153,0.2)'
+                    boxShadow: '0 0 20px rgba(50,55,74,0.3), 0 0 35px rgba(50,55,74,0.2)'
                   }}
                   whileTap={{ scale: 0.92 }}
                 >
@@ -182,7 +182,7 @@ function SeriesPill({ label, active, onClick }) {
       whileTap={{ scale: 0.95 }}
       className={`series-pill focus-ring ${active ? 'series-pill--active' : ''}`}
       animate={active ? {
-        boxShadow: ['0 0 0 0 rgba(236,72,153,0.4)', '0 0 0 8px rgba(236,72,153,0)']
+        boxShadow: ['0 0 0 0 rgba(59,117,151,0.5)', '0 0 0 8px rgba(59,117,151,0)']
       } : {}}
       transition={{ duration: 0.3 }}
     >

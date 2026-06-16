@@ -38,7 +38,7 @@ export default function FloatingContact({ hidden = false }) {
                   href={TEL_URL}
                   whileHover={{ 
                     scale: 1.08,
-                    boxShadow: '0 0 35px rgba(236,72,153,0.7), 0 0 60px rgba(236,72,153,0.5)'
+                    boxShadow: '0 0 35px rgba(50,55,74,0.7), 0 0 60px rgba(50,55,74,0.5)'
                   }}
                   whileTap={{ scale: 0.92 }}
                   aria-label="Gọi điện"
@@ -80,7 +80,7 @@ export default function FloatingContact({ hidden = false }) {
                 whileHover={{ 
                   scale: 1.12,
                   rotate: -8,
-                  boxShadow: '0 0 40px rgba(236,72,153,0.7), 0 0 70px rgba(236,72,153,0.5)'
+                  boxShadow: '0 0 40px rgba(50,55,74,0.7), 0 0 70px rgba(50,55,74,0.5)'
                 }}
                 whileTap={{ scale: 0.88 }}
                 aria-label="Gọi điện"

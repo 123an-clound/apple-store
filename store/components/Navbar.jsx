@@ -51,19 +51,19 @@ export default function Navbar() {
       }`}
     >
       <div className="section-shell section-padding flex items-center justify-between h-14 sm:h-16 lg:h-[4.5rem]">
-        <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group focus-ring rounded-lg">
-          <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-[var(--radius-md)] overflow-hidden ring-1 ring-[var(--border-subtle)] group-hover:ring-pink-500/40 transition-all icon-float">
+        <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group focus-ring rounded-lg logo-container-glow">
+          <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-[var(--radius-md)] overflow-hidden ring-1 ring-[var(--border-subtle)] group-hover:ring-blue-500/40 transition-all logo-glow">
             <Image
               src="/logo.png"
-              alt="Linh Tây Store logo"
+              alt="Apple Store logo"
               fill
               className="object-cover"
               sizes="(max-width: 640px) 32px, 36px"
             />
           </div>
           <span className="font-bold text-base sm:text-lg lg:text-xl tracking-tight heading-display">
-            <span className="text-[var(--text-primary)]">Linh Tây</span>{' '}
-            <span className="text-pink-gradient glow-text-pink">Store</span>
+            <span className="text-[var(--text-primary)]">Apple</span>{' '}
+            <span className="text-blue-gradient glow-text-blue">Store</span>
           </span>
         </Link>
 
@@ -77,7 +77,7 @@ export default function Navbar() {
             onClick={toggleTheme}
             whileHover={{ 
               scale: 1.1,
-              boxShadow: '0 0 25px rgba(236,72,153,0.5), 0 0 50px rgba(236,72,153,0.3)'
+              boxShadow: '0 0 25px rgba(50,55,74,0.5), 0 0 50px rgba(50,55,74,0.3)'
             }}
             whileTap={{ scale: 0.9 }}
             className="btn-ghost gap-2 !min-h-[40px] px-4 btn-modern btn-liquid"
@@ -91,11 +91,11 @@ export default function Navbar() {
             className="btn-ghost gap-2 !min-h-[40px] px-4 btn-neon"
             whileHover={{ 
               scale: 1.05,
-              boxShadow: '0 0 25px rgba(236,72,153,0.4), 0 0 40px rgba(236,72,153,0.2)'
+              boxShadow: '0 0 25px rgba(59,117,151,0.5), 0 0 40px rgba(59,117,151,0.3)'
             }}
             whileTap={{ scale: 0.95 }}
           >
-            <span className="w-2 h-2 rounded-full bg-pink-500 animate-pulse" aria-hidden />
+            <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" aria-hidden />
             {HOTLINE_DISPLAY}
           </motion.a>
           <motion.a 
@@ -103,7 +103,7 @@ export default function Navbar() {
             className="btn-primary btn-sm !min-h-[40px] px-5 btn-modern btn-shine-sweep"
             whileHover={{ 
               scale: 1.05,
-              boxShadow: '0 0 35px rgba(236,72,153,0.6), 0 0 60px rgba(236,72,153,0.4)'
+              boxShadow: '0 0 35px rgba(59,117,151,0.6), 0 0 60px rgba(59,117,151,0.4)'
             }}
             whileTap={{ scale: 0.95 }}
           >
@@ -184,9 +184,9 @@ export default function Navbar() {
                   style={{
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
                     width: '100%', minHeight: 52, borderRadius: 12,
-                    background: 'linear-gradient(135deg, #ec4899, #db2777)',
+                    background: 'linear-gradient(135deg, #5B8FB8, #8BAAC9)',
                     color: '#fff', fontWeight: 700, fontSize: 16,
-                    textDecoration: 'none', boxShadow: '0 4px 16px rgba(16,185,129,0.35)',
+                    textDecoration: 'none', boxShadow: '0 4px 16px rgba(59,117,151,0.5)',
                   }}
                 >
                   <Phone size={18} />
