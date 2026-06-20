@@ -91,7 +91,7 @@ export default function Navbar() {
             className="btn-ghost gap-2 !min-h-[40px] px-4 btn-neon"
             whileHover={{ 
               scale: 1.05,
-              boxShadow: '0 0 25px rgba(59,117,151,0.5), 0 0 40px rgba(59,117,151,0.3)'
+              boxShadow: '0 0 25px rgba(70,165,227,0.5), 0 0 40px rgba(70,165,227,0.3)'
             }}
             whileTap={{ scale: 0.95 }}
           >
@@ -103,7 +103,7 @@ export default function Navbar() {
             className="btn-primary btn-sm !min-h-[40px] px-5 btn-modern btn-shine-sweep"
             whileHover={{ 
               scale: 1.05,
-              boxShadow: '0 0 35px rgba(59,117,151,0.6), 0 0 60px rgba(59,117,151,0.4)'
+              boxShadow: '0 0 35px rgba(70,165,227,0.6), 0 0 60px rgba(70,165,227,0.4)'
             }}
             whileTap={{ scale: 0.95 }}
           >
@@ -184,9 +184,9 @@ export default function Navbar() {
                   style={{
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
                     width: '100%', minHeight: 52, borderRadius: 12,
-                    background: 'linear-gradient(135deg, #5B8FB8, #8BAAC9)',
+                    background: 'linear-gradient(135deg, #66b5e8, #86c5ed)',
                     color: '#fff', fontWeight: 700, fontSize: 16,
-                    textDecoration: 'none', boxShadow: '0 4px 16px rgba(59,117,151,0.5)',
+                    textDecoration: 'none', boxShadow: '0 4px 16px rgba(70,165,227,0.5)',
                   }}
                 >
                   <Phone size={18} />

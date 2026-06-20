@@ -182,7 +182,7 @@ function SeriesPill({ label, active, onClick }) {
       whileTap={{ scale: 0.95 }}
       className={`series-pill focus-ring ${active ? 'series-pill--active' : ''}`}
       animate={active ? {
-        boxShadow: ['0 0 0 0 rgba(59,117,151,0.5)', '0 0 0 8px rgba(59,117,151,0)']
+        boxShadow: ['0 0 0 0 rgba(70,165,227,0.5)', '0 0 0 8px rgba(70,165,227,0)']
       } : {}}
       transition={{ duration: 0.3 }}
     >

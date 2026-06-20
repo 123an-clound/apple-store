@@ -1,0 +1,126 @@
+/* Floating Contact Animations */
+@keyframes shine {
+  0% { left: -100%; }
+  100% { left: 200%; }
+}
+
+@keyframes liquid-neon {
+  0% {
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.2),
+                0 0 40px rgba(34, 211, 238, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(34, 211, 238, 0.4),
+                0 0 60px rgba(34, 211, 238, 0.2);
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.2),
+                0 0 40px rgba(34, 211, 238, 0.1);
+  }
+}
+
+@keyframes liquid-neon-reverse {
+  0% {
+    box-shadow: 0 0 20px rgba(37, 99, 235, 0.2),
+                0 0 40px rgba(37, 99, 235, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(37, 99, 235, 0.4),
+                0 0 60px rgba(37, 99, 235, 0.2);
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(37, 99, 235, 0.2),
+                0 0 40px rgba(37, 99, 235, 0.1);
+  }
+}
+
+@keyframes contact-ripple {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Multi-layer ripple effects */
+@keyframes ripple-1 {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+@keyframes ripple-2 {
+  0% {
+    transform: scale(1);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+@keyframes ripple-3 {
+  0% {
+    transform: scale(1);
+    opacity: 0.2;
+  }
+  100% {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
+.animate-liquid-neon {
+  animation: liquid-neon 2s ease-in-out infinite;
+}
+
+.animate-liquid-neon-reverse {
+  animation: liquid-neon-reverse 2s ease-in-out infinite;
+}
+
+.contact-ripple {
+  position: relative;
+}
+
+.contact-ripple::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  border: 2px solid currentColor;
+  opacity: 0;
+  animation: contact-ripple 2s ease-out infinite;
+}
+
+.animate-ripple-1 {
+  position: absolute;
+  inset: -8px;
+  border-radius: inherit;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  animation: ripple-1 2s ease-out infinite;
+}
+
+.animate-ripple-2 {
+  position: absolute;
+  inset: -8px;
+  border-radius: inherit;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  animation: ripple-2 2s ease-out infinite 0.3s;
+}
+
+.animate-ripple-3 {
+  position: absolute;
+  inset: -8px;
+  border-radius: inherit;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  animation: ripple-3 2s ease-out infinite 0.6s;
+}

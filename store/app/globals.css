@@ -1,11 +1,12 @@
 @import "tailwindcss";
+@import "./floating-contact.css";
 
 /* ─── Design Tokens ──────────────────────────────── */
 /* tailwindcss v4 theme configuration */
 @theme {
-  --color-pink-400: #f472b6;
-  --color-pink-500: #ec4899;
-  --color-pink-600: #db2777;
+  --color-pink-400: #4BB8FA;
+  --color-pink-500: #4BB8FA;
+  --color-pink-600: #4BB8FA;
   --font-display: var(--font-display), 'Plus Jakarta Sans', sans-serif;
 }
 
@@ -13,17 +14,17 @@
   --font-inter: 'Inter', sans-serif;
 
   /* Brand */
-  --color-primary: #3B7597;
-  --color-primary-hover: #4B85A7;
-  --color-primary-soft: rgba(59, 117, 151, 0.12);
+  --color-primary: #46a5e3;
+  --color-primary-hover: #46a5e3;
+  --color-primary-soft: rgba(70, 165, 227, 0.12);
   --color-secondary: #d4a853;
   --color-on-primary: #ffffff;
 
   /* Semantic */
   --color-success: #16a34a;
   --color-error: #dc2626;
-  --color-info: #3B7597;
-  --color-focus: #3B7597;
+  --color-info: #46a5e3;
+  --color-focus: #46a5e3;
 
   /* Surfaces */
   --surface: #ffffff;
@@ -90,7 +91,7 @@
   --glass: rgba(23,23,23,0.92);
   --glass-border: rgba(255,255,255,0.08);
   --shadow-1: 0 1px 3px rgba(0,0,0,0.35);
-  --shadow-2: 0 4px 20px rgba(0,0,0,0.4), 0 0 0 1px rgba(16,185,129,0.1);
+  --shadow-2: 0 4px 20px rgba(0,0,0,0.4), 0 0 0 1px rgba(16, 145, 185, 0.1);
   --shadow-3: 0 16px 48px rgba(0,0,0,0.5);
 }
 
@@ -257,12 +258,12 @@ body {
 .product-card-price-value {
   font-size: 1.1875rem;
   font-weight: 900;
-  color: rgba(59,117,151,0.55);
+  color: rgba(70,165,227,0.55);
   line-height: 1;
 }
 @media (min-width: 420px) { .product-card-price-value { font-size: 1.25rem; } }
 @media (min-width: 640px) { .product-card-price-value { font-size: 1.5rem; } }
-.dark .product-card-price-value { color: rgba(59,117,151,0.55); }
+.dark .product-card-price-value { color: rgba(70,165,227,0.55); }
 
 /* ─── Button system ──────────────────────────────── */
 .btn {
@@ -298,12 +299,12 @@ body {
   text-decoration: none;
   border: none;
   cursor: pointer;
-  box-shadow: 0 8px 24px -6px rgba(59,117,151,0.45);
+  box-shadow: 0 8px 24px -6px rgba(70,165,227,0.45);
   transition: all 0.2s ease;
   touch-action: manipulation;
   white-space: nowrap;
 }
-.btn-primary:hover { filter: brightness(1.05); box-shadow: 0 10px 28px -6px rgba(59,117,151,0.55); transform: translateY(-1px); }
+.btn-primary:hover { filter: brightness(1.05); box-shadow: 0 10px 28px -6px rgba(70,165,227,0.55); transform: translateY(-1px); }
 .btn-primary:active { transform: scale(0.98); }
 .btn-primary:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
 
@@ -409,7 +410,7 @@ body {
   background: var(--color-primary);
   color: var(--color-on-primary);
   border-color: transparent;
-  box-shadow: 0 4px 12px rgba(59,117,151,0.4);
+  box-shadow: 0 4px 12px rgba(70,165,227,0.4);
 }
 .series-pill--active::after {
   content: '';
@@ -543,6 +544,12 @@ body {
   gap: 12px;
   text-align: left;
   box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+.hero-highlight-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 8px 24px rgba(70,165,227,0.25);
+  transform: scale(1.05);
 }
 @media (min-width: 640px) { .hero-highlight-card { padding: 20px; gap: 14px; } }
 .dark .hero-highlight-card { background: rgba(33,33,33,0.82); }
@@ -557,6 +564,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.6s ease;
+}
+.hero-highlight-card:hover .hero-highlight-icon {
+  transform: rotate(360deg);
 }
 
 .hero-highlight-text { min-width: 0; padding-top: 2px; }
@@ -566,6 +577,10 @@ body {
   font-weight: 600;
   color: var(--text-primary);
   line-height: 1.3;
+  transition: color 0.2s;
+}
+.hero-highlight-card:hover .hero-highlight-title {
+  color: var(--color-primary);
 }
 @media (min-width: 640px) { .hero-highlight-title { font-size: 0.9375rem; } }
 
@@ -730,7 +745,7 @@ body {
 }
 
 .glow-text-pink {
-  text-shadow: 0 0 10px #3B7597, 0 0 20px #3B7597;
+  text-shadow: 0 0 10px #46a5e3, 0 0 20px #46a5e3;
 }
 
 .shine-effect {
@@ -1055,7 +1070,7 @@ body {
   content: '';
   position: absolute;
   inset: -4px;
-  background: linear-gradient(45deg, #3b82f6, #5B8FB8, #8BAAC9, #BAD0E3, #5B8FB8, #3b82f6, #2B5A75);
+  background: linear-gradient(45deg, #46a5e3, #66b5e8, #86c5ed, #a6d5f2, #66b5e8, #46a5e3, #2685c3);
   background-size: 400% 400%;
   border-radius: inherit;
   z-index: -1;
@@ -1099,7 +1114,7 @@ body {
   content: '';
   position: absolute;
   inset: -3px;
-  background: linear-gradient(45deg, #3b82f6, #5B8FB8, #8BAAC9, #5B8FB8, #3b82f6, #2B5A75, #3b82f6);
+  background: linear-gradient(45deg, #46a5e3, #66b5e8, #86c5ed, #66b5e8, #46a5e3, #2685c3, #46a5e3);
   background-size: 300% 300%;
   border-radius: inherit;
   z-index: -1;
@@ -1140,7 +1155,7 @@ body {
   content: '';
   position: absolute;
   inset: -4px;
-  background: linear-gradient(45deg, #3b82f6, #5B8FB8, #8BAAC9, #BAD0E3, #5B8FB8, #3b82f6, #2B5A75);
+  background: linear-gradient(45deg, #46a5e3, #66b5e8, #86c5ed, #a6d5f2, #66b5e8, #46a5e3, #2685c3);
   background-size: 400% 400%;
   border-radius: inherit;
   z-index: -1;
@@ -1167,4 +1182,3 @@ body {
   0% { background-position: 0% 50%; transform: rotate(0deg); }
   100% { background-position: 0% 50%; transform: rotate(360deg); }
 }
-

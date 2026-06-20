@@ -146,7 +146,7 @@ export default function ProductCard({ card, onClick }) {
                   style={{
                     display: 'block', height: 4, borderRadius: 9999,
                     width: i === currentImg ? 16 : 4,
-                    background: i === currentImg ? '#5B8FB8' : 'rgba(0,0,0,0.25)',
+                    background: i === currentImg ? '#66b5e8' : 'rgba(0,0,0,0.25)',
                     border: 'none', cursor: 'pointer', padding: 0,
                     transition: 'all 0.2s',
                   }}
@@ -205,7 +205,7 @@ export default function ProductCard({ card, onClick }) {
             </span>
             <div className="product-card-price-value" style={{
               fontWeight: 900,
-              color: '#3B7597',
+              color: '#46a5e3',
               lineHeight: 1,
             }}>
               {startingPrice}
