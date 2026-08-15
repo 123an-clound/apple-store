@@ -8,9 +8,20 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 import { TEL_URL, HOTLINE_DISPLAY } from '@/lib/constants';
 
+// The <html> class is the single source of truth for the theme — it is set by the
+// inline script in app/layout.js before first paint. Reading it through
+// useSyncExternalStore means the toggle renders the correct label immediately
+// instead of rendering "light" and then correcting itself after hydration.
+const themeListeners = new Set();
+const subscribeToTheme = (onStoreChange) => {
+  themeListeners.add(onStoreChange);
+  return () => themeListeners.delete(onStoreChange);
+};
+const getThemeSnapshot = () =>
+  document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [theme, setTheme] = useState('light');
 
   const scrolled = useSyncExternalStore(
     (onStoreChange) => {
@@ -21,10 +32,7 @@ export default function Navbar() {
     () => false
   );
 
-  useEffect(() => {
-    // Sync initial theme from HTML class set in layout script.
-    setTheme(document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-  }, []);
+  const theme = useSyncExternalStore(subscribeToTheme, getThemeSnapshot, () => 'light');
 
   useEffect(() => {
     document.body.style.overflow = mobileMenuOpen ? 'hidden' : '';
@@ -35,11 +43,11 @@ export default function Navbar() {
 
   const toggleTheme = () => {
     const next = theme === 'dark' ? 'light' : 'dark';
-    setTheme(next);
     document.documentElement.classList.toggle('dark', next === 'dark');
     try {
       localStorage.setItem('theme', next);
     } catch {}
+    themeListeners.forEach((listener) => listener());
   };
 
   return (
@@ -83,7 +91,7 @@ export default function Navbar() {
             className="btn-ghost gap-2 !min-h-[40px] px-4 btn-modern btn-liquid"
             aria-label={theme === 'dark' ? 'Chuyển sang giao diện sáng' : 'Chuyển sang giao diện tối'}
           >
-            <Sun size={18} className={theme === 'dark' ? 'icon-float' : 'icon-float-delayed'} />
+            <Sun size={18} />
             {theme === 'dark' ? 'Sáng' : 'Tối'}
           </motion.button>
           <motion.a 

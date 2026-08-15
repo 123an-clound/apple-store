@@ -105,8 +105,9 @@ Ensure your Supabase `kho_hang_iphone` table has these columns:
 
 ### Brand Assets:
 - **Logo**: Update `store/public/logo.png`
-- **Hero banner**: Update `store/public/hero.png`
-- **Favicon**: Update `store/app/favicon.ico`
+- **Hero background**: inline SVG in `store/components/HeroSection.jsx` (no image file)
+- **Favicon**: Update `store/app/icon.png` (and `store/app/apple-icon.png` for iOS)
+- **Social share card**: Update `store/public/og.png` (1200×630)
 
 ### Contact Info:
 Edit `store/lib/constants.js`:
@@ -124,8 +125,11 @@ store/
 ├── app/               # Next.js App Router
 │   ├── layout.js      # Root layout with metadata
 │   ├── page.js        # Home page (server component)
-│   ├── globals.css    # Global styles
-│   └── favicon.ico    # Favicon
+│   ├── globals.css    # Global styles + Tailwind v4 theme config
+│   ├── robots.js      # robots.txt
+│   ├── sitemap.js     # sitemap.xml
+│   ├── icon.png       # Favicon
+│   └── apple-icon.png # iOS home-screen icon
 ├── components/        # React components
 │   ├── Navbar.jsx
 │   ├── HeroSection.jsx
@@ -139,9 +143,10 @@ store/
 ├── public/            # Static assets
 ├── .env.local         # Local environment variables (git-ignored)
 ├── .env.example       # Example env variables
-├── next.config.mjs    # Next.js config
-├── tailwind.config.js # Tailwind CSS config
+├── next.config.mjs    # Next.js config + security headers
 └── package.json       # Dependencies
+
+Tailwind v4 is configured in CSS (`app/globals.css`), not a tailwind.config file.
 
 ../ (root)
 └── vercel.json        # Vercel build config

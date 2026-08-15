@@ -1,10 +1,8 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { ShieldCheck, Smartphone, Sparkles, MessageCircle } from 'lucide-react';
 import { ZALO_TRAGOP_URL } from '@/lib/constants';
-
-// Remove unused Image import since we're using SVG now
 
 const heroHighlights = [
   {
@@ -20,15 +18,21 @@ const heroHighlights = [
 ];
 
 export default function HeroSection() {
+  const reduceMotion = useReducedMotion();
+
   return (
     <section className="relative overflow-hidden pt-0 sm:pt-0 lg:pt-28 pb-8 sm:pb-10 lg:pb-16 lg:min-h-[80svh] lg:flex lg:items-end lg:justify-center">
 
-      {/* Desktop SVG Background */}
-      <motion.div 
+      {/* Desktop SVG Background. It is purely decorative and driven by ~30 SMIL
+          <animate> elements, which no CSS media query can switch off — so skip
+          rendering it entirely when reduced motion is requested. */}
+      {!reduceMotion && (
+      <motion.div
         className="absolute inset-0 z-0 hidden lg:block"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
+        aria-hidden="true"
       >
         <svg
           className="w-full h-full"
@@ -200,126 +204,7 @@ export default function HeroSection() {
           transition={{ duration: 5, repeat: Infinity, delay: 1 }}
         />
       </motion.div>
-
-      {/* Mobile/Tablet SVG Background */}
-      <motion.div 
-        className="relative z-10 hidden" 
-        style={{ paddingTop: '56px' }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8 }}
-      >
-        <div style={{
-          position: 'relative',
-          width: '100%',
-          height: '52vw',
-          minHeight: 180,
-          maxHeight: 260,
-          overflow: 'hidden',
-        }}>
-          <svg
-            className="w-full h-full"
-            viewBox="0 0 400 200"
-            preserveAspectRatio="xMidYMid slice"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <defs>
-              <linearGradient id="mobileBgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#f0f9ff" />
-                <stop offset="100%" stopColor="#e0f2fe" />
-              </linearGradient>
-              <linearGradient id="mobilePrimaryGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#46a5e3" stopOpacity="0.4" />
-                <stop offset="100%" stopColor="#46a5e3" stopOpacity="0.2" />
-              </linearGradient>
-            </defs>
-
-            <rect width="400" height="200" fill="url(#mobileBgGradient)" />
-
-            {/* iPhone shapes */}
-            <g opacity="0.25" fill="#46a5e3">
-              {/* Center phone */}
-              <rect x="150" y="30" width="70" height="140" rx="16" transform="rotate(-5 185 100)" />
-              <rect x="160" y="40" width="50" height="110" rx="10" transform="rotate(-5 185 100)" fill="rgba(255,255,255,0.5)" />
-              {/* Camera notch */}
-              <rect x="180" y="45" width="20" height="6" rx="3" transform="rotate(-5 185 100)" fill="rgba(70,165,227,0.8)" />
-
-              {/* Left small phone */}
-              <rect x="40" y="80" width="40" height="80" rx="10" transform="rotate(-15 60 120)" opacity="0.7">
-                <animate attributeName="opacity" values="0.5;0.8;0.5" dur="3s" repeatCount="indefinite" />
-              </rect>
-
-              {/* Right small phone */}
-              <rect x="320" y="60" width="45" height="90" rx="12" transform="rotate(10 342 105)" opacity="0.7">
-                <animate attributeName="opacity" values="0.5;0.8;0.5" dur="4s" repeatCount="indefinite" />
-              </rect>
-            </g>
-
-            {/* Apple logo decorations */}
-            <g opacity="0.2" fill="#46a5e3">
-              {/* Center Apple logo */}
-              <g transform="translate(200, 100) scale(0.15)">
-                <path d="M0,-60 C-15,-60 -25,-45 -25,-30 C-25,-15 -15,0 0,0 C15,0 25,-15 25,-30 C25,-45 15,-60 0,-60 Z M-10,-25 C-15,-25 -18,-20 -18,-15 C-18,-10 -15,-5 -10,-5 C-5,-5 -2,-10 -2,-15 C-2,-20 -5,-25 -10,-25 Z M10,-25 C5,-25 2,-20 2,-15 C2,-10 5,-5 10,-5 C15,-5 18,-10 18,-15 C18,-20 15,-25 10,-25 Z M0,-10 C-20,-10 -35,5 -35,25 C-35,45 -25,60 0,60 C25,60 35,45 35,25 C35,5 20,-10 0,-10 Z">
-                  <animate attributeName="opacity" values="0.4;0.7;0.4" dur="4s" repeatCount="indefinite" />
-                </path>
-              </g>
-
-              {/* Small Apple logos */}
-              <g transform="translate(60, 40) scale(0.1)">
-                <path d="M0,-60 C-15,-60 -25,-45 -25,-30 C-25,-15 -15,0 0,0 C15,0 25,-15 25,-30 C25,-45 15,-60 0,-60 Z M-10,-25 C-15,-25 -18,-20 -18,-15 C-18,-10 -15,-5 -10,-5 C-5,-5 -2,-10 -2,-15 C-2,-20 -5,-25 -10,-25 Z M10,-25 C5,-25 2,-20 2,-15 C2,-10 5,-5 10,-5 C15,-5 18,-10 18,-15 C18,-20 15,-25 10,-25 Z M0,-10 C-20,-10 -35,5 -35,25 C-35,45 -25,60 0,60 C25,60 35,45 35,25 C35,5 20,-10 0,-10 Z">
-                  <animate attributeName="opacity" values="0.2;0.5;0.2" dur="3s" repeatCount="indefinite" />
-                </path>
-              </g>
-
-              <g transform="translate(340, 160) scale(0.12)">
-                <path d="M0,-60 C-15,-60 -25,-45 -25,-30 C-25,-15 -15,0 0,0 C15,0 25,-15 25,-30 C25,-45 15,-60 0,-60 Z M-10,-25 C-15,-25 -18,-20 -18,-15 C-18,-10 -15,-5 -10,-5 C-5,-5 -2,-10 -2,-15 C-2,-20 -5,-25 -10,-25 Z M10,-25 C5,-25 2,-20 2,-15 C2,-10 5,-5 10,-5 C15,-5 18,-10 18,-15 C18,-20 15,-25 10,-25 Z M0,-10 C-20,-10 -35,5 -35,25 C-35,45 -25,60 0,60 C25,60 35,45 35,25 C35,5 20,-10 0,-10 Z">
-                  <animate attributeName="opacity" values="0.2;0.5;0.2" dur="3.5s" repeatCount="indefinite" />
-                </path>
-              </g>
-            </g>
-
-            {/* Signal waves */}
-            <g opacity="0.15" stroke="#46a5e3" strokeWidth="2" fill="none">
-              <g transform="translate(185, 100)">
-                <circle r="25" strokeDasharray="4 4">
-                  <animate attributeName="r" values="25;35;25" dur="2s" repeatCount="indefinite" />
-                  <animate attributeName="opacity" values="0.3;0.6;0.3" dur="2s" repeatCount="indefinite" />
-                </circle>
-                <circle r="40" strokeDasharray="6 6">
-                  <animate attributeName="r" values="40;50;40" dur="2.5s" repeatCount="indefinite" />
-                  <animate attributeName="opacity" values="0.2;0.4;0.2" dur="2.5s" repeatCount="indefinite" />
-                </circle>
-              </g>
-            </g>
-
-            <rect width="400" height="200" fill="url(#mobileBgGradient)" opacity="0.4" />
-            
-            {/* Animated particles */}
-            <g>
-              <circle cx="50" cy="30" r="2" fill="#46a5e3">
-                <animate attributeName="cy" values="30;40;30" dur="3s" repeatCount="indefinite" />
-                <animate attributeName="opacity" values="0.3;0.8;0.3" dur="3s" repeatCount="indefinite" />
-              </circle>
-              <circle cx="350" cy="50" r="3" fill="#46a5e3">
-                <animate attributeName="cy" values="50;35;50" dur="4s" repeatCount="indefinite" />
-                <animate attributeName="opacity" values="0.4;0.9;0.4" dur="4s" repeatCount="indefinite" />
-              </circle>
-              <circle cx="200" cy="100" r="2" fill="#46a5e3">
-                <animate attributeName="cy" values="100;110;100" dur="5s" repeatCount="indefinite" />
-                <animate attributeName="opacity" values="0.3;0.7;0.3" dur="5s" repeatCount="indefinite" />
-              </circle>
-              <circle cx="100" cy="150" r="2.5" fill="#46a5e3">
-                <animate attributeName="cy" values="150;140;150" dur="3.5s" repeatCount="indefinite" />
-                <animate attributeName="opacity" values="0.4;0.8;0.4" dur="3.5s" repeatCount="indefinite" />
-              </circle>
-              <circle cx="300" cy="170" r="2" fill="#46a5e3">
-                <animate attributeName="cy" values="170;180;170" dur="4.5s" repeatCount="indefinite" />
-                <animate attributeName="opacity" values="0.3;0.7;0.3" dur="4.5s" repeatCount="indefinite" />
-              </circle>
-            </g>
-          </svg>
-        </div>
-      </motion.div>
+      )}
 
       {/* Hero card */}
       <div className="relative z-10 w-full max-w-4xl xl:max-w-5xl mx-auto section-padding mt-5 lg:mt-0">
@@ -333,7 +218,7 @@ export default function HeroSection() {
             whileHover={{ scale: 1.05, boxShadow: '0 0 20px rgba(236,72,153,0.3)' }}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-[var(--radius-pill)] border border-pink-500/25 bg-[var(--color-primary-soft)] text-pink-700 dark:text-pink-400 text-xs sm:text-sm font-semibold shine-effect"
           >
-            <Sparkles size={14} className="shrink-0 icon-float" />
+            <Sparkles size={14} className="shrink-0" />
             iPhone chính hãng · Giá tốt
           </motion.div>
 
@@ -347,8 +232,8 @@ export default function HeroSection() {
           >
             <motion.span 
               className="block text-[var(--text-primary)] glow-text-pink"
-              whileHover={{ 
-                textShadow: '0 0 30px rgba(53, 87, 240, 0.8).8), 0 0 60px rgba(236,72,153,0.4)'
+              whileHover={{
+                textShadow: '0 0 30px rgba(53,87,240,0.8), 0 0 60px rgba(236,72,153,0.4)'
               }}
               transition={{ duration: 0.3 }}
             >
@@ -383,7 +268,7 @@ export default function HeroSection() {
                 whiteSpace: 'nowrap',
               }}
             >
-              <MessageCircle size={20} className="icon-float" />
+              <MessageCircle size={20} />
               Nhận tư vấn mua trả góp ngay
             </motion.a>
           </motion.div>
@@ -402,11 +287,10 @@ export default function HeroSection() {
               whileHover={{ scale: 1.1 }}
               transition={{ duration: 0.3, delay: 0.6 }}
             >
-              <motion.div
-                className="hero-trust-badge-shine"
-                animate={{ x: ['-150%', '250%'] }}
-                transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
-              />
+              {/* Static highlight stripe — used to sweep on a 1.5s infinite loop
+                  regardless of interaction; now only the parent badge animates,
+                  on hover/focus (see .hero-trust-badge-special in globals.css). */}
+              <div className="hero-trust-badge-shine" />
               <span className="hero-trust-badge-text">✨ Bán trả góp</span>
             </motion.div>
           </motion.div>
@@ -430,7 +314,7 @@ export default function HeroSection() {
                   transition={{ duration: 0.4, delay: index * 0.1 }}
                 >
                   <div className="hero-highlight-icon">
-                    <Icon size={22} className="icon-float" />
+                    <Icon size={22} />
                   </div>
                   <div className="hero-highlight-text">
                     <p className="hero-highlight-title">{item.title}</p>

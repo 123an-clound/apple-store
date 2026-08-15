@@ -1,9 +1,20 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { TEL_URL, ZALO_URL } from '@/lib/constants';
 
 export default function FloatingContact({ hidden = false }) {
+  const reduceMotion = useReducedMotion();
+  // The looping glow/ripple is decorative; drop it entirely for visitors who ask
+  // for reduced motion (CSS media queries can't reach Framer Motion animations).
+  const pulse = (shadows, delay = 0) =>
+    reduceMotion
+      ? undefined
+      : {
+          animate: { scale: [1, 1.08, 1], boxShadow: shadows },
+          transition: { duration: 2, repeat: Infinity, repeatDelay: 3, delay },
+        };
+
   return (
     <AnimatePresence>
       {!hidden && (
@@ -20,21 +31,13 @@ export default function FloatingContact({ hidden = false }) {
             href={ZALO_URL}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Zalo"
-            animate={{
-              scale: [1, 1.08, 1],
-              boxShadow: [
-                '0 0 20px rgba(0, 198, 255, 0.4), 0 0 40px rgba(0, 198, 255, 0.2)',
-                '0 0 40px rgba(0, 198, 255, 0.8), 0 0 80px rgba(0, 198, 255, 0.4)',
-                '0 0 20px rgba(0, 198, 255, 0.4), 0 0 40px rgba(0, 198, 255, 0.2)'
-              ]
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              repeatDelay: 3
-            }}
-            whileHover={{ 
+            aria-label="Chat Zalo"
+            {...pulse([
+              '0 0 20px rgba(0, 198, 255, 0.4), 0 0 40px rgba(0, 198, 255, 0.2)',
+              '0 0 40px rgba(0, 198, 255, 0.8), 0 0 80px rgba(0, 198, 255, 0.4)',
+              '0 0 20px rgba(0, 198, 255, 0.4), 0 0 40px rgba(0, 198, 255, 0.2)',
+            ])}
+            whileHover={{
               scale: 1.15,
               boxShadow: '0 0 60px rgba(0, 198, 255, 0.9), 0 0 120px rgba(0, 198, 255, 0.5)'
             }}
@@ -50,7 +53,7 @@ export default function FloatingContact({ hidden = false }) {
             <div className="relative z-10 transform scale-90 group-hover:scale-110 transition-transform duration-500 opacity-90">
               <svg viewBox="0 0 40 40" className="w-[26px] h-[26px] md:w-[44px] md:h-[44px] fill-white drop-shadow-[0_0_12px_rgba(255,255,255,0.9)]" xmlns="http://www.w3.org/2000/svg">
                 <path d="M20 2C10.059 2 2 9.082 2 17.809c0 4.886 2.535 9.213 6.484 12.016L6.8 38l7.842-3.921c1.725.467 3.525.73 5.358.73C30.041 34.809 38 27.727 38 19c0-8.727-7.959-15.809-18-15.809z"></path>
-                <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" fill="#0072ff" font-size="26" font-weight="900" fontFamily="Arial">Z</text>
+                <text x="50%" y="55%" dominantBaseline="middle" textAnchor="middle" fill="#0072ff" fontSize="26" fontWeight="900" fontFamily="Arial">Z</text>
               </svg>
             </div>
             
@@ -71,22 +74,16 @@ export default function FloatingContact({ hidden = false }) {
             href={TEL_URL}
             target="_self"
             rel="noopener noreferrer"
-            aria-label="Phone"
-            animate={{
-              scale: [1, 1.08, 1],
-              boxShadow: [
+            aria-label="Gọi ngay"
+            {...pulse(
+              [
                 '0 0 20px rgba(37, 99, 235, 0.4), 0 0 40px rgba(37, 99, 235, 0.2)',
                 '0 0 40px rgba(37, 99, 235, 0.8), 0 0 80px rgba(37, 99, 235, 0.4)',
-                '0 0 20px rgba(37, 99, 235, 0.4), 0 0 40px rgba(37, 99, 235, 0.2)'
-              ]
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              repeatDelay: 3,
-              delay: 1
-            }}
-            whileHover={{ 
+                '0 0 20px rgba(37, 99, 235, 0.4), 0 0 40px rgba(37, 99, 235, 0.2)',
+              ],
+              1
+            )}
+            whileHover={{
               scale: 1.15,
               boxShadow: '0 0 60px rgba(37, 99, 235, 0.9), 0 0 120px rgba(37, 99, 235, 0.5)'
             }}

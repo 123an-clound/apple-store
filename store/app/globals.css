@@ -1,6 +1,11 @@
 @import "tailwindcss";
 @import "./floating-contact.css";
 
+/* Tailwind v4 ignores `darkMode: 'class'` in the JS config — without this the
+   `dark:` utilities follow the OS setting and silently ignore the site's own
+   light/dark toggle. Bind them to the .dark class the theme switch sets. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ─── Design Tokens ──────────────────────────────── */
 /* tailwindcss v4 theme configuration */
 @theme {
@@ -15,7 +20,7 @@
 
   /* Brand */
   --color-primary: #46a5e3;
-  --color-primary-hover: #46a5e3;
+  --color-primary-hover: #2685c3;
   --color-primary-soft: rgba(70, 165, 227, 0.12);
   --color-secondary: #d4a853;
   --color-on-primary: #ffffff;
@@ -255,15 +260,20 @@ body {
 }
 @media (min-width: 640px) { .product-card-price-label { font-size: 0.6875rem; } }
 
+/* Fluid size: at a fixed 19px an 8-digit price ("27.900.000đ") needed ~126px of
+   the ~108px available inside a 2-column card on a 375px screen, so the trailing
+   "đ" was clipped by the card's overflow:hidden. */
 .product-card-price-value {
-  font-size: 1.1875rem;
+  font-size: clamp(0.875rem, 3.8vw, 1.125rem);
   font-weight: 900;
-  color: rgba(70,165,227,0.55);
+  /* rgba(70,165,227,0.55) scored 2.5:1 on the light surface — below the 3:1 WCAG
+     AA floor for large text, on the single most important number on the card. */
+  color: #1f76b0;
   line-height: 1;
+  white-space: nowrap;
 }
-@media (min-width: 420px) { .product-card-price-value { font-size: 1.25rem; } }
-@media (min-width: 640px) { .product-card-price-value { font-size: 1.5rem; } }
-.dark .product-card-price-value { color: rgba(70,165,227,0.55); }
+@media (min-width: 640px) { .product-card-price-value { font-size: clamp(1.125rem, 2.6vw, 1.5rem); } }
+.dark .product-card-price-value { color: #66b5e8; }
 
 /* ─── Button system ──────────────────────────────── */
 .btn {
@@ -534,7 +544,6 @@ body {
   box-shadow: 0 8px 32px rgba(34, 197, 94, 0.5), 0 0 20px rgba(34, 197, 94, 0.4), 0 0 40px rgba(34, 197, 94, 0.2);
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  animation: gradient-shift 3s ease-in-out infinite, glow-pulse 2s ease-in-out infinite;
 }
 
 @keyframes gradient-shift {
@@ -555,9 +564,11 @@ body {
   }
 }
 
-.hero-trust-badge-special:hover {
+/* Animation only runs on interaction (hover/focus), not perpetually on page load. */
+.hero-trust-badge-special:hover,
+.hero-trust-badge-special:focus-visible {
   box-shadow: 0 12px 48px rgba(34, 197, 94, 0.8), 0 0 40px rgba(34, 197, 94, 0.7), 0 0 80px rgba(34, 197, 94, 0.5);
-  animation: gradient-shift 1.5s ease-in-out infinite;
+  animation: gradient-shift 1.5s ease-in-out infinite, glow-pulse 2s ease-in-out infinite;
 }
 
 .hero-trust-badge-shine {
@@ -585,12 +596,12 @@ body {
   background: linear-gradient(135deg, #22c55e 0%, #15803d 50%, #22c55e 100%);
   background-size: 200% 200%;
   box-shadow: 0 8px 32px rgba(34, 197, 94, 0.6), 0 0 20px rgba(34, 197, 94, 0.5), 0 0 40px rgba(34, 197, 94, 0.3);
-  animation: gradient-shift 3s ease-in-out infinite, glow-pulse-dark 2s ease-in-out infinite;
 }
 
-.dark .hero-trust-badge-special:hover {
+.dark .hero-trust-badge-special:hover,
+.dark .hero-trust-badge-special:focus-visible {
   box-shadow: 0 12px 48px rgba(34, 197, 94, 0.9), 0 0 40px rgba(34, 197, 94, 0.8), 0 0 80px rgba(34, 197, 94, 0.6);
-  animation: gradient-shift 1.5s ease-in-out infinite;
+  animation: gradient-shift 1.5s ease-in-out infinite, glow-pulse-dark 2s ease-in-out infinite;
 }
 
 @media (min-width: 640px) {
@@ -752,13 +763,6 @@ body {
   }
 }
 
-/* Scale pulse */
-@keyframes scale-pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-}
-.animate-scale-pulse { animation: scale-pulse 2s ease-in-out infinite; }
-
 /* Rotate slow */
 @keyframes rotate-slow {
   from { transform: rotate(0deg); }
@@ -785,11 +789,18 @@ body {
   -webkit-text-fill-color: transparent;
 }
 
+/* The old version of this block listed animations by name, which meant every new
+   keyframe silently opted out of the preference. Blanket rule instead. */
 @media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
   html { scroll-behavior: auto; }
-  .shimmer-text, .animate-pulse-pink-intro, .animate-pulse-gold-intro, .animate-pulse-blue-intro,
-   .animate-float, .animate-float-slow, .animate-float-fast, .animate-button-glow,
-   .animate-scale-pulse, .animate-rotate-slow { animation: none; }
   .ui-card-interactive:hover { transform: none; }
 }
 
@@ -884,15 +895,6 @@ body {
 @keyframes card-shine {
   0% { left: -100%; }
   20%, 100% { left: 200%; }
-}
-
-/* ─── Icon Floating ───────────────────────────────── */
-.icon-float {
-  animation: float 3s ease-in-out infinite;
-}
-.icon-float-delayed {
-  animation: float 3s ease-in-out infinite;
-  animation-delay: 1s;
 }
 
 /* ─── Gradient Animation ──────────────────────────── */
@@ -1233,8 +1235,13 @@ body {
 .focus-ring:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
 
 /* ─── Logo Glow Effect ────────────────────────────────── */
+/* Glow/rotate only runs while the logo link (.group) is hovered or focused —
+   previously ran unconditionally forever on every page view. */
 .logo-glow {
   position: relative;
+}
+.group:hover .logo-glow,
+.group:focus-visible .logo-glow {
   animation: logo-pulse-glow 2s ease-in-out infinite;
 }
 .logo-glow::before {
@@ -1245,9 +1252,14 @@ body {
   background-size: 400% 400%;
   border-radius: inherit;
   z-index: -1;
+  filter: blur(6px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.group:hover .logo-glow::before,
+.group:focus-visible .logo-glow::before {
   animation: logo-gradient-rotate 2s linear infinite;
   opacity: 0.9;
-  filter: blur(6px);
 }
 .logo-glow::after {
   content: '';
@@ -1257,7 +1269,13 @@ body {
   background-size: 200% 200%;
   border-radius: inherit;
   z-index: -2;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.group:hover .logo-glow::after,
+.group:focus-visible .logo-glow::after {
   animation: logo-conic-rotate 3s linear infinite;
+  opacity: 1;
 }
 @keyframes logo-pulse-glow {
   0%, 100% { transform: scale(1); filter: brightness(1); box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
@@ -1289,9 +1307,14 @@ body {
   background-size: 300% 300%;
   border-radius: inherit;
   z-index: -1;
+  filter: blur(2px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.logo-container-glow:hover::before,
+.logo-container-glow:focus-visible::before {
   animation: border-rotate 3s linear infinite;
   opacity: 0.6;
-  filter: blur(2px);
 }
 .logo-container-glow::after {
   content: '';
@@ -1301,7 +1324,15 @@ body {
   background-size: 200% 200%;
   border-radius: inherit;
   z-index: -2;
-  animation: shimmer 2s ease-in-out infinite;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.logo-container-glow:hover::after,
+.logo-container-glow:focus-visible::after {
+  /* Named distinctly from .shimmer-text's @keyframes shimmer — reusing that name
+     here silently overrode .shimmer-text's animation with this one. */
+  animation: logo-container-shimmer 2s ease-in-out infinite;
+  opacity: 1;
 }
 @keyframes border-rotate {
   0% { background-position: 0% 50%; }
@@ -1310,7 +1341,7 @@ body {
   75% { background-position: 0% 100%; }
   100% { background-position: 0% 50%; }
 }
-@keyframes shimmer {
+@keyframes logo-container-shimmer {
   0% { opacity: 0.3; transform: translateX(-100%) translateY(-100%); }
   50% { opacity: 0.8; transform: translateX(100%) translateY(100%); }
   100% { opacity: 0.3; transform: translateX(-100%) translateY(-100%); }
@@ -1330,9 +1361,14 @@ body {
   background-size: 400% 400%;
   border-radius: inherit;
   z-index: -1;
+  filter: blur(8px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.logo-text-glow:hover::before,
+.logo-text-glow:focus-visible::before {
   animation: logo-text-gradient-rotate 2s linear infinite;
   opacity: 0.8;
-  filter: blur(8px);
 }
 .logo-text-glow::after {
   content: '';
@@ -1342,7 +1378,13 @@ body {
   background-size: 200% 200%;
   border-radius: inherit;
   z-index: -2;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.logo-text-glow:hover::after,
+.logo-text-glow:focus-visible::after {
   animation: logo-text-conic-rotate 3s linear infinite;
+  opacity: 1;
 }
 @keyframes logo-text-gradient-rotate {
   0% { background-position: 0% 50%; }

@@ -1,42 +1,32 @@
 'use client';
 
-import { useState, useMemo, useRef } from 'react';
+import { useState, useMemo } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import HeroSection from '@/components/HeroSection';
 import ProductGrid from '@/components/ProductGrid';
-import ProductModal from '@/components/ProductModal';
 import FloatingContact from '@/components/FloatingContact';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { X } from 'lucide-react';
 
 export default function HomeClient({ allCards, series }) {
   const [activeSeries, setActiveSeries] = useState(null);
-  const [selectedCard, setSelectedCard] = useState(null);
-  const lastTriggerElRef = useRef(null);
+  const router = useRouter();
+  const pathname = usePathname();
 
   const visibleCards = useMemo(() => {
     const bySeries = activeSeries ? allCards.filter((c) => c.series === activeSeries) : allCards;
     return [...bySeries].sort((a, b) => (b.sttMax ?? 0) - (a.sttMax ?? 0));
   }, [allCards, activeSeries]);
 
-  const isModalOpen = Boolean(selectedCard);
+  // The product modal now lives at /san-pham/[slug] (intercepted route, rendered
+  // in the @modal slot in layout.js) instead of local state, so HomeClient stays
+  // mounted underneath it — this pathname check is how it knows to hide the
+  // floating contact buttons while the modal covers them.
+  const isModalOpen = pathname.startsWith('/san-pham/');
 
-  const onCardClick = (card, triggerEl) => {
-    lastTriggerElRef.current = triggerEl || null;
-    setSelectedCard(card);
-  };
-
-  const closeModal = () => {
-    setSelectedCard(null);
-    setActiveSeries(null);
-  };
-
-  const handleSeriesClick = (seriesName) => {
-    if (activeSeries === seriesName) {
-      setActiveSeries(null);
-    } else {
-      setActiveSeries(seriesName);
-    }
+  const onCardClick = (card) => {
+    router.push(`/san-pham/${card.slug}`);
   };
 
   return (
@@ -66,9 +56,11 @@ export default function HomeClient({ allCards, series }) {
               transition={{ duration: 0.3 }}
             >
               {/* Series filter pills */}
+              {/* Toggle buttons, not tabs: there is no tabpanel per series —
+                  the same grid is filtered in place. */}
               <div
                 className="series-nav flex items-center gap-2 overflow-x-auto py-1"
-                role="tablist"
+                role="group"
                 aria-label="Lọc theo dòng iPhone"
               >
                 <SeriesPill label="Tất cả" active={activeSeries === null} onClick={() => setActiveSeries(null)} />
@@ -103,15 +95,17 @@ export default function HomeClient({ allCards, series }) {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2, duration: 0.4 }}
               >
-                <span className="font-semibold text-[var(--text-primary)] animate-scale-pulse glow-text-blue">
+                <span className="font-semibold text-[var(--text-primary)] glow-text-blue">
                   {visibleCards.length}
                 </span>{' '}
                 mẫu iPhone
               </motion.p>
             </motion.div>
 
+            <AnimatePresence>
             {activeSeries && (
               <motion.div
+                key="active-filter"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
@@ -152,6 +146,7 @@ export default function HomeClient({ allCards, series }) {
                 </motion.button>
               </motion.div>
             )}
+            </AnimatePresence>
           </header>
 
           <ProductGrid
@@ -162,38 +157,29 @@ export default function HomeClient({ allCards, series }) {
         </div>
       </section>
 
-      {selectedCard && (
-        <ProductModal card={selectedCard} onClose={closeModal} />
-      )}
-
       <FloatingContact hidden={isModalOpen} />
     </>
   );
 }
 
 function SeriesPill({ label, active, onClick }) {
+  const reduceMotion = useReducedMotion();
   return (
     <motion.button
       type="button"
-      role="tab"
-      aria-selected={active}
+      aria-pressed={active}
       onClick={onClick}
-      whileHover={{ scale: 1.05, y: -2 }}
-      whileTap={{ scale: 0.95 }}
+      whileHover={reduceMotion ? undefined : { scale: 1.05, y: -2 }}
+      whileTap={reduceMotion ? undefined : { scale: 0.95 }}
       className={`series-pill focus-ring ${active ? 'series-pill--active' : ''}`}
-      animate={active ? {
+      // One-shot ripple when the pill becomes active. Deliberately not looped:
+      // a permanently animating filter bar is distracting and drains battery.
+      animate={active && !reduceMotion ? {
         boxShadow: ['0 0 0 0 rgba(70,165,227,0.5)', '0 0 0 8px rgba(70,165,227,0)']
       } : {}}
       transition={{ duration: 0.3 }}
     >
-      <motion.span
-        animate={active ? {
-          scale: [1, 1.05, 1]
-        } : {}}
-        transition={{ duration: 0.5, repeat: Infinity }}
-      >
-        {label}
-      </motion.span>
+      {label}
     </motion.button>
   );
 }

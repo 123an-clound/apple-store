@@ -98,6 +98,19 @@ export function sortSeries(seriesArr) {
   });
 }
 
+// URL-safe slug for a product name, e.g. "iPhone 17 Pro Max" -> "iphone-17-pro-max".
+// Used for /san-pham/[slug] routes — relies on groupByModel's names already being
+// unique (they're a Map key), so no collision handling is needed here.
+export function slugify(name) {
+  if (!name) return '';
+  return name
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
 // ─────────────────────────────────────────────
 // Group raw DB rows into unique model cards
 // Each card shows the lowest starting price
@@ -109,6 +122,7 @@ export function groupByModel(rows) {
     if (!map.has(name)) {
       map.set(name, {
         name,
+        slug: slugify(name),
         series: getSeries(name),
         // Used for "mới nhất" ordering (STT lớn hơn lên trước)
         sttMax: Number.isFinite(Number(row?.stt)) ? Number(row.stt) : 0,

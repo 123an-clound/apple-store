@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { formatPrice } from '@/lib/helpers';
 
 const SLIDE_INTERVAL = 3500;
@@ -12,18 +12,20 @@ export default function ProductCard({ card, onClick }) {
   const [paused, setPaused] = useState(false);
   const [inView, setInView] = useState(false);
   const triggerRef = useRef(null);
+  const reduceMotion = useReducedMotion();
   const images = card.images;
 
   const advance = useCallback(() => {
-    if (images.length <= 1 || paused || !inView) return;
     setCurrentImg((prev) => (prev + 1) % images.length);
-  }, [images.length, paused, inView]);
+  }, [images.length]);
 
   useEffect(() => {
-    if (images.length <= 1 || paused || !inView) return;
+    // Auto-play only when the card is on screen, not hovered/focused, and the
+    // visitor has not asked for reduced motion.
+    if (images.length <= 1 || paused || !inView || reduceMotion) return;
     const timer = setInterval(advance, SLIDE_INTERVAL);
     return () => clearInterval(timer);
-  }, [advance, images.length, paused, inView]);
+  }, [advance, images.length, paused, inView, reduceMotion]);
 
   useEffect(() => {
     const el = triggerRef.current;
@@ -39,7 +41,7 @@ export default function ProductCard({ card, onClick }) {
     return () => obs.disconnect();
   }, []);
 
-  const startingPrice = formatPrice(String(card.lowestPrice).replace(/\./g, ''));
+  const startingPrice = formatPrice(card.lowestPrice);
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' || e.key === ' ') {
@@ -63,7 +65,7 @@ export default function ProductCard({ card, onClick }) {
       transition={{ duration: 0.2 }}
       style={{ width: '100%', height: '100%', minWidth: 0 }}
     >
-      <div
+      <motion.div
         ref={triggerRef}
         role="button"
         tabIndex={0}
@@ -83,13 +85,13 @@ export default function ProductCard({ card, onClick }) {
           display: 'flex',
           flexDirection: 'column',
           cursor: 'pointer',
-          transition: 'all 0.4s cubic-bezier(0.23, 1, 0.32, 1)'
         }}
-        whileHover={{
+        whileHover={reduceMotion ? undefined : {
+          y: -4,
           boxShadow: '0 0 40px rgba(50,55,74,0.5), 0 0 70px rgba(50,55,74,0.3)',
           borderColor: 'rgba(50,55,74,0.6)',
-          transform: 'translateY(-4px)'
         }}
+        transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
         aria-label={`Xem chi tiết ${card.name}, giá từ ${startingPrice}`}
       >
         {/* ── Image area ── */}
@@ -135,13 +137,15 @@ export default function ProductCard({ card, onClick }) {
             )}
           </AnimatePresence>
 
+          {/* Decorative slide dots: hidden from assistive tech and the tab order
+              so they don't nest interactive controls inside the card button. */}
           {images.length > 1 && (
-            <div style={{ position: 'absolute', bottom: 8, left: 0, right: 0, display: 'flex', justifyContent: 'center', gap: 4, zIndex: 2 }}>
+            <div style={{ position: 'absolute', bottom: 8, left: 0, right: 0, display: 'flex', justifyContent: 'center', gap: 4, zIndex: 2 }} aria-hidden="true">
               {images.map((_, i) => (
                 <button
                   key={i}
                   type="button"
-                  aria-label={`Ảnh ${i + 1}`}
+                  tabIndex={-1}
                   onClick={(e) => goToSlide(e, i)}
                   style={{
                     display: 'block', height: 4, borderRadius: 9999,
@@ -203,16 +207,14 @@ export default function ProductCard({ card, onClick }) {
             }}>
               Giá từ
             </span>
-            <div className="product-card-price-value" style={{
-              fontWeight: 900,
-              color: '#46a5e3',
-              lineHeight: 1,
-            }}>
+            {/* Sizing and colour live in .product-card-price-value so the fluid
+                font-size and theme-aware contrast aren't overridden inline. */}
+            <div className="product-card-price-value">
               {startingPrice}
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </motion.article>
   );
 }
