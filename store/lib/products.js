@@ -8,7 +8,7 @@ import { groupByModel } from './helpers';
 export const getAllProductCards = cache(async () => {
   try {
     const { data, error } = await supabase
-      .from('kho_hang_iphone')
+      .from('kho_iphone')
       .select('*')
       .order('stt', { ascending: false });
 
