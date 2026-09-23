@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import HeroSection from '@/components/HeroSection';
@@ -11,6 +11,7 @@ import { X } from 'lucide-react';
 
 export default function HomeClient({ allCards, series }) {
   const [activeSeries, setActiveSeries] = useState(null);
+  const [isHeroVisible, setIsHeroVisible] = useState(true);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -24,6 +25,18 @@ export default function HomeClient({ allCards, series }) {
   // mounted underneath it — this pathname check is how it knows to hide the
   // floating contact buttons while the modal covers them.
   const isModalOpen = pathname.startsWith('/san-pham/');
+
+  useEffect(() => {
+    const hero = document.querySelector('.spline-hero');
+    if (!hero) return undefined;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsHeroVisible(entry.isIntersecting),
+      { threshold: 0.08 },
+    );
+    observer.observe(hero);
+    return () => observer.disconnect();
+  }, []);
 
   const onCardClick = (card) => {
     router.push(`/san-pham/${card.slug}`);
@@ -157,7 +170,7 @@ export default function HomeClient({ allCards, series }) {
         </div>
       </section>
 
-      <FloatingContact hidden={isModalOpen} />
+      <FloatingContact hidden={isModalOpen || isHeroVisible} />
     </>
   );
 }

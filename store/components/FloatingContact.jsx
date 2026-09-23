@@ -23,7 +23,7 @@ export default function FloatingContact({ hidden = false }) {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 16 }}
           transition={{ duration: 0.2 }}
-          className="fixed bottom-8 right-6 md:bottom-[68px] md:right-[60px] z-[9999] flex flex-col gap-6 md:gap-[52px] transition-all duration-1000 opacity-100 translate-y-0"
+          className="fixed bottom-6 right-4 md:bottom-8 md:right-6 z-[9999] flex flex-col gap-5 md:gap-6 transition-all duration-1000 opacity-100 translate-y-0"
           aria-label="Liên hệ nhanh"
         >
           {/* Zalo Button */}
@@ -42,7 +42,7 @@ export default function FloatingContact({ hidden = false }) {
               boxShadow: '0 0 60px rgba(0, 198, 255, 0.9), 0 0 120px rgba(0, 198, 255, 0.5)'
             }}
             whileTap={{ scale: 0.9 }}
-            className="group relative w-12 h-12 md:w-20 md:h-20 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(0,198,255,0.5)] bg-gradient-to-br from-[#00c6ff] to-[#0072ff] animate-liquid-neon contact-ripple"
+            className="group relative w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(0,198,255,0.5)] bg-gradient-to-br from-[#00c6ff] to-[#0072ff] animate-liquid-neon contact-ripple"
           >
             {/* Multi-layer ripple effect */}
             <div className="absolute inset-0 rounded-full animate-ripple-1"></div>
@@ -51,7 +51,7 @@ export default function FloatingContact({ hidden = false }) {
             
             <div className="absolute inset-1 rounded-full bg-white/10 backdrop-blur-[2px] border border-white/20 group-hover:bg-white/30 transition-all"></div>
             <div className="relative z-10 transform scale-90 group-hover:scale-110 transition-transform duration-500 opacity-90">
-              <svg viewBox="0 0 40 40" className="w-[26px] h-[26px] md:w-[44px] md:h-[44px] fill-white drop-shadow-[0_0_12px_rgba(255,255,255,0.9)]" xmlns="http://www.w3.org/2000/svg">
+              <svg viewBox="0 0 40 40" className="w-[26px] h-[26px] md:w-9 md:h-9 fill-white drop-shadow-[0_0_12px_rgba(255,255,255,0.9)]" xmlns="http://www.w3.org/2000/svg">
                 <path d="M20 2C10.059 2 2 9.082 2 17.809c0 4.886 2.535 9.213 6.484 12.016L6.8 38l7.842-3.921c1.725.467 3.525.73 5.358.73C30.041 34.809 38 27.727 38 19c0-8.727-7.959-15.809-18-15.809z"></path>
                 <text x="50%" y="55%" dominantBaseline="middle" textAnchor="middle" fill="#0072ff" fontSize="26" fontWeight="900" fontFamily="Arial">Z</text>
               </svg>
@@ -88,7 +88,7 @@ export default function FloatingContact({ hidden = false }) {
               boxShadow: '0 0 60px rgba(37, 99, 235, 0.9), 0 0 120px rgba(37, 99, 235, 0.5)'
             }}
             whileTap={{ scale: 0.9 }}
-            className="group relative w-12 h-12 md:w-20 md:h-20 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(37,99,235,0.5)] bg-gradient-to-br from-[#2572ec] to-[#1e5ebc] animate-liquid-neon-reverse contact-ripple"
+            className="group relative w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(37,99,235,0.5)] bg-gradient-to-br from-[#2572ec] to-[#1e5ebc] animate-liquid-neon-reverse contact-ripple"
           >
             {/* Multi-layer ripple effect */}
             <div className="absolute inset-0 rounded-full animate-ripple-1"></div>
@@ -97,7 +97,7 @@ export default function FloatingContact({ hidden = false }) {
 
             <div className="absolute inset-1 rounded-full bg-white/10 backdrop-blur-[2px] border border-white/20 group-hover:bg-white/30 transition-all"></div>
             <div className="relative z-10 transform scale-90 group-hover:scale-110 transition-transform duration-500 opacity-90">
-              <svg viewBox="0 0 24 24" className="w-6 h-6 md:w-10 md:h-10 fill-white drop-shadow-[0_0_12px_rgba(255,255,255,0.9)]" xmlns="http://www.w3.org/2000/svg">
+              <svg viewBox="0 0 24 24" className="w-6 h-6 md:w-8 md:h-8 fill-white drop-shadow-[0_0_12px_rgba(255,255,255,0.9)]" xmlns="http://www.w3.org/2000/svg">
                 <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"></path>
                 <circle cx="18" cy="6" r="3" fill="none" stroke="white" strokeWidth="2">
                   <animate attributeName="r" from="3" to="8" dur="1.2s" repeatCount="indefinite"></animate>

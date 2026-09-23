@@ -25,7 +25,8 @@ const csp = [
   "style-src 'self' 'unsafe-inline'",
   `img-src 'self' data: blob: https://${supabaseHost}`,
   "font-src 'self' data:",
-  `connect-src 'self' https://${supabaseHost}`,
+  // GLTFLoader resolves images embedded in a GLB through same-document blob URLs.
+  `connect-src 'self' blob: https://${supabaseHost}`,
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",
