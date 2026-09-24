@@ -14,9 +14,11 @@ const supabaseHost = new URL(SUPABASE_URL).hostname;
 // this further would mean moving to nonces via middleware.
 // 'unsafe-eval' is only needed by Turbopack's dev-mode HMR runtime — the production
 // bundle never calls eval, so it's dropped outside development.
+// 'wasm-unsafe-eval' lets the hero's meshopt GLB decoder compile its WebAssembly
+// module; unlike 'unsafe-eval' it does not re-enable eval()/new Function().
 const scriptSrc =
   process.env.NODE_ENV === 'production'
-    ? "script-src 'self' 'unsafe-inline'"
+    ? "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'"
     : "script-src 'self' 'unsafe-inline' 'unsafe-eval'";
 
 const csp = [
