@@ -24,7 +24,7 @@ const heroHighlights = [
 
 const stageFeatures = [
   { label: 'Thiết kế Pro Max', icon: Gem, position: 'stage-feature-titanium' },
-  { label: 'A19 Pro', icon: Cpu, position: 'stage-feature-chip' },
+  { label: 'A20 Pro', icon: Cpu, position: 'stage-feature-chip' },
   { label: 'Camera Pro Fusion', icon: Camera, position: 'stage-feature-camera' },
   { label: 'Dynamic Island', icon: PanelTop, position: 'stage-feature-island' },
 ];
@@ -112,7 +112,7 @@ export default function HeroSection() {
           <div className="hero-stage-glow" aria-hidden="true" />
           <Scene3DLoader />
           <div className="spline-stage-frame" aria-hidden="true">
-            <span className="spline-stage-index">IPHONE 17 PRO MAX / 01</span>
+            <span className="spline-stage-index">IPHONE 18 PRO MAX / 01</span>
             <span className="spline-stage-axis spline-stage-axis-x" />
             <span className="spline-stage-axis spline-stage-axis-y" />
           </div>
@@ -143,7 +143,7 @@ export default function HeroSection() {
             transition={reduceMotion ? undefined : { duration: 2.8, repeat: Infinity, ease: 'easeInOut' }}
           >
             <MousePointer2 size={16} aria-hidden="true" />
-            Tự động trình diễn · Rê chuột để tương tác
+            Kéo hoặc vuốt để xoay 360°
           </motion.div>
         </motion.div>
       </div>

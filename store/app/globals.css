@@ -125,10 +125,15 @@ body {
   position: absolute;
   inset: 0;
   z-index: 1;
-  pointer-events: none;
   overflow: hidden;
   contain: strict;
+  cursor: grab;
+  /* Horizontal drags rotate the phone; vertical swipes still scroll the page on touch. */
+  touch-action: pan-y;
+  user-select: none;
 }
+.scene-3d[data-dragging] { cursor: grabbing; }
+.scene-3d-fallback { cursor: default; }
 .scene-3d canvas { display: block; width: 100%; height: 100%; }
 .scene-3d::after {
   content: '';

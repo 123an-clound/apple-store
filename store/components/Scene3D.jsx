@@ -6,42 +6,13 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 
-const MODEL_URL = '/models/iphone-17-pro-max.glb';
-const WALLPAPER_URL = '/models/iphone-17-pro-max-wallpaper.jpg';
+const MODEL_URL = '/models/iphone-18-pro-max.glb';
 const MODEL_HEIGHT = 6.4;
+// Cap at 60fps: 120Hz phones/iPads would otherwise render twice as many frames for no visible gain.
+const FRAME_INTERVAL = 1000 / 60 - 1;
 
 const lerp = (current, target, speed) => current + (target - current) * speed;
 const smoothstep = (value) => value * value * (3 - 2 * value);
-
-function roundedRectShape(width, height, radius) {
-  const x = -width / 2;
-  const y = -height / 2;
-  const shape = new THREE.Shape();
-  shape.moveTo(x + radius, y);
-  shape.lineTo(x + width - radius, y);
-  shape.quadraticCurveTo(x + width, y, x + width, y + radius);
-  shape.lineTo(x + width, y + height - radius);
-  shape.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-  shape.lineTo(x + radius, y + height);
-  shape.quadraticCurveTo(x, y + height, x, y + height - radius);
-  shape.lineTo(x, y + radius);
-  shape.quadraticCurveTo(x, y, x + radius, y);
-  return shape;
-}
-
-function normalizeShapeUvs(geometry, width, height) {
-  const positions = geometry.getAttribute('position');
-  const uvs = geometry.getAttribute('uv');
-  for (let index = 0; index < positions.count; index += 1) {
-    uvs.setXY(
-      index,
-      (positions.getX(index) + width / 2) / width,
-      (positions.getY(index) + height / 2) / height,
-    );
-  }
-  uvs.needsUpdate = true;
-  return geometry;
-}
 
 function sampleTimeline(frames, progress) {
   for (let index = 0; index < frames.length - 1; index += 1) {
@@ -55,10 +26,10 @@ function sampleTimeline(frames, progress) {
   return frames.at(-1)[1];
 }
 
-function createStage(compact) {
+function createStage(compact, lowPower) {
   const stage = new THREE.Group();
   const halo = new THREE.Mesh(
-    new THREE.TorusGeometry(compact ? 3.15 : 3.55, 0.018, 10, compact ? 96 : 160),
+    new THREE.TorusGeometry(compact ? 3.15 : 3.55, 0.018, lowPower ? 6 : 10, lowPower ? 96 : 160),
     new THREE.MeshBasicMaterial({ color: 0x78d7ff, transparent: true, opacity: 0.38 }),
   );
   halo.rotation.x = 1.12;
@@ -66,13 +37,13 @@ function createStage(compact) {
   stage.add(halo);
 
   const innerHalo = new THREE.Mesh(
-    new THREE.TorusGeometry(compact ? 2.55 : 2.9, 0.008, 8, compact ? 80 : 140),
+    new THREE.TorusGeometry(compact ? 2.55 : 2.9, 0.008, lowPower ? 6 : 8, lowPower ? 80 : 140),
     new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.22 }),
   );
   innerHalo.rotation.set(1.3, -0.35, 0.25);
   stage.add(innerHalo);
 
-  const particleCount = compact ? 42 : 120;
+  const particleCount = lowPower ? 42 : 120;
   const positions = new Float32Array(particleCount * 3);
   for (let index = 0; index < particleCount; index += 1) {
     positions[index * 3] = (Math.random() - 0.5) * 10;
@@ -117,10 +88,9 @@ function disposeSceneResources(root) {
   materials.forEach((material) => material.dispose());
 }
 
-function prepareImportedModel(gltf, renderer, displayTexture = null) {
+function prepareImportedModel(gltf, renderer, lowPower) {
   const source = gltf.scene;
   const maxAnisotropy = Math.min(4, renderer.capabilities.getMaxAnisotropy());
-  let wallpaperTexture = displayTexture;
 
   source.traverse((object) => {
     if (!object.isMesh) return;
@@ -130,14 +100,12 @@ function prepareImportedModel(gltf, renderer, displayTexture = null) {
     materials.forEach((material) => {
       if (!material) return;
       material.envMapIntensity = Math.max(material.envMapIntensity ?? 1, 1.08);
-      // The GLB ships the OLED at emissive strength 10, which clips the wallpaper to white
-      // under ACES tone mapping. Reuse the embedded texture on a calibrated screen layer.
-      if (material.name === 'OLED') {
-        wallpaperTexture ??= material.map ?? material.emissiveMap;
-        material.transparent = true;
-        material.opacity = 0;
-        material.depthWrite = false;
-        material.colorWrite = false;
+      if (lowPower) {
+        // Zeroing these drops their shader branches; the clearcoat on the screen/front glass is
+        // the costliest since it covers most pixels, and the difference is subtle at phone size.
+        if ('clearcoat' in material) material.clearcoat = 0;
+        if ('iridescence' in material) material.iridescence = 0;
+        if ('anisotropy' in material) material.anisotropy = 0;
       }
       Object.values(material).forEach((value) => {
         if (value?.isTexture) value.anisotropy = maxAnisotropy;
@@ -145,10 +113,6 @@ function prepareImportedModel(gltf, renderer, displayTexture = null) {
       material.needsUpdate = true;
     });
   });
-
-  // The supplied Blender model faces -Z. Rotate once so its display faces the camera.
-  source.rotation.y = Math.PI;
-  source.updateMatrixWorld(true);
 
   const initialBounds = new THREE.Box3().setFromObject(source);
   const initialSize = initialBounds.getSize(new THREE.Vector3());
@@ -164,22 +128,6 @@ function prepareImportedModel(gltf, renderer, displayTexture = null) {
   const model = new THREE.Group();
   model.add(source);
 
-  if (wallpaperTexture) {
-    const screenWidth = 2.86;
-    const screenHeight = 6.14;
-    const screenGeometry = normalizeShapeUvs(
-      new THREE.ShapeGeometry(roundedRectShape(screenWidth, screenHeight, 0.46), 28),
-      screenWidth,
-      screenHeight,
-    );
-    const screen = new THREE.Mesh(
-      screenGeometry,
-      new THREE.MeshBasicMaterial({ map: wallpaperTexture, toneMapped: false }),
-    );
-    screen.position.z = 0.215;
-    model.add(screen);
-  }
-
   return model;
 }
 
@@ -193,6 +141,8 @@ export default function Scene3D() {
     const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
     let reduceMotion = motionPreference.matches;
     const compact = window.matchMedia('(max-width: 767px)').matches;
+    // Phones and tablets: layout still follows `compact`, render cost follows `lowPower`.
+    const lowPower = window.matchMedia('(max-width: 1024px), (pointer: coarse)').matches;
     let disposed = false;
 
     const scene = new THREE.Scene();
@@ -201,10 +151,10 @@ export default function Scene3D() {
 
     const renderer = new THREE.WebGLRenderer({
       alpha: true,
-      antialias: !compact,
+      antialias: !lowPower,
       powerPreference: 'high-performance',
     });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, compact ? 1.25 : 1.8));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, compact ? 1.25 : lowPower ? 1.5 : 1.8));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.08;
@@ -224,7 +174,7 @@ export default function Scene3D() {
     phone.rotation.order = 'YXZ';
     scene.add(phone);
 
-    const { stage, halo, innerHalo, particles } = createStage(compact);
+    const { stage, halo, innerHalo, particles } = createStage(compact, lowPower);
     scene.add(stage);
 
     const ambientLight = new THREE.HemisphereLight(0xe7f5ff, 0x111827, 2.2);
@@ -239,13 +189,19 @@ export default function Scene3D() {
 
     const pointer = { x: 0, y: 0 };
     const current = { x: 0, y: 0 };
+    // Drag-to-rotate: yaw/pitch offsets layered on top of the cinematic timeline.
+    const drag = { id: null, lastX: 0, lastY: 0, lastMove: 0, yaw: 0, pitch: 0, velocity: 0 };
+    let timelineTime = 0;
+    let lastFrameTime = null;
+    let lastRenderTime = -Infinity;
+    let resumeAt = 0;
     let frameId = 0;
     let tabVisible = !document.hidden;
     let inViewport = true;
 
     const renderOnce = () => renderer.render(scene, camera);
     const setStaticPose = () => {
-      phone.rotation.set(-0.08, -0.42, 0.025);
+      phone.rotation.set(-0.08 + drag.pitch, -0.42 + drag.yaw, 0.025);
       phone.position.set(0, 0, 0.18);
       phone.scale.setScalar(compact ? 0.78 : 0.9);
     };
@@ -279,10 +235,58 @@ export default function Scene3D() {
       pointer.y = 0;
     };
 
+    const onDragStart = (event) => {
+      if (drag.id !== null || (event.pointerType === 'mouse' && event.button !== 0)) return;
+      drag.id = event.pointerId;
+      drag.lastX = event.clientX;
+      drag.lastY = event.clientY;
+      drag.lastMove = performance.now();
+      drag.velocity = 0;
+      container.setPointerCapture(event.pointerId);
+      container.dataset.dragging = 'true';
+    };
+    const onDragMove = (event) => {
+      if (event.pointerId !== drag.id) return;
+      const deltaYaw = (event.clientX - drag.lastX) * 0.012;
+      drag.yaw += deltaYaw;
+      drag.pitch = THREE.MathUtils.clamp(drag.pitch + (event.clientY - drag.lastY) * 0.006, -0.5, 0.5);
+      drag.velocity = deltaYaw;
+      drag.lastX = event.clientX;
+      drag.lastY = event.clientY;
+      drag.lastMove = performance.now();
+      if (reduceMotion) {
+        setStaticPose();
+        renderOnce();
+      }
+    };
+    const onDragEnd = (event) => {
+      if (event.pointerId !== drag.id) return;
+      drag.id = null;
+      // No fling when the finger rested before lifting, or when motion is reduced.
+      if (reduceMotion || performance.now() - drag.lastMove > 80) drag.velocity = 0;
+      resumeAt = performance.now() + 2000;
+      delete container.dataset.dragging;
+    };
+
     const render = (time = 0) => {
       frameId = 0;
       if (reduceMotion || !tabVisible || !inViewport) return;
-      const progress = (time % 18000) / 18000;
+      if (time - lastRenderTime < FRAME_INTERVAL) {
+        scheduleFrame();
+        return;
+      }
+      lastRenderTime = time;
+      const delta = lastFrameTime === null ? 0 : Math.min(time - lastFrameTime, 100);
+      lastFrameTime = time;
+      const dragging = drag.id !== null;
+      if (!dragging) {
+        // Pause the show while the user holds the phone and briefly after release.
+        if (time >= resumeAt) timelineTime += delta;
+        drag.yaw += drag.velocity;
+        drag.velocity *= 0.92;
+        if (time >= resumeAt) drag.pitch = lerp(drag.pitch, 0, 0.03);
+      }
+      const progress = (timelineTime % 18000) / 18000;
       current.x = lerp(current.x, pointer.x, 0.045);
       current.y = lerp(current.y, pointer.y, 0.045);
 
@@ -293,8 +297,8 @@ export default function Scene3D() {
       const revealPulse = Math.sin(progress * Math.PI * 2);
       const scalePulse = 1 + Math.sin(progress * Math.PI * 4 - 0.7) * 0.018;
 
-      phone.rotation.y = cinematicY + current.x * 0.14;
-      phone.rotation.x = -0.1 + Math.sin(progress * Math.PI * 2 - 0.4) * 0.11 + current.y * 0.07;
+      phone.rotation.y = cinematicY + drag.yaw + current.x * 0.14;
+      phone.rotation.x = -0.1 + Math.sin(progress * Math.PI * 2 - 0.4) * 0.11 + current.y * 0.07 + drag.pitch;
       phone.rotation.z = 0.025 + Math.sin(progress * Math.PI * 2) * 0.045 - current.x * 0.025;
       phone.position.x = current.x * 0.13;
       phone.position.y = Math.sin(progress * Math.PI * 2 - 0.5) * 0.16 - current.y * 0.08;
@@ -320,7 +324,6 @@ export default function Scene3D() {
 
     const loader = new GLTFLoader();
     loader.setMeshoptDecoder(MeshoptDecoder);
-    const textureLoader = new THREE.TextureLoader();
     loader.load(
       MODEL_URL,
       (gltf) => {
@@ -328,28 +331,15 @@ export default function Scene3D() {
           disposeSceneResources(gltf.scene);
           return;
         }
-        const attachModel = (displayTexture = null) => {
-          if (disposed) {
-            displayTexture?.dispose();
-            disposeSceneResources(gltf.scene);
-            return;
-          }
-          if (displayTexture) {
-            displayTexture.colorSpace = THREE.SRGBColorSpace;
-            displayTexture.anisotropy = Math.min(4, renderer.capabilities.getMaxAnisotropy());
-          }
-          phone.add(prepareImportedModel(gltf, renderer, displayTexture));
-          container.dataset.modelState = 'ready';
-          container.style.removeProperty('--model-progress');
-          if (reduceMotion) {
-            setStaticPose();
-            renderOnce();
-          } else {
-            scheduleFrame();
-          }
-        };
-
-        textureLoader.load(WALLPAPER_URL, attachModel, undefined, () => attachModel());
+        phone.add(prepareImportedModel(gltf, renderer, lowPower));
+        container.dataset.modelState = 'ready';
+        container.style.removeProperty('--model-progress');
+        if (reduceMotion) {
+          setStaticPose();
+          renderOnce();
+        } else {
+          scheduleFrame();
+        }
       },
       (event) => {
         if (event.lengthComputable && event.total > 0) {
@@ -392,6 +382,10 @@ export default function Scene3D() {
     intersectionObserver.observe(container);
 
     window.addEventListener('pointermove', onPointerMove, { passive: true });
+    container.addEventListener('pointerdown', onDragStart);
+    container.addEventListener('pointermove', onDragMove);
+    container.addEventListener('pointerup', onDragEnd);
+    container.addEventListener('pointercancel', onDragEnd);
     window.addEventListener('pointerleave', onPointerLeave, { passive: true });
     document.addEventListener('visibilitychange', onVisibilityChange);
     motionPreference.addEventListener('change', onMotionPreferenceChange);
@@ -412,6 +406,10 @@ export default function Scene3D() {
       resizeObserver.disconnect();
       intersectionObserver.disconnect();
       window.removeEventListener('pointermove', onPointerMove);
+      container.removeEventListener('pointerdown', onDragStart);
+      container.removeEventListener('pointermove', onDragMove);
+      container.removeEventListener('pointerup', onDragEnd);
+      container.removeEventListener('pointercancel', onDragEnd);
       window.removeEventListener('pointerleave', onPointerLeave);
       document.removeEventListener('visibilitychange', onVisibilityChange);
       motionPreference.removeEventListener('change', onMotionPreferenceChange);
