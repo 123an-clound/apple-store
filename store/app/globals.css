@@ -105,10 +105,14 @@
 }
 
 /* ─── Base ───────────────────────────────────────── */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+/* In @layer base so Tailwind utilities (mt-*, py-*, …) can override it. Unlayered,
+   this reset beat every spacing utility on the storefront. */
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 }
 
 html { scroll-behavior: smooth; }

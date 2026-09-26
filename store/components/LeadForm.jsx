@@ -3,6 +3,7 @@
 import { useActionState, useId, useState } from 'react';
 import { PhoneCall, CheckCircle2 } from 'lucide-react';
 import { submitLead } from '@/app/actions/lead';
+import { useContact } from '@/components/ContactProvider';
 
 const field = {
   width: '100%', minHeight: 44, borderRadius: 10, padding: '0 12px', fontSize: 14,
@@ -14,21 +15,26 @@ export default function LeadForm({ product }) {
   const [open, setOpen] = useState(false);
   const [state, action, pending] = useActionState(submitLead, null);
   const id = useId();
+  const { responsePromise } = useContact();
 
   if (state?.ok) {
     return (
-      <p role="status" style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: 'var(--color-success)', margin: 0 }}>
-        <CheckCircle2 size={16} aria-hidden="true" /> Đã nhận yêu cầu — chúng tôi sẽ gọi lại sớm.
+      // Text in --text-primary: the brand green is below 4.5:1 on light surfaces.
+      <p role="status" style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: 'var(--text-primary)', margin: 0 }}>
+        <CheckCircle2 size={16} color="#16a34a" aria-hidden="true" /> Đã nhận yêu cầu — {responsePromise ? responsePromise.charAt(0).toLowerCase() + responsePromise.slice(1) : 'chúng tôi sẽ gọi lại sớm'}.
       </p>
     );
   }
 
   if (!open) {
     return (
-      <button type="button" onClick={() => setOpen(true)} className="focus-ring"
-        style={{ display: 'inline-flex', alignItems: 'center', gap: 8, minHeight: 44, padding: '0 14px', borderRadius: 10, border: '1px dashed var(--border-strong)', background: 'transparent', color: 'var(--text-primary)', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>
-        <PhoneCall size={15} aria-hidden="true" /> Để lại số, chúng tôi gọi lại
-      </button>
+      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '6px 12px' }}>
+        <button type="button" onClick={() => setOpen(true)} className="focus-ring"
+          style={{ display: 'inline-flex', alignItems: 'center', gap: 8, minHeight: 44, padding: '0 14px', borderRadius: 10, border: '1px dashed var(--border-strong)', background: 'transparent', color: 'var(--text-primary)', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>
+          <PhoneCall size={15} aria-hidden="true" /> Để lại số, chúng tôi gọi lại
+        </button>
+        {responsePromise && <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>{responsePromise}</span>}
+      </div>
     );
   }
 
@@ -53,6 +59,10 @@ export default function LeadForm({ product }) {
           <option value="thu_cu">Thu cũ đổi mới</option>
         </select>
       </div>
+      <p style={{ margin: 0, fontSize: 12, color: 'var(--text-muted)' }}>
+        Khi gửi, bạn đồng ý để cửa hàng liên hệ theo{' '}
+        <a href="/chinh-sach-bao-mat" target="_blank" style={{ textDecoration: 'underline', color: 'var(--text-secondary)' }}>Chính sách bảo mật</a>.
+      </p>
       {state?.error && <p role="alert" style={{ margin: 0, fontSize: 13, color: 'var(--color-error)' }}>{state.error}</p>}
       <button type="submit" disabled={pending} className="focus-ring"
         style={{ minHeight: 44, borderRadius: 10, border: 'none', background: 'var(--color-primary-hover)', color: '#fff', fontWeight: 700, fontSize: 14, cursor: pending ? 'wait' : 'pointer', opacity: pending ? 0.7 : 1 }}>

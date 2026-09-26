@@ -1,11 +1,13 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ChevronLeft, Phone, MessageCircle, ShieldCheck, Sparkles } from 'lucide-react';
+import { ChevronRight, Phone, MessageCircle, ShieldCheck, Sparkles } from 'lucide-react';
 import { getAllProductCards, getProductCardBySlug } from '@/lib/products';
 import { SITE_URL } from '@/lib/constants';
 import { getContact } from '@/lib/settings';
 import LeadForm from '@/components/LeadForm';
+import Footer from '@/components/Footer';
+import { formatPrice } from '@/lib/helpers';
 
 export const revalidate = 60;
 
@@ -19,7 +21,8 @@ export async function generateMetadata({ params }) {
   const card = await getProductCardBySlug(slug);
   if (!card) return {};
 
-  const title = `${card.name} — Giá từ ${card.variants[0]?.priceFormatted ?? 'liên hệ'} | Apple Store`;
+  // lowestPrice, not variants[0]: the first variant isn't necessarily the cheapest.
+  const title = `${card.name} — Giá từ ${formatPrice(card.lowestPrice)} | Apple Store`;
   const description =
     card.description || `${card.name} chính hãng, giá tốt, bảo hành uy tín tại Apple Store.`;
   const url = `${SITE_URL}/san-pham/${slug}`;
@@ -68,19 +71,33 @@ export default async function ProductPage({ params }) {
       name: v.spec,
     })),
   };
+  const breadcrumbLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Trang chủ', item: SITE_URL },
+      { '@type': 'ListItem', position: 2, name: card.name, item: url },
+    ],
+  };
 
   return (
-    // id="products": target of the layout's "Bỏ qua đến sản phẩm" skip link on this page too.
+    <>
+    {/* id="products": target of the layout's "Bỏ qua đến sản phẩm" skip link on this page too. */}
     <main id="products" className="min-h-screen">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify([jsonLd, breadcrumbLd]).replace(/</g, '\\u003c') }}
       />
       <div className="section-shell section-padding py-6 sm:py-10">
-        <Link href="/" className="btn-ghost gap-2 !px-3">
-          <ChevronLeft size={18} />
-          Quay lại danh sách
-        </Link>
+        <nav aria-label="Breadcrumb">
+          <ol className="flex flex-wrap items-center gap-1 text-caption">
+            <li><Link href="/" className="hover:text-[var(--text-primary)] hover:underline focus-ring rounded">Trang chủ</Link></li>
+            <li aria-hidden="true"><ChevronRight size={14} /></li>
+            <li><Link href="/#products" className="hover:text-[var(--text-primary)] hover:underline focus-ring rounded">{card.series}</Link></li>
+            <li aria-hidden="true"><ChevronRight size={14} /></li>
+            <li aria-current="page" className="font-medium text-[var(--text-primary)]">{card.name}</li>
+          </ol>
+        </nav>
 
         <div className="mt-6 grid gap-8 lg:grid-cols-2 lg:gap-12">
           <div>
@@ -186,5 +203,7 @@ export default async function ProductPage({ params }) {
         </div>
       </div>
     </main>
+    <Footer />
+    </>
   );
 }

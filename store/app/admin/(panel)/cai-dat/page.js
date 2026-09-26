@@ -18,7 +18,7 @@ export default async function SettingsPage() {
       <PageHeader title="Cài đặt" description="Thông tin liên hệ hiển thị trên toàn website." />
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <section className="a-card p-5 sm:p-6 lg:col-span-2" aria-labelledby="contact-h">
-          <h2 id="contact-h" className="font-semibold">Liên hệ</h2>
+          <h2 id="contact-h" className="font-semibold">Liên hệ &amp; cửa hàng</h2>
           <p className="a-subtle mb-5 text-xs">
             Dùng cho nút gọi, Zalo và dữ liệu có cấu trúc (SEO). {hasRole(role, 'owner') ? '' : 'Chỉ chủ sở hữu được sửa.'}
           </p>

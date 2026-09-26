@@ -18,5 +18,10 @@ export default async function sitemap() {
       changeFrequency: 'weekly',
       priority: 0.8,
     })),
+    {
+      url: `${SITE_URL}/chinh-sach-bao-mat`,
+      changeFrequency: 'yearly',
+      priority: 0.2,
+    },
   ];
 }

@@ -50,6 +50,9 @@ const securityHeaders = [
 const nextConfig = {
   // Don't advertise the framework/version in every response.
   poweredByHeader: false,
+  // app/global-not-found.js: the app has two root layouts ((site), admin), so a
+  // plain root not-found.js has no layout to render in.
+  experimental: { globalNotFound: true },
   // A stray empty package-lock.json in the parent folder makes Next infer the wrong
   // workspace root. Pin it to this app.
   turbopack: {

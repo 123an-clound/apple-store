@@ -5,6 +5,7 @@ import { SITE_URL } from '@/lib/constants';
 import { getContact } from '@/lib/settings';
 import ModalSlot from '@/components/ModalSlot';
 import { ContactProvider } from '@/components/ContactProvider';
+import { Analytics } from '@vercel/analytics/next';
 
 const inter = Inter({
   subsets: ['latin', 'vietnamese'],
@@ -21,12 +22,15 @@ const plusJakarta = Plus_Jakarta_Sans({
 
 // Icons are picked up automatically from app/icon.png and app/apple-icon.png.
 
+// LocalBusiness (MobilePhoneStore) once the owner has entered an address in
+// /admin/cai-dat — Google requires an address for it — plain Organization before that.
 const buildOrganizationJsonLd = (contact) => ({
   '@context': 'https://schema.org',
-  '@type': 'Organization',
+  '@type': contact.address ? 'MobilePhoneStore' : 'Organization',
   name: 'Apple Store',
   url: SITE_URL,
   logo: `${SITE_URL}/logo.png`,
+  image: `${SITE_URL}/og.png`,
   telephone: contact.hotline,
   contactPoint: {
     '@type': 'ContactPoint',
@@ -35,6 +39,22 @@ const buildOrganizationJsonLd = (contact) => ({
     areaServed: 'VN',
     availableLanguage: 'Vietnamese',
   },
+  ...(contact.address && {
+    address: { '@type': 'PostalAddress', streetAddress: contact.address, addressCountry: 'VN' },
+    hasMap: contact.directionsUrl,
+    priceRange: '₫₫',
+  }),
+  ...(contact.address && contact.opens && contact.closes && {
+    openingHoursSpecification: {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+      opens: contact.opens,
+      closes: contact.closes,
+    },
+  }),
+  ...(contact.address && contact.geo && {
+    geo: { '@type': 'GeoCoordinates', latitude: contact.geo.lat, longitude: contact.geo.lng },
+  }),
 });
 
 export const metadata = {
@@ -103,6 +123,9 @@ export default async function RootLayout({ children, modal }) {
           {children}
           <ModalSlot>{modal}</ModalSlot>
         </ContactProvider>
+        {/* Cookieless Vercel Web Analytics; only on Vercel, where /_vercel/insights is served
+            same-origin (dev would load a debug script from a host the CSP blocks). */}
+        {process.env.VERCEL === '1' && <Analytics />}
       </body>
     </html>
   );

@@ -302,7 +302,34 @@ export async function saveSettings(_prev, formData) {
   if (Object.values(values).some((v) => !/^[0-9]{8,12}$/.test(v))) {
     return { error: 'Số điện thoại phải gồm 8–12 chữ số.' };
   }
-  const { error } = await admin.supabase.from('apple_settings').update(values).eq('id', 1);
+
+  // Store details — every field optional; empty clears it.
+  const text = (k, max) => String(formData.get(k) ?? '').trim().slice(0, max) || null;
+  const time = (k) => {
+    const v = text(k, 5);
+    return v && /^([01]\d|2[0-3]):[0-5]\d$/.test(v) ? v : null;
+  };
+  const coord = (k, limit) => {
+    const v = text(k, 20);
+    if (v === null) return null;
+    const n = Number(v.replace(',', '.'));
+    return Number.isFinite(n) && Math.abs(n) <= limit ? n : NaN;
+  };
+  const store = {
+    address: text('address', 200),
+    maps_url: text('maps_url', 500),
+    open_time: time('open_time'),
+    close_time: time('close_time'),
+    latitude: coord('latitude', 90),
+    longitude: coord('longitude', 180),
+    response_promise: text('response_promise', 80),
+  };
+  // Rendered as a link on the public site: https only, no javascript:/data: URLs.
+  if (store.maps_url && !/^https:\/\//i.test(store.maps_url)) return { error: 'Link bản đồ phải bắt đầu bằng https://' };
+  if (Number.isNaN(store.latitude) || Number.isNaN(store.longitude)) return { error: 'Toạ độ không hợp lệ.' };
+  if ((store.latitude === null) !== (store.longitude === null)) return { error: 'Nhập đủ cả vĩ độ và kinh độ, hoặc để trống cả hai.' };
+
+  const { error } = await admin.supabase.from('apple_settings').update({ ...values, ...store }).eq('id', 1);
   if (error) return dbError(error);
   revalidateSite();
   return { ok: true };
