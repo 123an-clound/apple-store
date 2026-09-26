@@ -14,7 +14,7 @@ import {
   Smartphone,
   Sparkles,
 } from 'lucide-react';
-import { HOTLINE_DISPLAY, TEL_URL, ZALO_TRAGOP_URL } from '@/lib/constants';
+import { useContact } from '@/components/ContactProvider';
 import Scene3DLoader from '@/components/Scene3DLoader';
 
 const heroHighlights = [
@@ -30,6 +30,7 @@ const stageFeatures = [
 ];
 
 export default function HeroSection() {
+  const { hotlineDisplay, telUrl, zaloTragopUrl } = useContact();
   const reduceMotion = useReducedMotion();
   const enter = (delay = 0) => ({
     initial: reduceMotion ? false : { opacity: 0, y: 22 },
@@ -58,7 +59,7 @@ export default function HeroSection() {
 
           <motion.div {...enter(0.27)} className="spline-hero-actions">
             <motion.a
-              href={ZALO_TRAGOP_URL}
+              href={zaloTragopUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary btn-modern btn-shine-sweep btn-full-glow spline-primary-cta focus-ring"
@@ -70,14 +71,14 @@ export default function HeroSection() {
             </motion.a>
 
             <motion.a
-              href={TEL_URL}
+              href={telUrl}
               className="spline-hotline-cta glass-spline focus-ring"
               whileHover={reduceMotion ? undefined : { y: -2 }}
               whileTap={reduceMotion ? undefined : { scale: 0.98 }}
-              aria-label={`Gọi hotline ${HOTLINE_DISPLAY}`}
+              aria-label={`Gọi hotline ${hotlineDisplay}`}
             >
               <Phone size={19} aria-hidden="true" />
-              <span>{HOTLINE_DISPLAY}</span>
+              <span>{hotlineDisplay}</span>
             </motion.a>
           </motion.div>
 

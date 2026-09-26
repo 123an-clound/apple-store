@@ -28,7 +28,8 @@ const csp = [
   `img-src 'self' data: blob: https://${supabaseHost}`,
   "font-src 'self' data:",
   // GLTFLoader resolves images embedded in a GLB through same-document blob URLs.
-  `connect-src 'self' blob: https://${supabaseHost}`,
+  // wss: is the Supabase Realtime socket used by the admin panel.
+  `connect-src 'self' blob: https://${supabaseHost} wss://${supabaseHost}`,
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",

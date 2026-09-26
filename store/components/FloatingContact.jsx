@@ -1,9 +1,10 @@
 'use client';
 
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { TEL_URL, ZALO_URL } from '@/lib/constants';
+import { useContact } from '@/components/ContactProvider';
 
 export default function FloatingContact({ hidden = false }) {
+  const { telUrl, zaloUrl } = useContact();
   const reduceMotion = useReducedMotion();
   // The looping glow/ripple is decorative; drop it entirely for visitors who ask
   // for reduced motion (CSS media queries can't reach Framer Motion animations).
@@ -28,7 +29,7 @@ export default function FloatingContact({ hidden = false }) {
         >
           {/* Zalo Button */}
           <motion.a
-            href={ZALO_URL}
+            href={zaloUrl}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Chat Zalo"
@@ -71,7 +72,7 @@ export default function FloatingContact({ hidden = false }) {
 
           {/* Phone Button */}
           <motion.a
-            href={TEL_URL}
+            href={telUrl}
             target="_self"
             rel="noopener noreferrer"
             aria-label="Gọi ngay"

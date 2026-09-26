@@ -10,6 +10,7 @@ export const getAllProductCards = cache(async () => {
     const { data, error } = await supabase
       .from('kho_iphone')
       .select('*')
+      .eq('is_visible', true)
       .order('stt', { ascending: false });
 
     if (error) {

@@ -6,7 +6,7 @@ import { useState, useEffect, useSyncExternalStore } from 'react';
 import { Menu, X, Phone, Sun, Moon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-import { TEL_URL, HOTLINE_DISPLAY } from '@/lib/constants';
+import { useContact } from '@/components/ContactProvider';
 
 // The <html> class is the single source of truth for the theme — it is set by the
 // inline script in app/layout.js before first paint. Reading it through
@@ -21,6 +21,7 @@ const getThemeSnapshot = () =>
   document.documentElement.classList.contains('dark') ? 'dark' : 'light';
 
 export default function Navbar() {
+  const { telUrl, hotlineDisplay } = useContact();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const scrolled = useSyncExternalStore(
@@ -95,7 +96,7 @@ export default function Navbar() {
             {theme === 'dark' ? 'Sáng' : 'Tối'}
           </motion.button>
           <motion.a 
-            href={TEL_URL} 
+            href={telUrl} 
             className="btn-ghost gap-2 !min-h-[40px] px-4 btn-neon"
             whileHover={{ 
               scale: 1.05,
@@ -104,7 +105,7 @@ export default function Navbar() {
             whileTap={{ scale: 0.95 }}
           >
             <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" aria-hidden />
-            {HOTLINE_DISPLAY}
+            {hotlineDisplay}
           </motion.a>
           <motion.a 
             href="#products" 
@@ -188,7 +189,7 @@ export default function Navbar() {
               {/* Call CTA */}
               <div style={{ padding: '16px 20px' }}>
                 <a
-                  href={TEL_URL}
+                  href={telUrl}
                   style={{
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
                     width: '100%', minHeight: 52, borderRadius: 12,
@@ -198,7 +199,7 @@ export default function Navbar() {
                   }}
                 >
                   <Phone size={18} />
-                  Gọi {HOTLINE_DISPLAY}
+                  Gọi {hotlineDisplay}
                 </a>
               </div>
 

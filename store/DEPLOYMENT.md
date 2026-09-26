@@ -159,6 +159,15 @@ Tailwind v4 is configured in CSS (`app/globals.css`), not a tailwind.config file
 - Supabase Anon Key is publicly accessible (this is by design for read-only access)
 - Use RLS (Row Level Security) policies in Supabase to protect sensitive data
 
+## 🛠️ Trang quản trị (/admin)
+
+- Đăng nhập bằng tài khoản Supabase Auth có trong bảng `apple_admins` (role `owner` / `editor` / `viewer`).
+- Thêm người mới: tạo user trong Supabase Dashboard → Authentication, rồi owner gán quyền ở `/admin/quan-tri`.
+- Quyền được kiểm tra 2 lớp: Server Action (`app/admin/actions.js`) và RLS (`private.apple_has_role()`).
+- Mọi thay đổi sản phẩm / cài đặt / khách hàng được ghi tự động vào `apple_audit_log` (trigger).
+- Quên mật khẩu cần thêm `<SITE_URL>/admin/auth/callback` vào Supabase → Authentication → URL Configuration → Redirect URLs, và đặt `NEXT_PUBLIC_SITE_URL` trên Vercel.
+- Test CSV: `node app/admin/components/csv.test.mjs`.
+
 ## 📱 Supported Devices
 
 - ✅ Mobile (iOS Safari, Chrome Android)

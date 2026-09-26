@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { formatPrice } from '@/lib/helpers';
+import { formatPrice, BADGES } from '@/lib/helpers';
 
 const SLIDE_INTERVAL = 3500;
 
@@ -110,6 +110,19 @@ export default function ProductCard({ card, onClick }) {
               {card.series}
             </span>
           </div>
+
+          {card.badge && BADGES[card.badge] && (
+            <div style={{ position: 'absolute', top: 10, right: 10, zIndex: 2 }}>
+              <span style={{
+                display: 'inline-flex', alignItems: 'center',
+                borderRadius: 9999, background: BADGES[card.badge].color,
+                padding: '3px 10px', fontSize: 10, fontWeight: 700,
+                textTransform: 'uppercase', letterSpacing: '0.08em', color: '#fff',
+              }}>
+                {BADGES[card.badge].label}
+              </span>
+            </div>
+          )}
 
           <AnimatePresence mode="wait">
             {images.length > 0 ? (

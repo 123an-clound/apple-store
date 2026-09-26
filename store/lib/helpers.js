@@ -16,27 +16,34 @@ export function extractFilename(rawPath) {
   return filename;
 }
 
-// Build a full Supabase Storage URL from a raw Windows path column value
-export function buildImageUrl(rawPath) {
+// Object name inside the anh-iphone bucket for a raw image column value.
+// Heuristic: some rows may miss the file extension in the source column.
+// Default to ".png" (this store asset set is mostly PNG).
+export function imageObjectName(rawPath) {
   const filename = extractFilename(rawPath);
   if (!filename) return null;
-  // Heuristic: some rows may miss the file extension in the source column.
-  // Default to ".png" (this store asset set is mostly PNG).
-  const finalName = /\.[a-z0-9]+$/i.test(filename) ? filename : `${filename}.png`;
+  return /\.[a-z0-9]+$/i.test(filename) ? filename : `${filename}.png`;
+}
+
+// Build a full Supabase Storage URL from a raw Windows path column value
+export function buildImageUrl(rawPath) {
+  const finalName = imageObjectName(rawPath);
+  if (!finalName) return null;
   return `${STORAGE_BASE_URL}${encodeURIComponent(finalName)}`;
 }
 
+export const IMAGE_COLUMNS = [
+  'Hình ảnh sản phẩm 1',
+  'Hình ảnh sản phẩm 2',
+  'Hình ảnh sản phẩm 3',
+  'Hình ảnh sản phẩm 4',
+  'Hình ảnh sản phẩm 5',
+  'Hình ảnh sản phẩm 6',
+];
+
 // Return up to 6 non-null image URLs from a raw product row
 export function getImageUrls(row) {
-  const cols = [
-    'Hình ảnh sản phẩm 1',
-    'Hình ảnh sản phẩm 2',
-    'Hình ảnh sản phẩm 3',
-    'Hình ảnh sản phẩm 4',
-    'Hình ảnh sản phẩm 5',
-    'Hình ảnh sản phẩm 6',
-  ];
-  return cols
+  return IMAGE_COLUMNS
     .map((col) => buildImageUrl(row[col]))
     .filter(Boolean);
 }
@@ -57,6 +64,22 @@ export function parsePrice(rawPrice) {
   const num = parseInt(cleaned, 10);
   return isNaN(num) ? Infinity : num;
 }
+
+// Price actually charged: sale_price when it undercuts the list price.
+export function effectivePrice(row) {
+  const base = parsePrice(row['Giá']);
+  const sale = Number(row?.sale_price);
+  return sale > 0 && sale < base ? sale : base;
+}
+
+// Badge values allowed by the kho_iphone.badge check constraint.
+// Colours are dark enough for white text (WCAG AA).
+export const BADGES = {
+  NEW: { label: 'Mới', color: '#1d4ed8' },
+  HOT: { label: 'Hot', color: '#b91c1c' },
+  SALE: { label: 'Giảm giá', color: '#c2410c' },
+  LIMITED: { label: 'Giới hạn', color: '#6d28d9' },
+};
 
 // Spec fallback
 export function getSpec(row) {
@@ -126,8 +149,8 @@ export function groupByModel(rows) {
         series: getSeries(name),
         // Used for "mới nhất" ordering (STT lớn hơn lên trước)
         sttMax: Number.isFinite(Number(row?.stt)) ? Number(row.stt) : 0,
-        lowestPrice: parsePrice(row['Giá']),
-        lowestPriceRaw: row['Giá'],
+        lowestPrice: effectivePrice(row),
+        badge: null,
         images: getImageUrls(row),
         description: row['Mô tả'] || '',
         variants: [],
@@ -137,15 +160,17 @@ export function groupByModel(rows) {
     if (Number.isFinite(Number(row?.stt))) {
       card.sttMax = Math.max(card.sttMax ?? 0, Number(row.stt));
     }
-    const price = parsePrice(row['Giá']);
-    if (price < card.lowestPrice) {
-      card.lowestPrice = price;
-      card.lowestPriceRaw = row['Giá'];
-    }
+    const price = effectivePrice(row);
+    const listPrice = parsePrice(row['Giá']);
+    card.lowestPrice = Math.min(card.lowestPrice, price);
+    card.badge ??= row.badge ?? null;
     card.variants.push({
       spec: getSpec(row),
-      price: parsePrice(row['Giá']),
-      priceFormatted: formatPrice(row['Giá']),
+      price,
+      priceFormatted: formatPrice(price),
+      // Struck-through list price, only when a sale price applies.
+      originalPriceFormatted: price < listPrice ? formatPrice(listPrice) : null,
+      soldOut: row.stock === 0,
       images: getImageUrls(row),
     });
   }

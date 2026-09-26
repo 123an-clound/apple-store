@@ -1,8 +1,10 @@
 import { Inter, Plus_Jakarta_Sans } from 'next/font/google';
 import Script from 'next/script';
-import './globals.css';
-import { SITE_URL, HOTLINE, HOTLINE_DISPLAY } from '@/lib/constants';
+import '../globals.css';
+import { SITE_URL } from '@/lib/constants';
+import { getContact } from '@/lib/settings';
 import ModalSlot from '@/components/ModalSlot';
+import { ContactProvider } from '@/components/ContactProvider';
 
 const inter = Inter({
   subsets: ['latin', 'vietnamese'],
@@ -19,21 +21,21 @@ const plusJakarta = Plus_Jakarta_Sans({
 
 // Icons are picked up automatically from app/icon.png and app/apple-icon.png.
 
-const organizationJsonLd = {
+const buildOrganizationJsonLd = (contact) => ({
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'Apple Store',
   url: SITE_URL,
   logo: `${SITE_URL}/logo.png`,
-  telephone: HOTLINE,
+  telephone: contact.hotline,
   contactPoint: {
     '@type': 'ContactPoint',
-    telephone: HOTLINE_DISPLAY,
+    telephone: contact.hotlineDisplay,
     contactType: 'sales',
     areaServed: 'VN',
     availableLanguage: 'Vietnamese',
   },
-};
+});
 
 export const metadata = {
   // Without this, Next resolves OG/Twitter image URLs against http://localhost:3000.
@@ -68,7 +70,8 @@ export const viewport = {
   ],
 };
 
-export default function RootLayout({ children, modal }) {
+export default async function RootLayout({ children, modal }) {
+  const contact = await getContact();
   return (
     <html
       lang="vi"
@@ -78,7 +81,7 @@ export default function RootLayout({ children, modal }) {
       <body className="antialiased transition-colors duration-300">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(buildOrganizationJsonLd(contact)).replace(/</g, '\\u003c') }}
         />
         <Script id="theme-init" strategy="beforeInteractive">
           {`
@@ -96,8 +99,10 @@ export default function RootLayout({ children, modal }) {
         <a href="#products" className="skip-link">
           Bỏ qua đến sản phẩm
         </a>
-        {children}
-        <ModalSlot>{modal}</ModalSlot>
+        <ContactProvider value={contact}>
+          {children}
+          <ModalSlot>{modal}</ModalSlot>
+        </ContactProvider>
       </body>
     </html>
   );

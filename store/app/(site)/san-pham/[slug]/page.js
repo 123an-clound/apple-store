@@ -3,7 +3,9 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ChevronLeft, Phone, MessageCircle, ShieldCheck, Sparkles } from 'lucide-react';
 import { getAllProductCards, getProductCardBySlug } from '@/lib/products';
-import { SITE_URL, TEL_URL, ZALO_URL } from '@/lib/constants';
+import { SITE_URL } from '@/lib/constants';
+import { getContact } from '@/lib/settings';
+import LeadForm from '@/components/LeadForm';
 
 export const revalidate = 60;
 
@@ -47,6 +49,7 @@ export default async function ProductPage({ params }) {
   const { slug } = await params;
   const card = await getProductCardBySlug(slug);
   if (!card) notFound();
+  const { telUrl, zaloUrl } = await getContact();
 
   const url = `${SITE_URL}/san-pham/${slug}`;
   const jsonLd = {
@@ -60,7 +63,7 @@ export default async function ProductPage({ params }) {
       url,
       priceCurrency: 'VND',
       price: Number.isFinite(v.price) ? v.price : undefined,
-      availability: 'https://schema.org/InStock',
+      availability: v.soldOut ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock',
       itemCondition: 'https://schema.org/NewCondition',
       name: v.spec,
     })),
@@ -149,7 +152,11 @@ export default async function ProductPage({ params }) {
                     style={{ padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
                   >
                     <span className="font-semibold text-[var(--text-primary)]">{v.spec}</span>
-                    <span className="product-card-price-value">{v.priceFormatted}</span>
+                    <span style={{ textAlign: 'right' }}>
+                      <span className="product-card-price-value">{v.priceFormatted}</span>
+                      {v.originalPriceFormatted && <s className="text-caption" style={{ display: 'block' }}>{v.originalPriceFormatted}</s>}
+                      {v.soldOut && <span className="text-caption" style={{ display: 'block', color: 'var(--color-error)' }}>Tạm hết hàng</span>}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -162,12 +169,14 @@ export default async function ProductPage({ params }) {
               </div>
             )}
 
+            <LeadForm product={card.name} />
+
             <div className="flex gap-3">
-              <a href={TEL_URL} className="btn-primary flex-1 gap-3">
+              <a href={telUrl} className="btn-primary flex-1 gap-3">
                 <Phone size={17} />
                 Gọi mua ngay
               </a>
-              <a href={ZALO_URL} target="_blank" rel="noopener noreferrer" className="btn-secondary flex-1 gap-3">
+              <a href={zaloUrl} target="_blank" rel="noopener noreferrer" className="btn-secondary flex-1 gap-3">
                 <MessageCircle size={17} />
                 Tư vấn Zalo
               </a>

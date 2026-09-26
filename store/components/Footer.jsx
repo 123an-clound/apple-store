@@ -1,6 +1,7 @@
-import { TEL_URL, ZALO_URL, HOTLINE_DISPLAY } from '@/lib/constants';
+import { getContact } from '@/lib/settings';
 
-export default function Footer() {
+export default async function Footer() {
+  const { telUrl, zaloUrl, hotlineDisplay } = await getContact();
   const year = new Date().getFullYear();
 
   return (
@@ -15,13 +16,13 @@ export default function Footer() {
           <div className="flex flex-col gap-3 md:items-center">
             <p className="text-[11px] font-semibold uppercase tracking-widest text-[var(--text-muted)] mb-1">Liên hệ</p>
             <a
-              href={TEL_URL}
+              href={telUrl}
               className="text-sm font-semibold text-[var(--text-primary)] hover:text-blue-600 dark:hover:text-blue-400 hover:scale-105 transition-all focus-ring rounded inline-block btn-modern"
             >
-              {HOTLINE_DISPLAY}
+              {hotlineDisplay}
             </a>
             <a
-              href={ZALO_URL}
+              href={zaloUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:scale-105 transition-all focus-ring rounded inline-block btn-neon"
