@@ -10,11 +10,13 @@ const escapeHtml = (s) =>
 // the lead form keeps working without email configured. Lead fields are
 // visitor input: HTML-escaped in the body, newlines stripped from the subject.
 export async function notifyNewLead({ name, phone, kind, product }) {
-  const key = process.env.RESEND_API_KEY;
-  const to = process.env.LEAD_NOTIFY_EMAIL;
+  // trim(): a value piped into the Vercel CLI/dashboard can carry a BOM or newline,
+  // which breaks the Authorization header ("Cannot convert … to a ByteString").
+  const key = process.env.RESEND_API_KEY?.trim();
+  const to = process.env.LEAD_NOTIFY_EMAIL?.trim();
   if (!key || !to) return;
 
-  const from = process.env.LEAD_FROM_EMAIL || 'Apple Store <onboarding@resend.dev>';
+  const from = process.env.LEAD_FROM_EMAIL?.trim() || 'Apple Store <onboarding@resend.dev>';
   const kindLabel = KIND_LABELS[kind] ?? kind;
   const adminUrl = `${SITE_URL}/admin/khach-hang`;
   const subject = `Khách mới: ${name} · ${phone}`.replace(/[\r\n]+/g, ' ').slice(0, 150);
