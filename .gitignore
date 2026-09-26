@@ -1,2 +1,5 @@
 .vercel
 .env*
+
+# Playwright MCP screenshots/logs (local tooling output)
+.playwright-mcp/

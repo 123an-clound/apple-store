@@ -166,6 +166,7 @@ Tailwind v4 is configured in CSS (`app/globals.css`), not a tailwind.config file
 - Quyền được kiểm tra 2 lớp: Server Action (`app/admin/actions.js`) và RLS (`private.apple_has_role()`).
 - Mọi thay đổi sản phẩm / cài đặt / khách hàng được ghi tự động vào `apple_audit_log` (trigger).
 - Quên mật khẩu cần thêm `<SITE_URL>/admin/auth/callback` vào Supabase → Authentication → URL Configuration → Redirect URLs, và đặt `NEXT_PUBLIC_SITE_URL` trên Vercel.
+- Email báo khách mới (Resend): đặt `RESEND_API_KEY`, `LEAD_NOTIFY_EMAIL` (và `LEAD_FROM_EMAIL` khi đã xác minh domain riêng). Tối đa 20 email/giờ; form giới hạn 3 yêu cầu/10 phút mỗi IP.
 - Test CSV: `node app/admin/components/csv.test.mjs`.
 
 ## 📱 Supported Devices

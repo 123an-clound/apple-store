@@ -21,6 +21,9 @@
   /* Brand */
   --color-primary: #46a5e3;
   --color-primary-hover: #2685c3;
+  /* Text-safe primary: ≥ 4.5:1 on light surfaces and under white text (WCAG AA). */
+  --color-primary-strong: #185d8a;
+  --color-primary-text: #185d8a;
   --color-primary-soft: rgba(70, 165, 227, 0.12);
   --color-secondary: #d4a853;
   --color-on-primary: #ffffff;
@@ -40,7 +43,7 @@
   /* Text */
   --text-primary: #171717;
   --text-secondary: #404040;
-  --text-muted: #737373;
+  --text-muted: #5f5f5f; /* was #737373 — 4.06:1 on --surface-elevated, below AA */
   --text-color: #171717;
 
   /* Border */
@@ -89,6 +92,7 @@
   --text-primary: #fafafa;
   --text-secondary: #d4d4d4;
   --text-muted: #a3a3a3;
+  --color-primary-text: #46a5e3;
   --text-color: #ffffff;
   --border-subtle: rgba(255,255,255,0.1);
   --border-strong: rgba(255,255,255,0.18);
@@ -325,7 +329,7 @@ html:not(.dark) body {
   font-weight: 900;
   /* rgba(70,165,227,0.55) scored 2.5:1 on the light surface — below the 3:1 WCAG
      AA floor for large text, on the single most important number on the card. */
-  color: #1f76b0;
+  color: var(--color-primary-text); /* was #1f76b0 — 4.2:1 at mobile size */
   line-height: 1;
   white-space: nowrap;
 }
@@ -385,7 +389,7 @@ html:not(.dark) body {
   border-radius: var(--radius-xl);
   border: 2px solid var(--color-primary);
   background: var(--surface);
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   font-weight: 700;
   font-size: 1rem;
   text-decoration: none;
@@ -474,7 +478,7 @@ html:not(.dark) body {
 }
 .series-pill:hover { color: var(--text-primary); border-color: var(--border-strong); }
 .series-pill--active {
-  background: var(--color-primary);
+  background: var(--color-primary-strong);
   color: var(--color-on-primary);
   border-color: transparent;
   box-shadow: 0 4px 12px rgba(70,165,227,0.4);
@@ -503,7 +507,7 @@ html:not(.dark) body {
 }
 .badge-primary {
   background: var(--color-primary-soft);
-  color: var(--color-primary-hover);
+  color: var(--color-primary-text);
   border: 1px solid rgba(16,185,129,0.25);
 }
 

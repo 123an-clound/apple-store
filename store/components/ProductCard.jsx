@@ -155,10 +155,10 @@ export default function ProductCard({ card, onClick }) {
           {images.length > 1 && (
             <div style={{ position: 'absolute', bottom: 8, left: 0, right: 0, display: 'flex', justifyContent: 'center', gap: 4, zIndex: 2 }} aria-hidden="true">
               {images.map((_, i) => (
-                <button
+                // span, not button: a focusable control nested in the card's
+                // role="button" is flagged by axe (nested-interactive) even with tabIndex -1.
+                <span
                   key={i}
-                  type="button"
-                  tabIndex={-1}
                   onClick={(e) => goToSlide(e, i)}
                   style={{
                     display: 'block', height: 4, borderRadius: 9999,

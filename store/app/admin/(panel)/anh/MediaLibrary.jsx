@@ -10,6 +10,7 @@ import PageHeader from '../../components/PageHeader';
 import { useToast } from '../../components/Toast';
 import { useConfirm } from '../../components/Confirm';
 import { listImages, uploadImage } from '../../components/storage';
+import CropDialog from '../../components/CropDialog';
 
 const kb = (n) => (n > 1024 * 1024 ? `${(n / 1024 / 1024).toFixed(1)} MB` : `${Math.round(n / 1024)} KB`);
 
@@ -24,6 +25,7 @@ export default function MediaLibrary({ refs, canEdit }) {
   const [uploading, setUploading] = useState(0);
   const [dragOver, setDragOver] = useState(false);
   const [pending, startTransition] = useTransition();
+  const [cropFile, setCropFile] = useState(null);
 
   const load = useCallback(() => listImages().then(setItems, (e) => setLoadError(e.message)), []);
   useEffect(() => { load(); }, [load]);
@@ -39,13 +41,15 @@ export default function MediaLibrary({ refs, canEdit }) {
     return o.name.toLowerCase().includes(q.trim().toLowerCase());
   });
 
-  const uploadFiles = async (files) => {
+  // A single image goes through the crop editor; a batch uploads as-is.
+  const uploadFiles = async (files, { crop = true, hint } = {}) => {
     const list = [...files];
     if (!list.length) return;
+    if (crop && list.length === 1) { setCropFile(list[0]); return; }
     setUploading(list.length);
     let ok = 0;
     for (const file of list) {
-      try { await uploadImage(file, file.name.replace(/\.[^.]+$/, '')); ok++; }
+      try { await uploadImage(file, hint ?? file.name.replace(/\.[^.]+$/, '')); ok++; }
       catch (e) { toast(`${file.name}: ${e.message}`, 'error'); }
       setUploading((n) => n - 1);
     }
@@ -169,6 +173,13 @@ export default function MediaLibrary({ refs, canEdit }) {
           {items && shown.length === 0 && <p className="a-subtle py-10 text-center text-sm">Không có ảnh phù hợp.</p>}
         </div>
       </div>
+
+      {cropFile && (
+        <CropDialog source={cropFile}
+          onDone={(file) => { const hint = cropFile.name.replace(/\.[^.]+$/, ''); setCropFile(null); uploadFiles([file], { crop: false, hint }); }}
+          onSkip={() => { const f = cropFile; setCropFile(null); uploadFiles([f], { crop: false }); }}
+          onCancel={() => setCropFile(null)} />
+      )}
     </>
   );
 }

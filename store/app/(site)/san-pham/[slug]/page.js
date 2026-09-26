@@ -70,7 +70,8 @@ export default async function ProductPage({ params }) {
   };
 
   return (
-    <main className="min-h-screen">
+    // id="products": target of the layout's "Bỏ qua đến sản phẩm" skip link on this page too.
+    <main id="products" className="min-h-screen">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}

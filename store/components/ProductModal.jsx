@@ -125,11 +125,11 @@ export default function ProductModal({ card, onClose }) {
                 {card.name}
               </h2>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 5 }}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, fontSize: 10, fontWeight: 700, color: 'var(--color-primary-hover)', background: 'rgba(70,165,227,0.2)', borderRadius: 9999, padding: '2px 8px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, fontSize: 10, fontWeight: 700, color: 'var(--color-primary-text)', background: 'rgba(70,165,227,0.2)', borderRadius: 9999, padding: '2px 8px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                   <Sparkles size={9} />{card.series}
                 </span>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, fontSize: 10, fontWeight: 600, color: 'var(--color-primary)', background: 'rgba(70,165,227,0.15)', border: '1px solid rgba(70,165,227,0.3)', borderRadius: 9999, padding: '2px 8px' }}>
-                  <ShieldCheck size={9} style={{ color: 'var(--color-primary)' }} />Chính hãng
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, fontSize: 10, fontWeight: 600, color: 'var(--color-primary-text)', background: 'rgba(70,165,227,0.15)', border: '1px solid rgba(70,165,227,0.3)', borderRadius: 9999, padding: '2px 8px' }}>
+                  <ShieldCheck size={9} style={{ color: 'var(--color-primary-text)' }} />Chính hãng
                 </span>
               </div>
             </div>
@@ -192,9 +192,9 @@ export default function ProductModal({ card, onClose }) {
               <motion.div 
                 whileHover={{ scale: 1.02, boxShadow: '0 0 20px rgba(70,165,227,0.4)' }}
                 style={{ borderRadius: 12, border: '1px solid rgba(50,55,74,0.2)', background: 'linear-gradient(135deg,rgba(70,165,227,0.15),var(--surface-elevated))', padding: '10px 14px' }}>
-                <p style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--color-primary-hover)', margin: '0 0 4px' }}>Giá bán</p>
+                <p style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--color-primary-text)', margin: '0 0 4px' }}>Giá bán</p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-                  <span style={{ fontSize: 24, fontWeight: 900, color: 'var(--color-primary-hover)', lineHeight: 1 }}>{activeVariant.priceFormatted}</span>
+                  <span style={{ fontSize: 24, fontWeight: 900, color: 'var(--color-primary-text)', lineHeight: 1 }}>{activeVariant.priceFormatted}</span>
                   {activeVariant.originalPriceFormatted && <s style={{ fontSize: 13, color: 'var(--text-muted)' }}>{activeVariant.originalPriceFormatted}</s>}
                   {activeVariant.soldOut && <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--color-error)' }}>Tạm hết hàng</span>}
                   <span style={{ fontSize: 10, color: 'var(--text-muted)', background: 'var(--surface)', border: '1px solid var(--border-subtle)', borderRadius: 9999, padding: '2px 7px' }}>{activeVariant.spec}</span>
@@ -209,8 +209,8 @@ export default function ProductModal({ card, onClose }) {
                 {card.variants.map((v, i) => (
                   <button key={`${v.spec}-${v.price}-${i}`} type="button" onClick={() => selectVariant(v)}
                     style={{ padding: '8px 10px', borderRadius: 9, textAlign: 'left', cursor: 'pointer', transition: 'all 0.15s', border: isActive(v) ? '2px solid var(--color-primary)' : '1.5px solid var(--border-subtle)', background: isActive(v) ? 'rgba(70,165,227,0.15)' : 'var(--surface-elevated)', outline: 'none' }}>
-                    <span style={{ display: 'block', fontSize: 12, fontWeight: 700, color: isActive(v) ? 'var(--color-primary)' : 'var(--text-primary)', lineHeight: 1.3 }}>{v.spec}</span>
-                    <span style={{ display: 'block', fontSize: 11, fontWeight: 600, marginTop: 2, color: isActive(v) ? 'var(--color-primary)' : 'var(--text-muted)' }}>{v.priceFormatted}{v.soldOut ? ' · Hết hàng' : ''}</span>
+                    <span style={{ display: 'block', fontSize: 12, fontWeight: 700, color: isActive(v) ? 'var(--color-primary-text)' : 'var(--text-primary)', lineHeight: 1.3 }}>{v.spec}</span>
+                    <span style={{ display: 'block', fontSize: 11, fontWeight: 600, marginTop: 2, color: isActive(v) ? 'var(--color-primary-text)' : 'var(--text-muted)' }}>{v.priceFormatted}{v.soldOut ? ' · Hết hàng' : ''}</span>
                   </button>
                 ))}
               </div>
@@ -281,8 +281,8 @@ export default function ProductModal({ card, onClose }) {
             {/* Header */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 20px', borderBottom: '1px solid var(--border-subtle)', flexShrink: 0 }}>
               <div style={{ display: 'flex', gap: 8 }}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: 'rgba(70,165,227,0.2)', color: 'var(--color-primary-hover)', borderRadius: 9999, padding: '4px 12px', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}><Sparkles size={11} />{card.series}</span>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: 'rgba(70,165,227,0.15)', color: 'var(--color-primary)', border: '1px solid rgba(70,165,227,0.3)', borderRadius: 9999, padding: '4px 12px', fontSize: 11, fontWeight: 600 }}><ShieldCheck size={11} />Chính hãng</span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: 'rgba(70,165,227,0.2)', color: 'var(--color-primary-text)', borderRadius: 9999, padding: '4px 12px', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}><Sparkles size={11} />{card.series}</span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: 'rgba(70,165,227,0.15)', color: 'var(--color-primary-text)', border: '1px solid rgba(70,165,227,0.3)', borderRadius: 9999, padding: '4px 12px', fontSize: 11, fontWeight: 600 }}><ShieldCheck size={11} />Chính hãng</span>
               </div>
               <button type="button" onClick={onClose} aria-label="Đóng"
                 style={{ width: 36, height: 36, borderRadius: '50%', background: 'var(--surface-elevated)', border: '1px solid var(--border-subtle)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)' }}>
@@ -316,9 +316,9 @@ export default function ProductModal({ card, onClose }) {
                   <p style={{ fontSize: 13, color: 'var(--text-muted)', marginTop: 5 }}>Chọn phiên bản phù hợp với bạn</p>
                 </div>
                 <div style={{ borderRadius: 14, border: '1px solid rgba(16,185,129,0.22)', background: 'linear-gradient(135deg,rgba(16,185,129,0.08),var(--surface-elevated))', padding: '16px 20px' }}>
-                  <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--color-primary-hover)', margin: '0 0 8px' }}>Giá bán</p>
+                  <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--color-primary-text)', margin: '0 0 8px' }}>Giá bán</p>
                   <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, flexWrap: 'wrap' }}>
-                    <span style={{ fontSize: 34, fontWeight: 900, color: 'var(--color-primary-hover)', lineHeight: 1 }}>{activeVariant.priceFormatted}</span>
+                    <span style={{ fontSize: 34, fontWeight: 900, color: 'var(--color-primary-text)', lineHeight: 1 }}>{activeVariant.priceFormatted}</span>
                   {activeVariant.originalPriceFormatted && <s style={{ fontSize: 13, color: 'var(--text-muted)' }}>{activeVariant.originalPriceFormatted}</s>}
                   {activeVariant.soldOut && <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--color-error)' }}>Tạm hết hàng</span>}
                     <span style={{ fontSize: 12, color: 'var(--text-muted)', background: 'var(--surface)', border: '1px solid var(--border-subtle)', borderRadius: 9999, padding: '3px 10px' }}>Giá theo phiên bản</span>
@@ -331,8 +331,8 @@ export default function ProductModal({ card, onClose }) {
                     {card.variants.map((v, i) => (
                       <button key={`${v.spec}-${v.price}-${i}`} type="button" onClick={() => selectVariant(v)}
                         style={{ padding: '10px 14px', borderRadius: 10, textAlign: 'left', cursor: 'pointer', transition: 'all 0.15s', border: isActive(v) ? '2px solid var(--color-primary)' : '1px solid var(--border-subtle)', background: isActive(v) ? 'rgba(70,165,227,0.2)' : 'var(--surface-elevated)', outline: 'none' }}>
-                        <span style={{ display: 'block', fontSize: 13, fontWeight: 700, color: isActive(v) ? 'var(--color-primary)' : 'var(--text-primary)', lineHeight: 1.3 }}>{v.spec}</span>
-                        <span style={{ display: 'block', fontSize: 12, fontWeight: 600, marginTop: 3, color: isActive(v) ? 'var(--color-primary)' : 'var(--text-muted)' }}>{v.priceFormatted}{v.soldOut ? ' · Hết hàng' : ''}</span>
+                        <span style={{ display: 'block', fontSize: 13, fontWeight: 700, color: isActive(v) ? 'var(--color-primary-text)' : 'var(--text-primary)', lineHeight: 1.3 }}>{v.spec}</span>
+                        <span style={{ display: 'block', fontSize: 12, fontWeight: 600, marginTop: 3, color: isActive(v) ? 'var(--color-primary-text)' : 'var(--text-muted)' }}>{v.priceFormatted}{v.soldOut ? ' · Hết hàng' : ''}</span>
                       </button>
                     ))}
                   </div>

@@ -1,6 +1,10 @@
 'use server';
 
+import { createHash } from 'node:crypto';
+import { headers } from 'next/headers';
+import { after } from 'next/server';
 import supabase from '@/lib/supabase';
+import { notifyNewLead } from '@/lib/notify';
 
 const KINDS = ['tu_van', 'tra_gop', 'thu_cu'];
 
@@ -20,17 +24,25 @@ export async function submitLead(_prev, formData) {
   if (!/^0[0-9]{9,10}$/.test(phone)) return { ok: false, error: 'Số điện thoại không hợp lệ.' };
   if (!KINDS.includes(kind)) return { ok: false, error: 'Nhu cầu không hợp lệ.' };
 
-  const { error } = await supabase.rpc('apple_submit_lead', {
+  // Salted hash of the visitor IP for the per-client rate limit — the raw IP is never stored.
+  const ip = ((await headers()).get('x-forwarded-for') ?? '').split(',')[0].trim();
+  const client = ip ? createHash('sha256').update(`apple-lead:${ip}`).digest('hex').slice(0, 32) : null;
+
+  const { data: shouldNotify, error } = await supabase.rpc('apple_submit_lead', {
     p_name: name,
     p_phone: phone,
     p_kind: kind,
     p_product: product || null,
     p_note: null,
+    p_client: client,
   });
   if (error) {
     // Rate-limit messages from the RPC are written for end users; anything else is not.
     const friendly = /vui lòng/i.test(error.message) ? error.message : 'Không gửi được, vui lòng gọi hotline.';
     return { ok: false, error: friendly };
   }
+  // Email goes out after the response, so a slow mail API never delays the visitor.
+  // The RPC caps notifications at 20/hour so a flood can't burn the email quota.
+  if (shouldNotify) after(() => notifyNewLead({ name, phone, kind, product }));
   return { ok: true };
 }
