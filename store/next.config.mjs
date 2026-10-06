@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const SUPABASE_URL =
-  process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://xsspvdgnhelzprcqaiek.supabase.co';
+  process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://jtizooyjnllostamffpp.supabase.co';
 const supabaseHost = new URL(SUPABASE_URL).hostname;
 
 // Product images and the REST API both live on the Supabase host, so it has to be
