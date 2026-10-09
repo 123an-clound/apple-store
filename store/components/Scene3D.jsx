@@ -26,47 +26,6 @@ function sampleTimeline(frames, progress) {
   return frames.at(-1)[1];
 }
 
-function createStage(compact, lowPower) {
-  const stage = new THREE.Group();
-  const halo = new THREE.Mesh(
-    new THREE.TorusGeometry(compact ? 3.15 : 3.55, 0.018, lowPower ? 6 : 10, lowPower ? 96 : 160),
-    new THREE.MeshBasicMaterial({ color: 0x78d7ff, transparent: true, opacity: 0.38 }),
-  );
-  halo.rotation.x = 1.12;
-  halo.rotation.y = 0.2;
-  stage.add(halo);
-
-  const innerHalo = new THREE.Mesh(
-    new THREE.TorusGeometry(compact ? 2.55 : 2.9, 0.008, lowPower ? 6 : 8, lowPower ? 80 : 140),
-    new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.22 }),
-  );
-  innerHalo.rotation.set(1.3, -0.35, 0.25);
-  stage.add(innerHalo);
-
-  const particleCount = lowPower ? 42 : 120;
-  const positions = new Float32Array(particleCount * 3);
-  for (let index = 0; index < particleCount; index += 1) {
-    positions[index * 3] = (Math.random() - 0.5) * 10;
-    positions[index * 3 + 1] = (Math.random() - 0.5) * 8;
-    positions[index * 3 + 2] = (Math.random() - 0.5) * 5 - 1;
-  }
-  const particleGeometry = new THREE.BufferGeometry();
-  particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  const particles = new THREE.Points(
-    particleGeometry,
-    new THREE.PointsMaterial({
-      color: 0x93dcff,
-      size: compact ? 0.025 : 0.035,
-      transparent: true,
-      opacity: 0.46,
-      sizeAttenuation: true,
-    }),
-  );
-  stage.add(particles);
-
-  return { stage, halo, innerHalo, particles };
-}
-
 function disposeSceneResources(root) {
   const geometries = new Set();
   const materials = new Set();
@@ -131,12 +90,17 @@ function prepareImportedModel(gltf, renderer, lowPower) {
   return model;
 }
 
-export default function Scene3D() {
+export default function Scene3D({ onReady, onError }) {
   const containerRef = useRef(null);
+  const callbacks = useRef({ onReady, onError });
+  useEffect(() => { callbacks.current = { onReady, onError }; }, [onReady, onError]);
 
   useEffect(() => {
     const container = containerRef.current;
-    if (!container || !window.WebGLRenderingContext) return undefined;
+    if (!container || !window.WebGLRenderingContext) {
+      callbacks.current.onError?.();
+      return undefined;
+    }
 
     const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
     let reduceMotion = motionPreference.matches;
@@ -174,9 +138,6 @@ export default function Scene3D() {
     phone.rotation.order = 'YXZ';
     scene.add(phone);
 
-    const { stage, halo, innerHalo, particles } = createStage(compact, lowPower);
-    scene.add(stage);
-
     const ambientLight = new THREE.HemisphereLight(0xe7f5ff, 0x111827, 2.2);
     const keyLight = new THREE.SpotLight(0xdff6ff, 70, 28, 0.62, 0.72, 1.5);
     keyLight.position.set(4.5, 5.8, 7);
@@ -209,9 +170,6 @@ export default function Scene3D() {
       const dark = document.documentElement.classList.contains('dark');
       ambientLight.color.set(dark ? 0x9ed7ff : 0xe7f5ff);
       ambientLight.groundColor.set(dark ? 0x050811 : 0x4a5566);
-      particles.material.color.set(dark ? 0x75d3ff : 0x248dcc);
-      halo.material.opacity = dark ? 0.46 : 0.28;
-      innerHalo.material.opacity = dark ? 0.28 : 0.16;
       renderer.toneMappingExposure = dark ? 1.18 : 1.02;
       if (reduceMotion) renderOnce();
     };
@@ -305,11 +263,6 @@ export default function Scene3D() {
       phone.position.z = 0.18 + revealPulse * 0.12;
       phone.scale.setScalar((compact ? 0.78 : 0.9) * scalePulse);
 
-      halo.rotation.z = time * 0.000075;
-      halo.rotation.y = 0.2 + Math.sin(time * 0.00022) * 0.16;
-      innerHalo.rotation.z = 0.25 - time * 0.000055;
-      particles.rotation.y = time * 0.000028;
-      particles.rotation.z = Math.sin(time * 0.00008) * 0.05;
       keyLight.position.x = 4.5 + current.x * 2.6 + Math.sin(time * 0.00031) * 1.1;
       keyLight.position.y = 5.6 - current.y * 2.2;
       rimLight.position.x = -4.6 + Math.cos(time * 0.00024) * 1.4;
@@ -333,6 +286,7 @@ export default function Scene3D() {
         }
         phone.add(prepareImportedModel(gltf, renderer, lowPower));
         container.dataset.modelState = 'ready';
+        callbacks.current.onReady?.();
         container.style.removeProperty('--model-progress');
         if (reduceMotion) {
           setStaticPose();
@@ -352,12 +306,22 @@ export default function Scene3D() {
         container.dataset.modelState = 'error';
         container.style.removeProperty('--model-progress');
         renderOnce();
+        callbacks.current.onError?.();
       },
     );
 
     const onVisibilityChange = () => {
       tabVisible = !document.hidden;
       scheduleFrame();
+    };
+    const onKeyDown = (event) => {
+      if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) return;
+      event.preventDefault();
+      if (event.key === 'ArrowLeft') drag.yaw -= 0.2;
+      if (event.key === 'ArrowRight') drag.yaw += 0.2;
+      if (event.key === 'ArrowUp') drag.pitch = Math.max(-0.5, drag.pitch - 0.1);
+      if (event.key === 'ArrowDown') drag.pitch = Math.min(0.5, drag.pitch + 0.1);
+      if (reduceMotion) { setStaticPose(); renderOnce(); }
     };
     const onMotionPreferenceChange = (event) => {
       reduceMotion = event.matches;
@@ -386,6 +350,7 @@ export default function Scene3D() {
     container.addEventListener('pointermove', onDragMove);
     container.addEventListener('pointerup', onDragEnd);
     container.addEventListener('pointercancel', onDragEnd);
+    container.addEventListener('keydown', onKeyDown);
     window.addEventListener('pointerleave', onPointerLeave, { passive: true });
     document.addEventListener('visibilitychange', onVisibilityChange);
     motionPreference.addEventListener('change', onMotionPreferenceChange);
@@ -410,6 +375,7 @@ export default function Scene3D() {
       container.removeEventListener('pointermove', onDragMove);
       container.removeEventListener('pointerup', onDragEnd);
       container.removeEventListener('pointercancel', onDragEnd);
+      container.removeEventListener('keydown', onKeyDown);
       window.removeEventListener('pointerleave', onPointerLeave);
       document.removeEventListener('visibilitychange', onVisibilityChange);
       motionPreference.removeEventListener('change', onMotionPreferenceChange);
@@ -421,5 +387,5 @@ export default function Scene3D() {
     };
   }, []);
 
-  return <div ref={containerRef} className="scene-3d" aria-hidden="true" />;
+  return <div ref={containerRef} className="scene-3d" role="group" tabIndex={0} aria-label="Mô hình iPhone 3D. Dùng phím mũi tên hoặc kéo để xoay." />;
 }

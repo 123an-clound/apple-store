@@ -1,24 +1,11 @@
-import { Inter, Plus_Jakarta_Sans } from 'next/font/google';
 import Script from 'next/script';
 import '../globals.css';
+import '../storefront.css';
 import { SITE_URL } from '@/lib/constants';
 import { getContact } from '@/lib/settings';
 import ModalSlot from '@/components/ModalSlot';
 import { ContactProvider } from '@/components/ContactProvider';
 import { Analytics } from '@vercel/analytics/next';
-
-const inter = Inter({
-  subsets: ['latin', 'vietnamese'],
-  variable: '--font-inter',
-  display: 'swap',
-});
-
-const plusJakarta = Plus_Jakarta_Sans({
-  subsets: ['latin', 'vietnamese'],
-  variable: '--font-display',
-  display: 'swap',
-  weight: ['600', '700', '800'],
-});
 
 // Icons are picked up automatically from app/icon.png and app/apple-icon.png.
 
@@ -84,10 +71,7 @@ export const metadata = {
 };
 
 export const viewport = {
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: '#0a0a0a' },
-  ],
+  themeColor: '#080809',
 };
 
 export default async function RootLayout({ children, modal }) {
@@ -95,7 +79,7 @@ export default async function RootLayout({ children, modal }) {
   return (
     <html
       lang="vi"
-      className={`${inter.variable} ${plusJakarta.variable}`}
+      className="dark"
       suppressHydrationWarning
     >
       <body className="antialiased transition-colors duration-300">
@@ -108,10 +92,10 @@ export default async function RootLayout({ children, modal }) {
             (function () {
               try {
                 var saved = localStorage.getItem('theme');
-                var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-                var theme = saved || (prefersDark ? 'dark' : 'light');
+                var theme = saved === 'light' ? 'light' : 'dark';
                 if (theme === 'dark') document.documentElement.classList.add('dark');
                 else document.documentElement.classList.remove('dark');
+                document.documentElement.style.colorScheme = theme;
               } catch (e) {}
             })();
           `}

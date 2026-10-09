@@ -1,4 +1,6 @@
 import { STORAGE_BASE_URL } from './supabase';
+import { formatPrice } from './product-display';
+export { formatPrice, BADGES } from './product-display';
 
 // ─────────────────────────────────────────────
 // Extract filename from Windows absolute paths
@@ -48,15 +50,6 @@ export function getImageUrls(row) {
     .filter(Boolean);
 }
 
-// Format price: strip dots, parse int, format as Vietnamese currency
-export function formatPrice(rawPrice) {
-  if (!rawPrice && rawPrice !== 0) return 'Liên hệ';
-  const cleaned = String(rawPrice).replace(/\./g, '').replace(/,/g, '');
-  const num = parseInt(cleaned, 10);
-  if (isNaN(num)) return 'Liên hệ';
-  return num.toLocaleString('vi-VN') + 'đ';
-}
-
 // Parse price to numeric integer for comparison
 export function parsePrice(rawPrice) {
   if (!rawPrice && rawPrice !== 0) return Infinity;
@@ -71,15 +64,6 @@ export function effectivePrice(row) {
   const sale = Number(row?.sale_price);
   return sale > 0 && sale < base ? sale : base;
 }
-
-// Badge values allowed by the kho_iphone.badge check constraint.
-// Colours are dark enough for white text (WCAG AA).
-export const BADGES = {
-  NEW: { label: 'Mới', color: '#1d4ed8' },
-  HOT: { label: 'Hot', color: '#b91c1c' },
-  SALE: { label: 'Giảm giá', color: '#c2410c' },
-  LIMITED: { label: 'Giới hạn', color: '#6d28d9' },
-};
 
 // Spec fallback
 export function getSpec(row) {

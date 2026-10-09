@@ -2,211 +2,88 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState, useEffect, useSyncExternalStore } from 'react';
-import { Menu, X, Phone, Sun, Moon } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-
+import { useState, useEffect, useRef, useSyncExternalStore } from 'react';
+import { Menu, X, Phone, Sun, Moon, Search, ShoppingBag, ArrowUpRight } from 'lucide-react';
 import { useContact } from '@/components/ContactProvider';
 
-// The <html> class is the single source of truth for the theme — it is set by the
-// inline script in app/layout.js before first paint. Reading it through
-// useSyncExternalStore means the toggle renders the correct label immediately
-// instead of rendering "light" and then correcting itself after hydration.
 const themeListeners = new Set();
-const subscribeToTheme = (onStoreChange) => {
-  themeListeners.add(onStoreChange);
-  return () => themeListeners.delete(onStoreChange);
+const subscribeToTheme = (listener) => {
+  themeListeners.add(listener);
+  return () => themeListeners.delete(listener);
 };
-const getThemeSnapshot = () =>
-  document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+const getThemeSnapshot = () => document.documentElement.classList.contains('dark') ? 'dark' : 'light';
 
 export default function Navbar() {
-  const { telUrl, hotlineDisplay } = useContact();
+  const { telUrl, hotlineDisplay, zaloUrl } = useContact();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const scrolled = useSyncExternalStore(
-    (onStoreChange) => {
-      window.addEventListener('scroll', onStoreChange, { passive: true });
-      return () => window.removeEventListener('scroll', onStoreChange);
-    },
-    () => window.scrollY > 16,
-    () => false
-  );
-
-  const theme = useSyncExternalStore(subscribeToTheme, getThemeSnapshot, () => 'light');
+  const menuRef = useRef(null);
+  const menuButtonRef = useRef(null);
+  const theme = useSyncExternalStore(subscribeToTheme, getThemeSnapshot, () => 'dark');
 
   useEffect(() => {
-    document.body.style.overflow = mobileMenuOpen ? 'hidden' : '';
+    if (!mobileMenuOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const items = () => Array.from(menuRef.current?.querySelectorAll('a[href], button') ?? []);
+    items()[0]?.focus();
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') { setMobileMenuOpen(false); menuButtonRef.current?.focus(); }
+      if (event.key !== 'Tab') return;
+      const controls = [menuButtonRef.current, ...items()].filter(Boolean);
+      const first = controls[0];
+      const last = controls.at(-1);
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    };
+    const desktop = window.matchMedia('(min-width: 768px)');
+    const closeOnDesktop = () => { if (desktop.matches) setMobileMenuOpen(false); };
+    desktop.addEventListener('change', closeOnDesktop);
+    window.addEventListener('keydown', onKeyDown);
     return () => {
-      document.body.style.overflow = '';
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', onKeyDown);
+      desktop.removeEventListener('change', closeOnDesktop);
     };
   }, [mobileMenuOpen]);
 
   const toggleTheme = () => {
     const next = theme === 'dark' ? 'light' : 'dark';
     document.documentElement.classList.toggle('dark', next === 'dark');
-    try {
-      localStorage.setItem('theme', next);
-    } catch {}
+    document.documentElement.style.colorScheme = next;
+    try { localStorage.setItem('theme', next); } catch {}
     themeListeners.forEach((listener) => listener());
   };
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-        scrolled
-          ? 'bg-[var(--surface)]/96 backdrop-blur-xl border-b border-[var(--border-subtle)] shadow-[var(--shadow-1)]'
-          : 'bg-[var(--surface)]/80 backdrop-blur-md'
-      }`}
-    >
-      <div className="section-shell section-padding flex items-center justify-between h-14 sm:h-16 lg:h-[4.5rem]">
-        <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group focus-ring rounded-lg logo-container-glow">
-          <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-[var(--radius-md)] overflow-hidden ring-1 ring-[var(--border-subtle)] group-hover:ring-blue-500/40 transition-all logo-glow">
-            <Image
-              src="/logo.png"
-              alt="Apple Store logo"
-              fill
-              className="object-cover"
-              sizes="(max-width: 640px) 32px, 36px"
-            />
-          </div>
-          <span className="font-bold text-base sm:text-lg lg:text-xl tracking-tight heading-display">
-            <span className="text-[var(--text-primary)]">Apple</span>{' '}
-            <span className="text-blue-gradient glow-text-blue">Store</span>
-          </span>
+    <header className="store-nav">
+      <div className="nav-inner section-shell section-padding">
+        <Link href="/" prefetch={false} className="store-wordmark focus-ring" aria-label="Apple Store, trang chủ">
+          <Image src="/logo.png" alt="" width={30} height={30} /><span>Apple Store</span>
         </Link>
-
-        <motion.div className="hidden lg:flex items-center gap-3"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          <motion.button
-            type="button"
-            onClick={toggleTheme}
-            whileHover={{ 
-              scale: 1.1,
-              boxShadow: '0 0 25px rgba(50,55,74,0.5), 0 0 50px rgba(50,55,74,0.3)'
-            }}
-            whileTap={{ scale: 0.9 }}
-            className="btn-ghost gap-2 !min-h-[40px] px-4 btn-modern btn-liquid"
-            aria-label={theme === 'dark' ? 'Chuyển sang giao diện sáng' : 'Chuyển sang giao diện tối'}
-          >
-            <Sun size={18} />
-            {theme === 'dark' ? 'Sáng' : 'Tối'}
-          </motion.button>
-          <motion.a 
-            href={telUrl} 
-            className="btn-ghost gap-2 !min-h-[40px] px-4 btn-neon"
-            whileHover={{ 
-              scale: 1.05,
-              boxShadow: '0 0 25px rgba(70,165,227,0.5), 0 0 40px rgba(70,165,227,0.3)'
-            }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" aria-hidden />
-            {hotlineDisplay}
-          </motion.a>
-          <motion.a 
-            href="#products" 
-            className="btn-primary btn-sm !min-h-[40px] px-5 btn-modern btn-shine-sweep"
-            whileHover={{ 
-              scale: 1.05,
-              boxShadow: '0 0 35px rgba(70,165,227,0.6), 0 0 60px rgba(70,165,227,0.4)'
-            }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Sản phẩm
-          </motion.a>
-        </motion.div>
-
-        <button
-          type="button"
-          className="lg:hidden min-w-[44px] min-h-[44px] flex items-center justify-center text-[var(--text-primary)] focus-ring rounded-[var(--radius-md)]"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          aria-expanded={mobileMenuOpen}
-          aria-label={mobileMenuOpen ? 'Đóng menu' : 'Mở menu'}
-        >
-          {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
-        </button>
+        <nav className="desktop-nav" aria-label="Điều hướng chính">
+          <Link href="/#products" prefetch={false}>Sản phẩm</Link><Link href="/#highlights" prefetch={false}>Điểm nổi bật</Link>
+          <a href={zaloUrl} target="_blank" rel="noopener noreferrer">Tư vấn</a>
+        </nav>
+        <div className="nav-actions">
+          <Link href="/#product-search" prefetch={false} className="icon-button nav-search" aria-label="Tìm kiếm iPhone"><Search size={18} strokeWidth={1.5} /></Link>
+          <button type="button" onClick={toggleTheme} className="icon-button theme-toggle" aria-label={theme === 'dark' ? 'Chuyển sang giao diện sáng' : 'Chuyển sang giao diện tối'}>
+            {theme === 'dark' ? <Sun size={18} strokeWidth={1.5} /> : <Moon size={18} strokeWidth={1.5} />}
+          </button>
+          <Link href="/#products" prefetch={false} className="icon-button nav-shop" aria-label="Xem sản phẩm"><ShoppingBag size={18} strokeWidth={1.5} /></Link>
+          <button ref={menuButtonRef} type="button" className="icon-button mobile-menu-toggle" onClick={() => setMobileMenuOpen(!mobileMenuOpen)} aria-expanded={mobileMenuOpen} aria-controls="mobile-navigation" aria-label={mobileMenuOpen ? 'Đóng menu' : 'Mở menu'}>
+            {mobileMenuOpen ? <X size={21} /> : <Menu size={21} />}
+          </button>
+        </div>
       </div>
-
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.2 }}
-            style={{ borderTop: '1px solid var(--border-subtle)', background: 'var(--surface)' }}
-            className="lg:hidden"
-          >
-            {/* Menu card */}
-            <div style={{ margin: '12px 16px 16px', borderRadius: 16, border: '1px solid var(--border-subtle)', background: 'var(--surface-elevated)', overflow: 'hidden' }}>
-
-              {/* Theme toggle */}
-              <button
-                type="button"
-                onClick={() => { toggleTheme(); setMobileMenuOpen(false); }}
-                style={{
-                  width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                  padding: '16px 20px', background: 'transparent', border: 'none',
-                  borderBottom: '1px solid var(--border-subtle)', cursor: 'pointer',
-                }}
-              >
-                <span style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 15, fontWeight: 600, color: 'var(--text-primary)' }}>
-                  <span style={{ width: 36, height: 36, borderRadius: 10, background: 'var(--surface)', border: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-secondary)', flexShrink: 0 }}>
-                    {theme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
-                  </span>
-                  {theme === 'dark' ? 'Giao diện sáng' : 'Giao diện tối'}
-                </span>
-                <span style={{ fontSize: 12, color: 'var(--text-muted)', background: 'var(--surface)', border: '1px solid var(--border-subtle)', borderRadius: 9999, padding: '3px 10px', fontWeight: 500 }}>
-                  {theme === 'dark' ? 'Chuyển sáng' : 'Chuyển tối'}
-                </span>
-              </button>
-
-              {/* Xem sản phẩm */}
-              <a
-                href="#products"
-                onClick={() => setMobileMenuOpen(false)}
-                style={{
-                  width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                  padding: '16px 20px', textDecoration: 'none',
-                  borderBottom: '1px solid var(--border-subtle)',
-                }}
-              >
-                <span style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 15, fontWeight: 600, color: 'var(--text-primary)' }}>
-                  <span style={{ width: 36, height: 36, borderRadius: 10, background: 'var(--surface)', border: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--text-secondary)' }}><rect x="2" y="3" width="7" height="7"/><rect x="15" y="3" width="7" height="7"/><rect x="2" y="14" width="7" height="7"/><rect x="15" y="14" width="7" height="7"/></svg>
-                  </span>
-                  Xem sản phẩm
-                </span>
-                <span style={{ fontSize: 12, color: 'var(--text-muted)', background: 'var(--surface)', border: '1px solid var(--border-subtle)', borderRadius: 9999, padding: '3px 10px', fontWeight: 500 }}>
-                  Khám phá
-                </span>
-              </a>
-
-              {/* Call CTA */}
-              <div style={{ padding: '16px 20px' }}>
-                <a
-                  href={telUrl}
-                  style={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-                    width: '100%', minHeight: 52, borderRadius: 12,
-                    background: 'linear-gradient(135deg, #66b5e8, #86c5ed)',
-                    color: '#fff', fontWeight: 700, fontSize: 16,
-                    textDecoration: 'none', boxShadow: '0 4px 16px rgba(70,165,227,0.5)',
-                  }}
-                >
-                  <Phone size={18} />
-                  Gọi {hotlineDisplay}
-                </a>
-              </div>
-
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {mobileMenuOpen && (
+        <nav ref={menuRef} id="mobile-navigation" className="mobile-navigation" aria-label="Điều hướng di động">
+          <Link href="/#products" prefetch={false} onClick={() => setMobileMenuOpen(false)}>Xem sản phẩm <ShoppingBag size={22} /></Link>
+          <Link href="/#highlights" prefetch={false} onClick={() => setMobileMenuOpen(false)}>Điểm nổi bật <ArrowUpRight size={22} /></Link>
+          <a href={zaloUrl} target="_blank" rel="noopener noreferrer" onClick={() => setMobileMenuOpen(false)}>Tư vấn qua Zalo <ArrowUpRight size={22} /></a>
+          <button type="button" onClick={() => { toggleTheme(); setMobileMenuOpen(false); menuButtonRef.current?.focus(); }}>{theme === 'dark' ? 'Giao diện sáng' : 'Giao diện tối'} {theme === 'dark' ? <Sun size={22} /> : <Moon size={22} />}</button>
+          <a href={telUrl} className="mobile-hotline"><Phone size={18} /> {hotlineDisplay}</a>
+        </nav>
+      )}
     </header>
   );
 }

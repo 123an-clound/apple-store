@@ -1,18 +1,20 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useEffect, useState } from 'react';
+import Image from 'next/image';
+import { Component, useState } from 'react';
+import { Rotate3D, X } from 'lucide-react';
 
-const Fallback = () => <div className="scene-3d scene-3d-fallback" aria-hidden="true" />;
+const Scene3D = dynamic(() => import('./Scene3D'), { ssr: false, loading: () => null });
 
-const Scene3D = dynamic(() => import('./Scene3D'), {
-  ssr: false,
-  loading: Fallback,
-});
+// Keep the product poster visible if WebGL initialization or a dynamic import fails.
+class SceneBoundary extends Component {
+  state = { failed: false };
+  static getDerivedStateFromError() { return { failed: true }; }
+  componentDidCatch() { this.props.onError(); }
+  render() { return this.state.failed ? null : this.props.children; }
+}
 
-// Software WebGL (SwiftShader / llvmpipe — no GPU acceleration) spends ~10 s of
-// main-thread time compiling shaders and drawing the first frame, freezing the
-// whole page. Those visitors keep the static backdrop instead.
 function hasHardwareWebGL() {
   try {
     const gl = document.createElement('canvas').getContext('webgl');
@@ -21,25 +23,34 @@ function hasHardwareWebGL() {
     const renderer = info ? String(gl.getParameter(info.UNMASKED_RENDERER_WEBGL)) : '';
     gl.getExtension('WEBGL_lose_context')?.loseContext();
     return !/swiftshader|llvmpipe|softpipe|software/i.test(renderer);
-  } catch {
-    return false;
-  }
+  } catch { return false; }
 }
 
 export default function Scene3DLoader() {
   const [show, setShow] = useState(false);
+  const [ready, setReady] = useState(false);
+  const [unavailable, setUnavailable] = useState(false);
+  const close = () => { setShow(false); setReady(false); };
+  const open = () => {
+    if (!hasHardwareWebGL()) { setUnavailable(true); return; }
+    setUnavailable(false);
+    setShow(true);
+  };
+  const onError = () => { close(); setUnavailable(true); };
 
-  useEffect(() => {
-    // Start the three.js bundle only once the page is idle, so it never
-    // competes with first paint and the hero headline (the LCP element).
-    const run = () => { if (hasHardwareWebGL()) setShow(true); };
-    if ('requestIdleCallback' in window) {
-      const id = requestIdleCallback(run, { timeout: 2500 });
-      return () => cancelIdleCallback(id);
-    }
-    const t = setTimeout(run, 1200);
-    return () => clearTimeout(t);
-  }, []);
-
-  return show ? <Scene3D /> : <Fallback />;
+  return (
+    <div className="scene-viewer">
+      <div className={'scene-poster' + (ready ? ' scene-poster--hidden' : '')}>
+        <Image src="/images/iphone-hero.webp" alt="Mặt trước và mặt sau mô hình iPhone 18 Pro Max màu burgundy" fill loading="eager" fetchPriority="high" decoding="sync" sizes="(max-width: 359px) 512px, (max-width: 575px) 576px, (max-width: 1100px) 100vw, 1100px" className="hero-poster" />
+      </div>
+      {show && <SceneBoundary onError={onError}><Scene3D onReady={() => setReady(true)} onError={onError} /></SceneBoundary>}
+      <p className="scene-status" role="status">
+        {unavailable ? 'Thiết bị đang hiển thị ảnh sản phẩm. Chế độ 3D chưa khả dụng.' : show ? ready ? 'Kéo để xoay. Dùng phím mũi tên khi chọn mô hình.' : 'Đang tải mô hình 3D…' : ''}
+      </p>
+      <button type="button" className="scene-toggle focus-ring" onClick={show ? close : open} aria-pressed={show}>
+        {show ? <X size={15} aria-hidden="true" /> : <Rotate3D size={16} aria-hidden="true" />}
+        {show ? 'Đóng chế độ 3D' : 'Khám phá 360°'}
+      </button>
+    </div>
+  );
 }
